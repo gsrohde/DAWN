@@ -1,0 +1,3 @@
+[submodule "biocro-lib"]
+	path = biocro-lib
+	url = git@github.com:gsrohde/biocro-lib.git
