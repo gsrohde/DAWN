@@ -10,21 +10,28 @@ BIOCRO_LIB_FILE = $(BIOCRO_SOURCE_PATH)/$(BIOCRO_LIB_NAME)$(LIBRARY_FILE_EXTENSI
 # root directory for BioCro header files
 BIOCRO_INCLUDES = $(BIOCRO_SOURCE_PATH)
 
+.PHONY: run clean
+
 run: main
 	./main
 
 main: main.cpp xml_parser.cpp Result_xml_document.cpp $(BIOCRO_LIB_FILE) DOMTreeErrorReporter.cpp
 	clang++ -std=c++11 -g -Wall -pedantic -I $(BIOCRO_INCLUDES) $(BIOCRO_LIB_FILE) -lxerces-c main.cpp xml_parser.cpp Result_xml_document.cpp DOMTreeErrorReporter.cpp -o main
 
+main-debug: main.cpp xml_parser.cpp Result_xml_document.cpp $(BIOCRO_LIB_FILE)
+	clang++ -std=c++11 -g -O0 -Wall -pedantic -I $(BIOCRO_INCLUDES) $(BIOCRO_LIB_FILE) -lxerces-c main.cpp xml_parser.cpp Result_xml_document.cpp DOMTreeErrorReporter.cpp -o main-debug
+
+clean:
+	rm -f main main-debug
+	rm -fr main.dSYM main-debug.dSYM
 
 # For macOS only:
 
 ifeq ($(shell uname -s),Darwin)
 
+.PHONY: debug
+
 debug: main-debug
 	/Applications/Xcode.app/Contents/Developer/usr/bin/lldb main-debug
-
-main-debug: main.cpp xml_parser.cpp Result_xml_document.cpp $(BIOCRO_LIB_FILE)
-	clang++ -std=c++11 -g -O0 -Wall -pedantic -I $(BIOCRO_INCLUDES) $(BIOCRO_LIB_FILE) -lxerces-c main.cpp xml_parser.cpp Result_xml_document.cpp DOMTreeErrorReporter.cpp -o main-debug
 
 endif
