@@ -15,11 +15,11 @@ BIOCRO_INCLUDES = $(BIOCRO_SOURCE_PATH)
 run: main
 	./main
 
-main: main.cpp xml_parser.cpp Result_xml_document.cpp $(BIOCRO_LIB_FILE) DOMTreeErrorReporter.cpp
-	clang++ -std=c++11 -g -Wall -pedantic -I $(BIOCRO_INCLUDES) $(BIOCRO_LIB_FILE) -lxerces-c main.cpp xml_parser.cpp Result_xml_document.cpp DOMTreeErrorReporter.cpp -o main
+main: main.cpp simulation_definition.cpp Result_xml_document.cpp $(BIOCRO_LIB_FILE) DOMTreeErrorReporter.cpp
+	clang++ -std=c++11 -g -Wall -pedantic -I $(BIOCRO_INCLUDES) $(BIOCRO_LIB_FILE) -lxerces-c main.cpp simulation_definition.cpp Result_xml_document.cpp DOMTreeErrorReporter.cpp -o main
 
-main-debug: main.cpp xml_parser.cpp Result_xml_document.cpp $(BIOCRO_LIB_FILE)
-	clang++ -std=c++11 -g -O0 -Wall -pedantic -I $(BIOCRO_INCLUDES) $(BIOCRO_LIB_FILE) -lxerces-c main.cpp xml_parser.cpp Result_xml_document.cpp DOMTreeErrorReporter.cpp -o main-debug
+main-debug: main.cpp simulation_definition.cpp Result_xml_document.cpp $(BIOCRO_LIB_FILE)
+	clang++ -std=c++11 -g -O0 -Wall -pedantic -I $(BIOCRO_INCLUDES) $(BIOCRO_LIB_FILE) -lxerces-c main.cpp simulation_definition.cpp Result_xml_document.cpp DOMTreeErrorReporter.cpp -o main-debug
 
 clean:
 	rm -f main main-debug

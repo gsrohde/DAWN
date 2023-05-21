@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include <errno.h>
 
-#include "xml_parser.h"
+#include "simulation_definition.h"
 #include "DOMTreeErrorReporter.hpp"
 
 using namespace xercesc;

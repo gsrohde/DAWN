@@ -1,5 +1,5 @@
-#ifndef XML_PARSER_H
-#define XML_PARSER_H
+#ifndef SIMULATION_DEFINITION_H
+#define SIMULATION_DEFINITION_H
 /**
  *  @file
  *  Class "GetConfig" provides the functions to read the XML data.

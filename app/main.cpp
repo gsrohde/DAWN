@@ -2,7 +2,7 @@
 #include <framework/module_factory.h>
 #include <module_library/module_library.h>
 
-#include "xml_parser.h"
+#include "simulation_definition.h"
 #include "print_result.h" // for now
 #include "Result_xml_document.h"
 
