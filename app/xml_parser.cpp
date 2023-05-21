@@ -21,7 +21,8 @@ using namespace std;
  *  The xerces-C DOM parser infrastructure is initialized.
  */
 
-Simulation_definition::Simulation_definition()
+Simulation_definition::Simulation_definition(string specification_file)
+    : specification_file{specification_file}
 {
    try
    {
@@ -49,6 +50,8 @@ Simulation_definition::Simulation_definition()
    ATTR_value = XMLString::transcode("value");
 
    m_ConfigFileParser = new XercesDOMParser;
+
+   read_spec_file();
 }
 
 state_map Simulation_definition::get_initial_state() {
@@ -118,14 +121,14 @@ Simulation_definition::~Simulation_definition()
 
 /**
  *  This function:
- *  - Tests the access and availability of the XML configuration file.
+ *  - Tests the access and availability of the XML simulation specification file.
  *  - Configures the xerces-c DOM parser.
- *  - Reads and extracts the pertinent information from the XML config file.
+ *  - Reads, extracts, and stores the pertinent information from the XML file.
  *
- *  @param in configFile The text string name of the HLA configuration file.
+ *  @param in specification_file The name of the XML file giving the specifications for the simulation.
  */
 
-void Simulation_definition::readConfigFile(string& configFile)
+void Simulation_definition::read_spec_file()
         throw( std::runtime_error )
 {
    // Test to see if the file is ok.
@@ -133,7 +136,7 @@ void Simulation_definition::readConfigFile(string& configFile)
    struct stat fileStatus;
 
    errno = 0;
-   if (stat(configFile.c_str(), &fileStatus) == -1) // ==0 ok; ==-1 error
+   if (stat(specification_file.c_str(), &fileStatus) == -1) // ==0 ok; ==-1 error
    {
        if ( errno == ENOENT )      // errno declared by include file errno.h
           throw ( std::runtime_error("Path file_name does not exist, or path is an empty string.") );
@@ -159,7 +162,7 @@ void Simulation_definition::readConfigFile(string& configFile)
 
    try
    {
-      m_ConfigFileParser->parse( configFile.c_str() );
+      m_ConfigFileParser->parse( specification_file.c_str() );
 
       if (m_ConfigFileParser->getErrorCount() == 0)
           printf("XML file validated against the schema successfully\n");

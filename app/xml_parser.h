@@ -32,10 +32,8 @@ enum {
 class Simulation_definition
 {
 public:
-   Simulation_definition();
+   Simulation_definition(string specification_file);
     ~Simulation_definition();
-
-    void readConfigFile(std::string&) throw(std::runtime_error);
     
     state_map get_initial_state();
     state_map get_parameters();
@@ -44,12 +42,16 @@ public:
     mc_vector get_differential_modules();
 
 private:
+    void read_spec_file() throw(std::runtime_error);
+
     void populate_mapping(DOMElement* currentElement, state_map& mapping);
     void populate_mapping(DOMElement* currentElement, state_vector_map& mapping);
     void process_row(DOMElement* row, state_vector_map& mapping);
     void set_module_list(DOMElement* currentElement, mc_vector& vec);
 
     xercesc::XercesDOMParser *m_ConfigFileParser;
+
+    string specification_file;
 
     state_map initial_state;
     state_map parameters;

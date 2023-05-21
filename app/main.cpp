@@ -64,11 +64,10 @@ int main(int argC, char* argV[]) {
         usage();
         return 1;
     }
-    string input_file = argV[parmInd];
+    string specification_file = argV[parmInd];
 
     
-    Simulation_definition sim_def;
-    sim_def.readConfigFile(input_file);
+    Simulation_definition sim_def(specification_file);
 
     biocro_simulation sim
         {
