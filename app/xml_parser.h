@@ -49,7 +49,7 @@ private:
     void process_row(DOMElement* row, state_vector_map& mapping);
     void set_module_list(DOMElement* currentElement, mc_vector& vec);
 
-    xercesc::XercesDOMParser *m_ConfigFileParser;
+    xercesc::XercesDOMParser *parser;
 
     string specification_file;
 

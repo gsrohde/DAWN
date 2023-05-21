@@ -49,7 +49,7 @@ Simulation_definition::Simulation_definition(string specification_file)
    ATTR_name = XMLString::transcode("name");
    ATTR_value = XMLString::transcode("value");
 
-   m_ConfigFileParser = new XercesDOMParser;
+   parser = new XercesDOMParser;
 
    read_spec_file();
 }
@@ -80,7 +80,7 @@ Simulation_definition::~Simulation_definition()
 {
    // Free memory
 
-   delete m_ConfigFileParser;
+   delete parser;
    //   if (m_OptionA)   XMLString::release( &m_OptionA );
    //if (m_OptionB)   XMLString::release( &m_OptionB );
 
@@ -152,26 +152,26 @@ void Simulation_definition::read_spec_file()
 
    // Configure DOM parser.
 
-   m_ConfigFileParser->setValidationScheme( XercesDOMParser::Val_Always );
-   m_ConfigFileParser->setDoNamespaces( true );
-   m_ConfigFileParser->setDoSchema( true );
-   m_ConfigFileParser->setLoadExternalDTD( false );
-   m_ConfigFileParser->setValidationConstraintFatal(true);
+   parser->setValidationScheme( XercesDOMParser::Val_Always );
+   parser->setDoNamespaces( true );
+   parser->setDoSchema( true );
+   parser->setLoadExternalDTD( false );
+   parser->setValidationConstraintFatal(true);
    DOMTreeErrorReporter *errReporter = new DOMTreeErrorReporter();
-   m_ConfigFileParser->setErrorHandler(errReporter);
+   parser->setErrorHandler(errReporter);
 
    try
    {
-      m_ConfigFileParser->parse( specification_file.c_str() );
+      parser->parse( specification_file.c_str() );
 
-      if (m_ConfigFileParser->getErrorCount() == 0)
+      if (parser->getErrorCount() == 0)
           printf("XML file validated against the schema successfully\n");
       else
           printf("XML file doesn't conform to the schema\n");
 
 
       // no need to free this pointer - owned by the parent parser object
-      DOMDocument* xmlDoc = m_ConfigFileParser->getDocument();
+      DOMDocument* xmlDoc = parser->getDocument();
 
       // Get the top-level element: NAme is "root". No attributes for "root"
 
