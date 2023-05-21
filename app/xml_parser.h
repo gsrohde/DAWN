@@ -9,12 +9,13 @@
 
 #include <xercesc/parsers/XercesDOMParser.hpp>
 
-#include <framework/module_factory.h>
-#include <module_library/module_library.h>
-#include <framework/state_map.h>
-
+/* Standard Library */
 #include <string>
-#include <stdexcept>
+
+/* BioCro */
+#include <framework/module_factory.h>
+#include <framework/state_map.h>
+#include <module_library/module_library.h>
 
 using std::string;
 using xercesc::DOMElement;
@@ -28,11 +29,11 @@ enum {
    ERROR_EMPTY_DOCUMENT
 };
 
-class GetConfig
+class Simulation_definition
 {
 public:
-   GetConfig();
-    ~GetConfig();
+   Simulation_definition();
+    ~Simulation_definition();
 
     void readConfigFile(std::string&) throw(std::runtime_error);
     

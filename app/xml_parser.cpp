@@ -21,7 +21,7 @@ using namespace std;
  *  The xerces-C DOM parser infrastructure is initialized.
  */
 
-GetConfig::GetConfig()
+Simulation_definition::Simulation_definition()
 {
    try
    {
@@ -51,19 +51,19 @@ GetConfig::GetConfig()
    m_ConfigFileParser = new XercesDOMParser;
 }
 
-state_map GetConfig::get_initial_state() {
+state_map Simulation_definition::get_initial_state() {
     return initial_state;
 }
-state_map GetConfig::get_parameters() {
+state_map Simulation_definition::get_parameters() {
     return parameters;
 }
-state_vector_map GetConfig::get_drivers() {
+state_vector_map Simulation_definition::get_drivers() {
     return drivers;
 }
-mc_vector GetConfig::get_direct_modules() {
+mc_vector Simulation_definition::get_direct_modules() {
     return direct_modules;
 }
-mc_vector GetConfig::get_differential_modules() {
+mc_vector Simulation_definition::get_differential_modules() {
     return differential_modules;
 }
 
@@ -73,7 +73,7 @@ mc_vector GetConfig::get_differential_modules() {
  *  framework.
  */
 
-GetConfig::~GetConfig()
+Simulation_definition::~Simulation_definition()
 {
    // Free memory
 
@@ -125,7 +125,7 @@ GetConfig::~GetConfig()
  *  @param in configFile The text string name of the HLA configuration file.
  */
 
-void GetConfig::readConfigFile(string& configFile)
+void Simulation_definition::readConfigFile(string& configFile)
         throw( std::runtime_error )
 {
    // Test to see if the file is ok.
@@ -230,7 +230,7 @@ void GetConfig::readConfigFile(string& configFile)
    }
 }
 
-void GetConfig::populate_mapping(DOMElement* currentElement, state_map& mapping) {
+void Simulation_definition::populate_mapping(DOMElement* currentElement, state_map& mapping) {
     DOMNodeList*     children = currentElement->getChildNodes();
     const XMLSize_t nodeCount = children->getLength();
 
@@ -271,7 +271,7 @@ void GetConfig::populate_mapping(DOMElement* currentElement, state_map& mapping)
     } // for children of currentElement
 }
 
-void GetConfig::populate_mapping(DOMElement* currentElement, state_vector_map& mapping) {
+void Simulation_definition::populate_mapping(DOMElement* currentElement, state_vector_map& mapping) {
     DOMNodeList*     children = currentElement->getChildNodes();
     const XMLSize_t nodeCount = children->getLength();
 
@@ -294,7 +294,7 @@ void GetConfig::populate_mapping(DOMElement* currentElement, state_vector_map& m
     } // for children of currentElement
 }
 
-void GetConfig::process_row(DOMElement* row, state_vector_map& mapping) {
+void Simulation_definition::process_row(DOMElement* row, state_vector_map& mapping) {
     DOMNodeList* children = row->getChildNodes();
     const XMLSize_t nodeCount = children->getLength();
 
@@ -333,7 +333,7 @@ void GetConfig::process_row(DOMElement* row, state_vector_map& mapping) {
     }
 }
 
-void GetConfig::set_module_list(DOMElement* currentElement, mc_vector& vec) {
+void Simulation_definition::set_module_list(DOMElement* currentElement, mc_vector& vec) {
     DOMNodeList*     children = currentElement->getChildNodes();
     const XMLSize_t nodeCount = children->getLength();
 

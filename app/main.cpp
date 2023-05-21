@@ -67,16 +67,16 @@ int main(int argC, char* argV[]) {
     string input_file = argV[parmInd];
 
     
-    GetConfig config;
-    config.readConfigFile(input_file);
+    Simulation_definition sim_def;
+    sim_def.readConfigFile(input_file);
 
     biocro_simulation sim
         {
-         config.get_initial_state(),
-         config.get_parameters(),
-         config.get_drivers(),
-         config.get_direct_modules(),
-         config.get_differential_modules(),
+         sim_def.get_initial_state(),
+         sim_def.get_parameters(),
+         sim_def.get_drivers(),
+         sim_def.get_direct_modules(),
+         sim_def.get_differential_modules(),
          
         "homemade_euler",
         1,
