@@ -12,7 +12,7 @@
 #include "simulation_definition.h"
 #include "DOMTreeErrorReporter.hpp"
 
-using namespace xercesc;
+//using namespace xercesc;
 using namespace std;
 
 /**

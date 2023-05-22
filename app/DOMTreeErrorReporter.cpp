@@ -31,7 +31,7 @@
 #endif
 #include <stdlib.h>
 #include <string.h>
-
+#include "StrX.h"
 
 void DOMTreeErrorReporter::warning(const SAXParseException&)
 {

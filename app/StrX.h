@@ -27,50 +27,53 @@
 #include <iostream.h>
 #endif
 
+
 XERCES_CPP_NAMESPACE_USE
 
 
-class DOMTreeErrorReporter : public ErrorHandler
+// ---------------------------------------------------------------------------
+//  This is a simple class that lets us do easy (though not terribly efficient)
+//  trancoding of XMLCh data to local code page for display.
+// ---------------------------------------------------------------------------
+class StrX
 {
-public:
+public :
     // -----------------------------------------------------------------------
     //  Constructors and Destructor
     // -----------------------------------------------------------------------
-    DOMTreeErrorReporter() :
-       fSawErrors(false)
+    StrX(const XMLCh* const toTranscode)
     {
+        // Call the private transcoding method
+        fLocalForm = XMLString::transcode(toTranscode);
     }
 
-    ~DOMTreeErrorReporter()
+    ~StrX()
     {
+        XMLString::release(&fLocalForm);
     }
 
-
-    // -----------------------------------------------------------------------
-    //  Implementation of the error handler interface
-    // -----------------------------------------------------------------------
-    void warning(const SAXParseException& toCatch);
-    void error(const SAXParseException& toCatch);
-    void fatalError(const SAXParseException& toCatch);
-    void resetErrors();
 
     // -----------------------------------------------------------------------
     //  Getter methods
     // -----------------------------------------------------------------------
-    bool getSawErrors() const;
+    const char* localForm() const
+    {
+        return fLocalForm;
+    }
 
+private :
     // -----------------------------------------------------------------------
     //  Private data members
     //
-    //  fSawErrors
-    //      This is set if we get any errors, and is queryable via a getter
-    //      method. Its used by the main code to suppress output if there are
-    //      errors.
+    //  fLocalForm
+    //      This is the local code page form of the string.
     // -----------------------------------------------------------------------
-    bool    fSawErrors;
+    char*   fLocalForm;
 };
 
-inline bool DOMTreeErrorReporter::getSawErrors() const
+inline XERCES_STD_QUALIFIER ostream& operator<<(XERCES_STD_QUALIFIER ostream& target, const StrX& toDump)
 {
-    return fSawErrors;
+    target << toDump.localForm();
+    return target;
 }
+
