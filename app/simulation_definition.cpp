@@ -11,6 +11,7 @@
 
 #include "simulation_definition.h"
 #include "DOMTreeErrorReporter.hpp"
+#include "StrX.h"
 
 //using namespace xercesc;
 using namespace std;
@@ -24,34 +25,36 @@ using namespace std;
 Simulation_definition::Simulation_definition(string specification_file)
     : specification_file{specification_file}
 {
-   try
-   {
-      XMLPlatformUtils::Initialize();  // Initialize Xerces infrastructure
-   }
-   catch( XMLException& e )
-   {
-      char* message = XMLString::transcode( e.getMessage() );
-      cerr << "XML toolkit initialization error: " << message << endl;
-      XMLString::release( &message );
-      // throw exception here to return ERROR_XERCES_INIT
-   }
 
-   // Tags and attributes used in XML file.
-   // Can't call transcode till after Xerces Initialize()
-   TAG_initial_values = XMLString::transcode("initial-values");
-   TAG_parameters = XMLString::transcode("parameters");
-   TAG_drivers = XMLString::transcode("drivers");
-   TAG_direct_modules = XMLString::transcode("direct-modules");
-   TAG_differential_modules = XMLString::transcode("differential-modules");
-   TAG_module = XMLString::transcode("module");
-   TAG_row = XMLString::transcode("row");
-   TAG_variable = XMLString::transcode("variable");
-   ATTR_name = XMLString::transcode("name");
-   ATTR_value = XMLString::transcode("value");
+    // Initialize the XML4C2 system
+    try
+    {
+        XMLPlatformUtils::Initialize();
+    }
+    catch(const XMLException& e )
+    {
+        cerr << "Error during Xerces-c Initialization.\n"
+             << "  Exception message:"
+             << StrX(e.getMessage()) << endl;
+        // throw exception here
+    }
 
-   parser = new XercesDOMParser;
+    // Tags and attributes used in XML file.
+    // Can't call transcode till after Xerces Initialize()
+    TAG_initial_values = XMLString::transcode("initial-values");
+    TAG_parameters = XMLString::transcode("parameters");
+    TAG_drivers = XMLString::transcode("drivers");
+    TAG_direct_modules = XMLString::transcode("direct-modules");
+    TAG_differential_modules = XMLString::transcode("differential-modules");
+    TAG_module = XMLString::transcode("module");
+    TAG_row = XMLString::transcode("row");
+    TAG_variable = XMLString::transcode("variable");
+    ATTR_name = XMLString::transcode("name");
+    ATTR_value = XMLString::transcode("value");
 
-   read_spec_file();
+    parser = new XercesDOMParser;
+
+    read_spec_file();
 }
 
 state_map Simulation_definition::get_initial_state() {
@@ -78,45 +81,43 @@ mc_vector Simulation_definition::get_differential_modules() {
 
 Simulation_definition::~Simulation_definition()
 {
-   // Free memory
+    // Free memory
 
-   delete parser;
-   //   if (m_OptionA)   XMLString::release( &m_OptionA );
-   //if (m_OptionB)   XMLString::release( &m_OptionB );
+    delete parser;
 
-   try
-   {
-       XMLString::release( &TAG_initial_values );
-       XMLString::release( &TAG_parameters );
-       XMLString::release( &TAG_drivers );
-       XMLString::release( &TAG_direct_modules );
-       XMLString::release( &TAG_differential_modules );
+    try
+    {
+        XMLString::release( &TAG_initial_values );
+        XMLString::release( &TAG_parameters );
+        XMLString::release( &TAG_drivers );
+        XMLString::release( &TAG_direct_modules );
+        XMLString::release( &TAG_differential_modules );
 
-       XMLString::release( &TAG_module );
-       XMLString::release( &TAG_row );
+        XMLString::release( &TAG_module );
+        XMLString::release( &TAG_row );
 
-       XMLString::release( &TAG_variable );
-       XMLString::release( &ATTR_name );
-       XMLString::release( &ATTR_value );
-   }
-   catch( ... )
-   {
-      cerr << "Unknown exception encountered in TagNamesdtor" << endl;
-   }
+        XMLString::release( &TAG_variable );
+        XMLString::release( &ATTR_name );
+        XMLString::release( &ATTR_value );
+    }
+    catch( ... )
+    {
+        cerr << "Unknown exception encountered in TagNamesdtor" << endl;
+    }
 
-   // Terminate Xerces
+    // Terminate Xerces
 
-   try
-   {
-      XMLPlatformUtils::Terminate();  // Terminate after release of memory
-   }
-   catch( xercesc::XMLException& e )
-   {
-      char* message = xercesc::XMLString::transcode( e.getMessage() );
+    try
+    {
+        XMLPlatformUtils::Terminate();  // Terminate after release of memory
+    }
+    catch( XMLException& e )
+    {
+        char* message = XMLString::transcode( e.getMessage() );
 
-      cerr << "XML ttolkit teardown error: " << message << endl;
-      XMLString::release( &message );
-   }
+        cerr << "XML ttolkit teardown error: " << message << endl;
+        XMLString::release( &message );
+    }
 }
 
 /**
@@ -131,106 +132,106 @@ Simulation_definition::~Simulation_definition()
 void Simulation_definition::read_spec_file()
         throw( std::runtime_error )
 {
-   // Test to see if the file is ok.
+    // Test to see if the file is ok.
 
-   struct stat fileStatus;
+    struct stat fileStatus;
 
-   errno = 0;
-   if (stat(specification_file.c_str(), &fileStatus) == -1) // ==0 ok; ==-1 error
-   {
-       if ( errno == ENOENT )      // errno declared by include file errno.h
-          throw ( std::runtime_error("Path file_name does not exist, or path is an empty string.") );
-       else if ( errno == ENOTDIR )
-          throw ( std::runtime_error("A component of the path is not a directory."));
-       else if ( errno == ELOOP )
-          throw ( std::runtime_error("Too many symbolic links encountered while traversing the path."));
-       else if ( errno == EACCES )
-          throw ( std::runtime_error("Permission denied."));
-       else if ( errno == ENAMETOOLONG )
-          throw ( std::runtime_error("File can not be read\n"));
-   }
+    errno = 0;
+    if (stat(specification_file.c_str(), &fileStatus) == -1) // ==0 ok; ==-1 error
+    {
+        if ( errno == ENOENT )      // errno declared by include file errno.h
+            throw ( std::runtime_error("Path file_name does not exist, or path is an empty string.") );
+        else if ( errno == ENOTDIR )
+            throw ( std::runtime_error("A component of the path is not a directory."));
+        else if ( errno == ELOOP )
+            throw ( std::runtime_error("Too many symbolic links encountered while traversing the path."));
+        else if ( errno == EACCES )
+            throw ( std::runtime_error("Permission denied."));
+        else if ( errno == ENAMETOOLONG )
+            throw ( std::runtime_error("File can not be read\n"));
+    }
 
-   // Configure DOM parser.
+    // Configure DOM parser.
 
-   parser->setValidationScheme( XercesDOMParser::Val_Always );
-   parser->setDoNamespaces( true );
-   parser->setDoSchema( true );
-   parser->setLoadExternalDTD( false );
-   parser->setValidationConstraintFatal(true);
-   DOMTreeErrorReporter *errReporter = new DOMTreeErrorReporter();
-   parser->setErrorHandler(errReporter);
+    parser->setValidationScheme( XercesDOMParser::Val_Always );
+    parser->setDoNamespaces( true );
+    parser->setDoSchema( true );
+    parser->setLoadExternalDTD( false );
+    parser->setValidationConstraintFatal(true);
+    DOMTreeErrorReporter *errReporter = new DOMTreeErrorReporter();
+    parser->setErrorHandler(errReporter);
 
-   try
-   {
-      parser->parse( specification_file.c_str() );
+    try
+    {
+        parser->parse( specification_file.c_str() );
 
-      if (parser->getErrorCount() == 0)
-          printf("XML file validated against the schema successfully\n");
-      else
-          printf("XML file doesn't conform to the schema\n");
+        if (parser->getErrorCount() == 0)
+            printf("XML file validated against the schema successfully\n");
+        else
+            printf("XML file doesn't conform to the schema\n");
 
 
-      // no need to free this pointer - owned by the parent parser object
-      DOMDocument* xmlDoc = parser->getDocument();
+        // no need to free this pointer - owned by the parent parser object
+        DOMDocument* xmlDoc = parser->getDocument();
 
-      // Get the top-level element: NAme is "root". No attributes for "root"
+        // Get the top-level element: NAme is "root". No attributes for "root"
 
-      DOMElement* elementRoot = xmlDoc->getDocumentElement();
-      if ( !elementRoot ) throw(std::runtime_error( "empty XML document" ));
+        DOMElement* elementRoot = xmlDoc->getDocumentElement();
+        if ( !elementRoot ) throw(std::runtime_error( "empty XML document" ));
 
-      // Parse XML file for tags of interest: "ApplicationSettings"
-      // Look one level nested within "root". (child of root)
+        // Parse XML file for tags of interest: "ApplicationSettings"
+        // Look one level nested within "root". (child of root)
 
-      DOMNodeList*     children = elementRoot->getChildNodes();
-      const XMLSize_t nodeCount = children->getLength();
+        DOMNodeList*     children = elementRoot->getChildNodes();
+        const XMLSize_t nodeCount = children->getLength();
 
-      // For all nodes, children of "" in the XML tree.
+        // For all nodes, children of "" in the XML tree.
 
-      for ( XMLSize_t i = 0; i < nodeCount; ++i )
-      {
-         DOMNode* currentNode = children->item(i);
-         if ( currentNode->getNodeType() &&  // true is not NULL
-             currentNode->getNodeType() == DOMNode::ELEMENT_NODE ) // is element
-         {
-            // Found node which is an Element. Re-cast node as element
-            DOMElement* currentElement
-                        = dynamic_cast< xercesc::DOMElement* >( currentNode );
-            if ( XMLString::equals(currentElement->getTagName(), TAG_initial_values))
+        for ( XMLSize_t i = 0; i < nodeCount; ++i )
+        {
+            DOMNode* currentNode = children->item(i);
+            if ( currentNode->getNodeType() &&  // true is not NULL
+                 currentNode->getNodeType() == DOMNode::ELEMENT_NODE ) // is element
             {
-               // Already tested node as type element and of name "initial_values".
-                populate_mapping(currentElement, initial_state);
+                // Found node which is an Element. Re-cast node as element
+                DOMElement* currentElement
+                    = dynamic_cast< DOMElement* >( currentNode );
+                if ( XMLString::equals(currentElement->getTagName(), TAG_initial_values))
+                {
+                    // Already tested node as type element and of name "initial_values".
+                    populate_mapping(currentElement, initial_state);
+                }
+                else if ( XMLString::equals(currentElement->getTagName(), TAG_parameters))
+                {
+                    // Already tested node as type element and of name "parameters".
+                    populate_mapping(currentElement, parameters);
+                }
+                else if ( XMLString::equals(currentElement->getTagName(), TAG_drivers))
+                {
+                    populate_mapping(currentElement, drivers);
+                }
+                else if ( XMLString::equals(currentElement->getTagName(), TAG_direct_modules))
+                {
+                    set_module_list(currentElement, direct_modules);
+                }
+                else if ( XMLString::equals(currentElement->getTagName(), TAG_differential_modules))
+                {
+                    set_module_list(currentElement, differential_modules);
+                }
+                else {
+                    cerr << "Unexpected child element of dynamical-system encountered: ";
+                    cerr << XMLString::transcode(currentElement->getTagName()) << endl;
+                }
             }
-            else if ( XMLString::equals(currentElement->getTagName(), TAG_parameters))
-            {
-               // Already tested node as type element and of name "parameters".
-                populate_mapping(currentElement, parameters);
-            }
-            else if ( XMLString::equals(currentElement->getTagName(), TAG_drivers))
-            {
-                populate_mapping(currentElement, drivers);
-            }
-            else if ( XMLString::equals(currentElement->getTagName(), TAG_direct_modules))
-            {
-                set_module_list(currentElement, direct_modules);
-            }
-            else if ( XMLString::equals(currentElement->getTagName(), TAG_differential_modules))
-            {
-                set_module_list(currentElement, differential_modules);
-            }
-            else {
-                cerr << "Unexpected child element of dynamical-system encountered: ";
-                cerr << XMLString::transcode(currentElement->getTagName()) << endl;
-            }
-         }
-      }
-   }
-   catch( xercesc::XMLException& e )
-   {
-      char* message = xercesc::XMLString::transcode( e.getMessage() );
-      ostringstream errBuf;
-      errBuf << "Error parsing file: " << message << flush;
-      XMLString::release( &message );
-   }
+        }
+    }
+    catch( XMLException& e )
+    {
+        char* message = XMLString::transcode( e.getMessage() );
+        ostringstream errBuf;
+        errBuf << "Error parsing file: " << message << flush;
+        XMLString::release( &message );
+    }
 }
 
 void Simulation_definition::populate_mapping(DOMElement* currentElement, state_map& mapping) {
@@ -245,7 +246,7 @@ void Simulation_definition::populate_mapping(DOMElement* currentElement, state_m
         {
             // Found node which is an Element. Re-cast node as element
             DOMElement* currentElement
-                = dynamic_cast< xercesc::DOMElement* >( currentNode );
+                = dynamic_cast< DOMElement* >( currentNode );
 
             if ( XMLString::equals(currentElement->getTagName(), TAG_variable))
             {
@@ -286,7 +287,7 @@ void Simulation_definition::populate_mapping(DOMElement* currentElement, state_v
         {
             // Found node which is an Element. Re-cast node as element
             DOMElement* currentElement
-                = dynamic_cast< xercesc::DOMElement* >( currentNode );
+                = dynamic_cast< DOMElement* >( currentNode );
 
             if ( XMLString::equals(currentElement->getTagName(), TAG_row)) {
                 process_row(currentElement, drivers);
@@ -308,7 +309,7 @@ void Simulation_definition::process_row(DOMElement* row, state_vector_map& mappi
         {
             // Found node which is an Element. Re-cast node as element
             DOMElement* currentElement
-                = dynamic_cast< xercesc::DOMElement* >( currentNode );
+                = dynamic_cast< DOMElement* >( currentNode );
 
             if ( XMLString::equals(currentElement->getTagName(), TAG_variable))
             {
@@ -348,7 +349,7 @@ void Simulation_definition::set_module_list(DOMElement* currentElement, mc_vecto
         {
             // Found node which is an Element. Re-cast node as element
             DOMElement* currentElement
-                = dynamic_cast< xercesc::DOMElement* >( currentNode );
+                = dynamic_cast< DOMElement* >( currentNode );
 
             if ( XMLString::equals(currentElement->getTagName(), TAG_module))
             {
