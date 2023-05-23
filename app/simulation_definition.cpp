@@ -172,11 +172,7 @@ void Simulation_definition::read_spec_file()
     }
 
     if (errors_occurred || parser->getErrorCount() > 0) {
-        cout << "There were errors parsing the simulation specification file." << endl;
-        throw;
-    }
-    else {
-        cout << "No errors found" << endl;
+        throw(std::runtime_error( "There were errors parsing the simulation specification file." ));
     }
 
     // no need to free this pointer - owned by the parent parser object
@@ -185,7 +181,10 @@ void Simulation_definition::read_spec_file()
     // Get the top-level element
 
     DOMElement* element_root = xml_doc->getDocumentElement();
-    if ( !element_root ) throw(std::runtime_error( "empty XML document" ));
+    if ( !element_root ) {
+        // The error count check should prevent us from ever getting here.
+        throw(std::runtime_error( "empty XML document" ));
+    }
 
     DOMNodeList* children = element_root->getChildNodes();
     const XMLSize_t node_count = children->getLength();
