@@ -43,7 +43,7 @@ public:
 
 private:
     void read_spec_file() throw(std::runtime_error);
-
+    void check_spec_file_status();
     void populate_mapping(DOMElement* current_element, state_map& mapping);
     void populate_mapping(DOMElement* current_element, state_vector_map& mapping);
     void process_row(DOMElement* row, state_vector_map& mapping);

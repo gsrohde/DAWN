@@ -135,22 +135,7 @@ void Simulation_definition::read_spec_file()
 {
     // Test to see if the file is ok.
 
-    struct stat file_status;
-
-    errno = 0;
-    if (stat(specification_file.c_str(), &file_status) == -1) // ==0 ok; ==-1 error
-    {
-        if ( errno == ENOENT )      // errno declared by include file errno.h
-            throw ( std::runtime_error("Path file_name does not exist, or path is an empty string.") );
-        else if ( errno == ENOTDIR )
-            throw ( std::runtime_error("A component of the path is not a directory."));
-        else if ( errno == ELOOP )
-            throw ( std::runtime_error("Too many symbolic links encountered while traversing the path."));
-        else if ( errno == EACCES )
-            throw ( std::runtime_error("Permission denied."));
-        else if ( errno == ENAMETOOLONG )
-            throw ( std::runtime_error("File can not be read\n"));
-    }
+    check_spec_file_status();
 
     // Configure DOM parser.
 
@@ -385,5 +370,24 @@ void Simulation_definition::set_module_list(DOMElement* current_element, mc_vect
                 vec.push_back(module_factory<standardBML::module_library>::retrieve(module_name));
             }
         }
+    }
+}
+
+void Simulation_definition::check_spec_file_status() {
+    struct stat file_status;
+
+    errno = 0;
+    if (stat(specification_file.c_str(), &file_status) == -1) // ==0 ok; ==-1 error
+    {
+        if ( errno == ENOENT )      // errno declared by include file errno.h
+            throw ( std::runtime_error("Path file_name does not exist, or path is an empty string.") );
+        else if ( errno == ENOTDIR )
+            throw ( std::runtime_error("A component of the path is not a directory."));
+        else if ( errno == ELOOP )
+            throw ( std::runtime_error("Too many symbolic links encountered while traversing the path."));
+        else if ( errno == EACCES )
+            throw ( std::runtime_error("Permission denied."));
+        else if ( errno == ENAMETOOLONG )
+            throw ( std::runtime_error("File can not be read\n"));
     }
 }
