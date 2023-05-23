@@ -19,9 +19,11 @@
 using namespace std;
 
 /**
- *  Constructor initializes xerces-C libraries.
+ *  Constructor initializes Xerces-C++ libraries.
  *  The XML tags and attributes which we seek are defined.
- *  The xerces-C DOM parser infrastructure is initialized.
+ *  The Xerces-C++ DOM parser infrastructure is initialized.
+ *
+ *  @param in specification_file The name of the XML file giving the specifications for the simulation.
  */
 
 Simulation_definition::Simulation_definition(string specification_file)
@@ -35,7 +37,7 @@ Simulation_definition::Simulation_definition(string specification_file)
     }
     catch(const XMLException& e )
     {
-        cerr << "Error during Xerces-c Initialization.\n"
+        cerr << "Error during Xerces-C++ Initialization.\n"
              << "  Exception message:"
              << StrX(e.getMessage()) << endl;
         // throw exception here
@@ -77,8 +79,8 @@ mc_vector Simulation_definition::get_differential_modules() {
 
 /**
  *  Class destructor frees memory used to hold the XML tag and
- *  attribute definitions. It als terminates use of the xerces-C
- *  framework.
+ *  attribute definitions. It also deletes the parser and terminates
+ *  use of the Xerces-C++ framework.
  */
 
 Simulation_definition::~Simulation_definition()
@@ -115,7 +117,7 @@ Simulation_definition::~Simulation_definition()
     }
     catch( XMLException& e )
     {
-        cerr << "Error during Xerces-c Termination.\n"
+        cerr << "Error during Xerces-C++ Termination.\n"
              << "  Exception message:"
              << StrX(e.getMessage()) << endl;
     }
@@ -124,10 +126,8 @@ Simulation_definition::~Simulation_definition()
 /**
  *  This function:
  *  - Tests the access and availability of the XML simulation specification file.
- *  - Configures the xerces-c DOM parser.
+ *  - Configures the Xerces-C++ DOM parser.
  *  - Reads, extracts, and stores the pertinent information from the XML file.
- *
- *  @param in specification_file The name of the XML file giving the specifications for the simulation.
  */
 
 void Simulation_definition::read_spec_file()
