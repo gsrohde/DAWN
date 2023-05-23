@@ -2,7 +2,7 @@
 #define SIMULATION_DEFINITION_H
 /**
  *  @file
- *  Class "GetConfig" provides the functions to read the XML data.
+ *  Class "Simulation_definition" provides the functions to read the XML data.
  *  @version 1.0
  */
 #include <xercesc/dom/DOM.hpp>
@@ -44,10 +44,10 @@ public:
 private:
     void read_spec_file() throw(std::runtime_error);
 
-    void populate_mapping(DOMElement* currentElement, state_map& mapping);
-    void populate_mapping(DOMElement* currentElement, state_vector_map& mapping);
+    void populate_mapping(DOMElement* current_element, state_map& mapping);
+    void populate_mapping(DOMElement* current_element, state_vector_map& mapping);
     void process_row(DOMElement* row, state_vector_map& mapping);
-    void set_module_list(DOMElement* currentElement, mc_vector& vec);
+    void set_module_list(DOMElement* current_element, mc_vector& vec);
 
     xercesc::XercesDOMParser *parser;
 

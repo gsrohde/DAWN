@@ -104,7 +104,7 @@ Simulation_definition::~Simulation_definition()
     }
     catch( ... )
     {
-        cerr << "Unknown exception encountered in TagNamesdtor" << endl;
+        cerr << "Unknown exception encountered when releasing XMLCh pointers" << endl;
     }
 
     // Terminate Xerces
@@ -135,10 +135,10 @@ void Simulation_definition::read_spec_file()
 {
     // Test to see if the file is ok.
 
-    struct stat fileStatus;
+    struct stat file_status;
 
     errno = 0;
-    if (stat(specification_file.c_str(), &fileStatus) == -1) // ==0 ok; ==-1 error
+    if (stat(specification_file.c_str(), &file_status) == -1) // ==0 ok; ==-1 error
     {
         if ( errno == ENOENT )      // errno declared by include file errno.h
             throw ( std::runtime_error("Path file_name does not exist, or path is an empty string.") );
@@ -159,10 +159,10 @@ void Simulation_definition::read_spec_file()
     parser->setDoSchema( true );
     parser->setLoadExternalDTD( false );
     parser->setValidationConstraintFatal(true);
-    DOMTreeErrorReporter *errReporter = new DOMTreeErrorReporter();
-    parser->setErrorHandler(errReporter);
+    DOMTreeErrorReporter* error_reporter = new DOMTreeErrorReporter();
+    parser->setErrorHandler(error_reporter);
 
-    bool errorsOccured = false;
+    bool errors_occurred = false;
     try
     {
         parser->parse( specification_file.c_str() );
@@ -170,36 +170,36 @@ void Simulation_definition::read_spec_file()
     catch (const OutOfMemoryException&)
     {
         cerr << "OutOfMemoryException" << endl;
-        errorsOccured = true;
+        errors_occurred = true;
     }
     catch (const XMLException& e)
     {
         cerr << "An error occurred during parsing\n   Message: "
              << StrX(e.getMessage()) << endl;
-        errorsOccured = true;
+        errors_occurred = true;
     }
 
     catch (const DOMException& e)
     {
-        const unsigned int maxChars = 2047;
-        XMLCh errText[maxChars + 1];
+        const unsigned int max_chars = 2047;
+        XMLCh err_text[max_chars + 1];
 
         cerr << "\nDOM Error during parsing: '" << specification_file << "'\n"
              << "DOMException code is:  " << e.code << endl;
 
-        if (DOMImplementation::loadDOMExceptionMsg(e.code, errText, maxChars))
-             cerr << "Message is: " << StrX(errText) << endl;
+        if (DOMImplementation::loadDOMExceptionMsg(e.code, err_text, max_chars))
+             cerr << "Message is: " << StrX(err_text) << endl;
 
-        errorsOccured = true;
+        errors_occurred = true;
     }
 
     catch (...)
     {
         cerr << "An error occurred during parsing\n " << endl;
-        errorsOccured = true;
+        errors_occurred = true;
     }
 
-    if (errorsOccured || parser->getErrorCount() > 0) {
+    if (errors_occurred || parser->getErrorCount() > 0) {
         cout << "There were errors parsing the simulation specification file." << endl;
         throw;
     }
@@ -208,83 +208,80 @@ void Simulation_definition::read_spec_file()
     }
 
     // no need to free this pointer - owned by the parent parser object
-    DOMDocument* xmlDoc = parser->getDocument();
+    DOMDocument* xml_doc = parser->getDocument();
 
-    // Get the top-level element: NAme is "root". No attributes for "root"
+    // Get the top-level element
 
-    DOMElement* elementRoot = xmlDoc->getDocumentElement();
-    if ( !elementRoot ) throw(std::runtime_error( "empty XML document" ));
+    DOMElement* element_root = xml_doc->getDocumentElement();
+    if ( !element_root ) throw(std::runtime_error( "empty XML document" ));
 
-    // Parse XML file for tags of interest: "ApplicationSettings"
-    // Look one level nested within "root". (child of root)
-
-    DOMNodeList*     children = elementRoot->getChildNodes();
-    const XMLSize_t nodeCount = children->getLength();
+    DOMNodeList* children = element_root->getChildNodes();
+    const XMLSize_t node_count = children->getLength();
 
     // For all nodes, children of "" in the XML tree.
 
-    for ( XMLSize_t i = 0; i < nodeCount; ++i )
+    for ( XMLSize_t i = 0; i < node_count; ++i )
     {
-        DOMNode* currentNode = children->item(i);
-        if ( currentNode->getNodeType() &&  // true is not NULL
-             currentNode->getNodeType() == DOMNode::ELEMENT_NODE ) // is element
+        DOMNode* current_node = children->item(i);
+        if ( current_node->getNodeType() &&  // true is not NULL
+             current_node->getNodeType() == DOMNode::ELEMENT_NODE ) // is element
         {
             // Found node which is an Element. Re-cast node as element
-            DOMElement* currentElement
-                = dynamic_cast< DOMElement* >( currentNode );
-            if ( XMLString::equals(currentElement->getTagName(), TAG_initial_values))
+            DOMElement* current_element
+                = dynamic_cast< DOMElement* >( current_node );
+            if ( XMLString::equals(current_element->getTagName(), TAG_initial_values))
             {
                 // Already tested node as type element and of name "initial_values".
-                populate_mapping(currentElement, initial_state);
+                populate_mapping(current_element, initial_state);
             }
-            else if ( XMLString::equals(currentElement->getTagName(), TAG_parameters))
+            else if ( XMLString::equals(current_element->getTagName(), TAG_parameters))
             {
                 // Already tested node as type element and of name "parameters".
-                populate_mapping(currentElement, parameters);
+                populate_mapping(current_element, parameters);
             }
-            else if ( XMLString::equals(currentElement->getTagName(), TAG_drivers))
+            else if ( XMLString::equals(current_element->getTagName(), TAG_drivers))
             {
-                populate_mapping(currentElement, drivers);
+                populate_mapping(current_element, drivers);
             }
-            else if ( XMLString::equals(currentElement->getTagName(), TAG_direct_modules))
+            else if ( XMLString::equals(current_element->getTagName(), TAG_direct_modules))
             {
-                set_module_list(currentElement, direct_modules);
+                set_module_list(current_element, direct_modules);
             }
-            else if ( XMLString::equals(currentElement->getTagName(), TAG_differential_modules))
+            else if ( XMLString::equals(current_element->getTagName(), TAG_differential_modules))
             {
-                set_module_list(currentElement, differential_modules);
+                set_module_list(current_element, differential_modules);
             }
             else {
                 cerr << "Unexpected child element of dynamical-system encountered: ";
-                cerr << XMLString::transcode(currentElement->getTagName()) << endl;
+                cerr << XMLString::transcode(current_element->getTagName()) << endl;
             }
         }
     }
 }
 
-void Simulation_definition::populate_mapping(DOMElement* currentElement, state_map& mapping) {
-    DOMNodeList*     children = currentElement->getChildNodes();
-    const XMLSize_t nodeCount = children->getLength();
+void Simulation_definition::populate_mapping(DOMElement* current_element, state_map& mapping) {
+    DOMNodeList*     children = current_element->getChildNodes();
+    const XMLSize_t node_count = children->getLength();
 
-    for ( XMLSize_t i = 0; i < nodeCount; ++i )
+    for ( XMLSize_t i = 0; i < node_count; ++i )
     {
-        DOMNode* currentNode = children->item(i);
-        if ( currentNode->getNodeType() &&  // true is not NULL
-             currentNode->getNodeType() == DOMNode::ELEMENT_NODE ) // is element
+        DOMNode* current_node = children->item(i);
+        if ( current_node->getNodeType() &&  // true is not NULL
+             current_node->getNodeType() == DOMNode::ELEMENT_NODE ) // is element
         {
             // Found node which is an Element. Re-cast node as element
-            DOMElement* currentElement
-                = dynamic_cast< DOMElement* >( currentNode );
+            DOMElement* current_element
+                = dynamic_cast< DOMElement* >( current_node );
 
-            if ( XMLString::equals(currentElement->getTagName(), TAG_variable))
+            if ( XMLString::equals(current_element->getTagName(), TAG_variable))
             {
                 // Read attributes of element "variable".
                 const XMLCh* name
-                    = currentElement->getAttribute(ATTR_name);
+                    = current_element->getAttribute(ATTR_name);
                 string key = XMLString::transcode(name);
 
                 const XMLCh* value
-                    = currentElement->getAttribute(ATTR_value);
+                    = current_element->getAttribute(ATTR_value);
                 string string_value = XMLString::transcode(value);
                 try {
                     double variable_value = std::stod(string_value);
@@ -300,53 +297,53 @@ void Simulation_definition::populate_mapping(DOMElement* currentElement, state_m
                 // shouldn't get here
             }
         } // if child node is an element
-    } // for children of currentElement
+    } // for children of current_element
 }
 
-void Simulation_definition::populate_mapping(DOMElement* currentElement, state_vector_map& mapping) {
-    DOMNodeList*     children = currentElement->getChildNodes();
-    const XMLSize_t nodeCount = children->getLength();
+void Simulation_definition::populate_mapping(DOMElement* current_element, state_vector_map& mapping) {
+    DOMNodeList* children = current_element->getChildNodes();
+    const XMLSize_t node_count = children->getLength();
 
-    for ( XMLSize_t i = 0; i < nodeCount; ++i )
+    for ( XMLSize_t i = 0; i < node_count; ++i )
     {
-        DOMNode* currentNode = children->item(i);
-        if ( currentNode->getNodeType() &&  // true is not NULL
-             currentNode->getNodeType() == DOMNode::ELEMENT_NODE ) // is element
+        DOMNode* current_node = children->item(i);
+        if ( current_node->getNodeType() &&  // true is not NULL
+             current_node->getNodeType() == DOMNode::ELEMENT_NODE ) // is element
         {
             // Found node which is an Element. Re-cast node as element
-            DOMElement* currentElement
-                = dynamic_cast< DOMElement* >( currentNode );
+            DOMElement* current_element
+                = dynamic_cast< DOMElement* >( current_node );
 
-            if ( XMLString::equals(currentElement->getTagName(), TAG_row)) {
-                process_row(currentElement, drivers);
+            if ( XMLString::equals(current_element->getTagName(), TAG_row)) {
+                process_row(current_element, drivers);
             } else {
                 cout << "shouldn't EVER get here!" << endl;
             }
         } // if child node is an element
-    } // for children of currentElement
+    } // for children of current_element
 }
 
 void Simulation_definition::process_row(DOMElement* row, state_vector_map& mapping) {
     DOMNodeList* children = row->getChildNodes();
-    const XMLSize_t nodeCount = children->getLength();
+    const XMLSize_t node_count = children->getLength();
 
-    for ( XMLSize_t j = 0; j < nodeCount; ++j) {
-        DOMNode* currentNode = children->item(j);
-        if ( currentNode->getNodeType() &&  // true is not NULL
-             currentNode->getNodeType() == DOMNode::ELEMENT_NODE ) // is element
+    for ( XMLSize_t j = 0; j < node_count; ++j) {
+        DOMNode* current_node = children->item(j);
+        if ( current_node->getNodeType() &&  // true is not NULL
+             current_node->getNodeType() == DOMNode::ELEMENT_NODE ) // is element
         {
             // Found node which is an Element. Re-cast node as element
-            DOMElement* currentElement
-                = dynamic_cast< DOMElement* >( currentNode );
+            DOMElement* current_element
+                = dynamic_cast< DOMElement* >( current_node );
 
-            if ( XMLString::equals(currentElement->getTagName(), TAG_variable))
+            if ( XMLString::equals(current_element->getTagName(), TAG_variable))
             {
                 // Read attributes of element "variable".
                 const XMLCh* name
-                    = currentElement->getAttribute(ATTR_name);
+                    = current_element->getAttribute(ATTR_name);
                 string key = XMLString::transcode(name);
                 const XMLCh* value
-                    = currentElement->getAttribute(ATTR_value);
+                    = current_element->getAttribute(ATTR_value);
                 string string_value = XMLString::transcode(value);
                 try {
                     double variable_value = std::stod(string_value);
@@ -365,25 +362,25 @@ void Simulation_definition::process_row(DOMElement* row, state_vector_map& mappi
     }
 }
 
-void Simulation_definition::set_module_list(DOMElement* currentElement, mc_vector& vec) {
-    DOMNodeList*     children = currentElement->getChildNodes();
-    const XMLSize_t nodeCount = children->getLength();
+void Simulation_definition::set_module_list(DOMElement* current_element, mc_vector& vec) {
+    DOMNodeList*     children = current_element->getChildNodes();
+    const XMLSize_t node_count = children->getLength();
 
-    for ( XMLSize_t i = 0; i < nodeCount; ++i )
+    for ( XMLSize_t i = 0; i < node_count; ++i )
     {
-        DOMNode* currentNode = children->item(i);
-        if ( currentNode->getNodeType() &&  // true is not NULL
-             currentNode->getNodeType() == DOMNode::ELEMENT_NODE ) // is element
+        DOMNode* current_node = children->item(i);
+        if ( current_node->getNodeType() &&  // true is not NULL
+             current_node->getNodeType() == DOMNode::ELEMENT_NODE ) // is element
         {
             // Found node which is an Element. Re-cast node as element
-            DOMElement* currentElement
-                = dynamic_cast< DOMElement* >( currentNode );
+            DOMElement* current_element
+                = dynamic_cast< DOMElement* >( current_node );
 
-            if ( XMLString::equals(currentElement->getTagName(), TAG_module))
+            if ( XMLString::equals(current_element->getTagName(), TAG_module))
             {
                 // Read name attribute of module.
                 const XMLCh* name
-                    = currentElement->getAttribute(ATTR_name);
+                    = current_element->getAttribute(ATTR_name);
                 string module_name = XMLString::transcode(name);
                 vec.push_back(module_factory<standardBML::module_library>::retrieve(module_name));
             }
