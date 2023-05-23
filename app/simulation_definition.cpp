@@ -115,10 +115,9 @@ Simulation_definition::~Simulation_definition()
     }
     catch( XMLException& e )
     {
-        char* message = XMLString::transcode( e.getMessage() );
-
-        cerr << "XML ttolkit teardown error: " << message << endl;
-        XMLString::release( &message );
+        cerr << "Error during Xerces-c Termination.\n"
+             << "  Exception message:"
+             << StrX(e.getMessage()) << endl;
     }
 }
 
