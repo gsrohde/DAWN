@@ -133,19 +133,8 @@ Simulation_definition::~Simulation_definition()
 void Simulation_definition::read_spec_file()
         throw( std::runtime_error )
 {
-    // Test to see if the file is ok.
-
     check_spec_file_status();
-
-    // Configure DOM parser.
-
-    parser->setValidationScheme( XercesDOMParser::Val_Always );
-    parser->setDoNamespaces( true );
-    parser->setDoSchema( true );
-    parser->setLoadExternalDTD( false );
-    parser->setValidationConstraintFatal(true);
-    DOMTreeErrorReporter* error_reporter = new DOMTreeErrorReporter();
-    parser->setErrorHandler(error_reporter);
+    configure_parser();
 
     bool errors_occurred = false;
     try
@@ -163,7 +152,6 @@ void Simulation_definition::read_spec_file()
              << StrX(e.getMessage()) << endl;
         errors_occurred = true;
     }
-
     catch (const DOMException& e)
     {
         const unsigned int max_chars = 2047;
@@ -177,7 +165,6 @@ void Simulation_definition::read_spec_file()
 
         errors_occurred = true;
     }
-
     catch (...)
     {
         cerr << "An error occurred during parsing\n " << endl;
@@ -390,4 +377,14 @@ void Simulation_definition::check_spec_file_status() {
         else if ( errno == ENAMETOOLONG )
             throw ( std::runtime_error("File can not be read\n"));
     }
+}
+
+void Simulation_definition::configure_parser() {
+    parser->setValidationScheme( XercesDOMParser::Val_Always );
+    parser->setDoNamespaces( true );
+    parser->setDoSchema( true );
+    parser->setLoadExternalDTD( false );
+    parser->setValidationConstraintFatal(true);
+    DOMTreeErrorReporter* error_reporter = new DOMTreeErrorReporter();
+    parser->setErrorHandler(error_reporter);
 }
