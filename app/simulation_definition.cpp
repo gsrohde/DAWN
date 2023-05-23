@@ -9,6 +9,8 @@
 #include <unistd.h>
 #include <errno.h>
 
+#include <xercesc/util/OutOfMemoryException.hpp>
+
 #include "simulation_definition.h"
 #include "DOMTreeErrorReporter.hpp"
 #include "StrX.h"
@@ -161,76 +163,103 @@ void Simulation_definition::read_spec_file()
     DOMTreeErrorReporter *errReporter = new DOMTreeErrorReporter();
     parser->setErrorHandler(errReporter);
 
+    bool errorsOccured = false;
     try
     {
         parser->parse( specification_file.c_str() );
+    }
+    catch (const OutOfMemoryException&)
+    {
+        cerr << "OutOfMemoryException" << endl;
+        errorsOccured = true;
+    }
+    catch (const XMLException& e)
+    {
+        cerr << "An error occurred during parsing\n   Message: "
+             << StrX(e.getMessage()) << endl;
+        errorsOccured = true;
+    }
 
-        if (parser->getErrorCount() == 0)
-            printf("XML file validated against the schema successfully\n");
-        else
-            printf("XML file doesn't conform to the schema\n");
+    catch (const DOMException& e)
+    {
+        const unsigned int maxChars = 2047;
+        XMLCh errText[maxChars + 1];
 
+        cerr << "\nDOM Error during parsing: '" << specification_file << "'\n"
+             << "DOMException code is:  " << e.code << endl;
 
-        // no need to free this pointer - owned by the parent parser object
-        DOMDocument* xmlDoc = parser->getDocument();
+        if (DOMImplementation::loadDOMExceptionMsg(e.code, errText, maxChars))
+             cerr << "Message is: " << StrX(errText) << endl;
 
-        // Get the top-level element: NAme is "root". No attributes for "root"
+        errorsOccured = true;
+    }
 
-        DOMElement* elementRoot = xmlDoc->getDocumentElement();
-        if ( !elementRoot ) throw(std::runtime_error( "empty XML document" ));
+    catch (...)
+    {
+        cerr << "An error occurred during parsing\n " << endl;
+        errorsOccured = true;
+    }
 
-        // Parse XML file for tags of interest: "ApplicationSettings"
-        // Look one level nested within "root". (child of root)
+    if (errorsOccured || parser->getErrorCount() > 0) {
+        cout << "There were errors parsing the simulation specification file." << endl;
+        throw;
+    }
+    else {
+        cout << "No errors found" << endl;
+    }
 
-        DOMNodeList*     children = elementRoot->getChildNodes();
-        const XMLSize_t nodeCount = children->getLength();
+    // no need to free this pointer - owned by the parent parser object
+    DOMDocument* xmlDoc = parser->getDocument();
 
-        // For all nodes, children of "" in the XML tree.
+    // Get the top-level element: NAme is "root". No attributes for "root"
 
-        for ( XMLSize_t i = 0; i < nodeCount; ++i )
+    DOMElement* elementRoot = xmlDoc->getDocumentElement();
+    if ( !elementRoot ) throw(std::runtime_error( "empty XML document" ));
+
+    // Parse XML file for tags of interest: "ApplicationSettings"
+    // Look one level nested within "root". (child of root)
+
+    DOMNodeList*     children = elementRoot->getChildNodes();
+    const XMLSize_t nodeCount = children->getLength();
+
+    // For all nodes, children of "" in the XML tree.
+
+    for ( XMLSize_t i = 0; i < nodeCount; ++i )
+    {
+        DOMNode* currentNode = children->item(i);
+        if ( currentNode->getNodeType() &&  // true is not NULL
+             currentNode->getNodeType() == DOMNode::ELEMENT_NODE ) // is element
         {
-            DOMNode* currentNode = children->item(i);
-            if ( currentNode->getNodeType() &&  // true is not NULL
-                 currentNode->getNodeType() == DOMNode::ELEMENT_NODE ) // is element
+            // Found node which is an Element. Re-cast node as element
+            DOMElement* currentElement
+                = dynamic_cast< DOMElement* >( currentNode );
+            if ( XMLString::equals(currentElement->getTagName(), TAG_initial_values))
             {
-                // Found node which is an Element. Re-cast node as element
-                DOMElement* currentElement
-                    = dynamic_cast< DOMElement* >( currentNode );
-                if ( XMLString::equals(currentElement->getTagName(), TAG_initial_values))
-                {
-                    // Already tested node as type element and of name "initial_values".
-                    populate_mapping(currentElement, initial_state);
-                }
-                else if ( XMLString::equals(currentElement->getTagName(), TAG_parameters))
-                {
-                    // Already tested node as type element and of name "parameters".
-                    populate_mapping(currentElement, parameters);
-                }
-                else if ( XMLString::equals(currentElement->getTagName(), TAG_drivers))
-                {
-                    populate_mapping(currentElement, drivers);
-                }
-                else if ( XMLString::equals(currentElement->getTagName(), TAG_direct_modules))
-                {
-                    set_module_list(currentElement, direct_modules);
-                }
-                else if ( XMLString::equals(currentElement->getTagName(), TAG_differential_modules))
-                {
-                    set_module_list(currentElement, differential_modules);
-                }
-                else {
-                    cerr << "Unexpected child element of dynamical-system encountered: ";
-                    cerr << XMLString::transcode(currentElement->getTagName()) << endl;
-                }
+                // Already tested node as type element and of name "initial_values".
+                populate_mapping(currentElement, initial_state);
+            }
+            else if ( XMLString::equals(currentElement->getTagName(), TAG_parameters))
+            {
+                // Already tested node as type element and of name "parameters".
+                populate_mapping(currentElement, parameters);
+            }
+            else if ( XMLString::equals(currentElement->getTagName(), TAG_drivers))
+            {
+                populate_mapping(currentElement, drivers);
+            }
+            else if ( XMLString::equals(currentElement->getTagName(), TAG_direct_modules))
+            {
+                set_module_list(currentElement, direct_modules);
+            }
+            else if ( XMLString::equals(currentElement->getTagName(), TAG_differential_modules))
+            {
+                set_module_list(currentElement, differential_modules);
+            }
+            else {
+                cerr << "Unexpected child element of dynamical-system encountered: ";
+                cerr << XMLString::transcode(currentElement->getTagName()) << endl;
             }
         }
-    }
-    catch( XMLException& e )
-    {
-        char* message = XMLString::transcode( e.getMessage() );
-        ostringstream errBuf;
-        errBuf << "Error parsing file: " << message << flush;
-        XMLString::release( &message );
     }
 }
 
