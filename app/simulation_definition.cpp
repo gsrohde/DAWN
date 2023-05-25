@@ -26,8 +26,9 @@ using namespace std;
  *  @param in specification_file The name of the XML file giving the specifications for the simulation.
  */
 
-Simulation_definition::Simulation_definition(string specification_file)
-    : specification_file{specification_file}
+Simulation_definition::Simulation_definition(string specification_file, Option_map parser_options)
+    : specification_file{specification_file},
+      parser_options{parser_options}
 {
 
     // Initialize the XML4C2 system
@@ -379,11 +380,24 @@ void Simulation_definition::check_spec_file_status() {
 }
 
 void Simulation_definition::configure_parser() {
-    parser->setValidationScheme( XercesDOMParser::Val_Always );
+    set_validation_scheme();
     parser->setDoNamespaces( true );
     parser->setDoSchema( true );
     parser->setLoadExternalDTD( false );
     parser->setValidationConstraintFatal(true);
     DOMTreeErrorReporter* error_reporter = new DOMTreeErrorReporter();
     parser->setErrorHandler(error_reporter);
+
+    // Possible errors show up when the parser is actually used, not
+    // here, so don't test for exceptions.
+    parser->setExternalNoNamespaceSchemaLocation(default_schema_file);
+}
+
+void Simulation_definition::set_validation_scheme() {
+    auto setting = parser_options.at("validation_scheme");
+    XercesDOMParser::ValSchemes scheme = setting == "always" ? XercesDOMParser::Val_Always
+                                       : setting == "auto"   ? XercesDOMParser::Val_Auto
+                                       : setting == "never"  ? XercesDOMParser::Val_Never
+                                       :                       XercesDOMParser::Val_Always; // should never get here
+    parser->setValidationScheme(scheme);
 }
