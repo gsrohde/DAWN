@@ -33,11 +33,16 @@
 #include <string.h>
 #include "StrX.h"
 
-void DOMTreeErrorReporter::warning(const SAXParseException&)
+void DOMTreeErrorReporter::warning(const SAXParseException& toCatch)
 {
     //
     // Ignore all warnings.
     //
+    fSawErrors = true;
+    XERCES_STD_QUALIFIER cerr << "(*) Warning at file \"" << StrX(toCatch.getSystemId())
+		 << "\", line " << toCatch.getLineNumber()
+		 << ", column " << toCatch.getColumnNumber()
+         << "\n   Message: " << StrX(toCatch.getMessage()) << XERCES_STD_QUALIFIER endl;
 }
 
 void DOMTreeErrorReporter::error(const SAXParseException& toCatch)
