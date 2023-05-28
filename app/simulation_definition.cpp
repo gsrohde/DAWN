@@ -3,6 +3,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <list>
+#include <set>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -15,8 +16,8 @@
 #include "DOMTreeErrorReporter.hpp"
 #include "StrX.h"
 
-//using namespace xercesc;
-using namespace std;
+using namespace std; // invalid_argument, runtime_error, stod
+using xercesc::DOMElement;
 
 /**
  *  Constructor initializes Xerces-C++ libraries.
@@ -132,7 +133,6 @@ Simulation_definition::~Simulation_definition()
  */
 
 void Simulation_definition::read_spec_file()
-        throw( std::runtime_error )
 {
     check_spec_file_status();
     configure_parser();
@@ -173,7 +173,7 @@ void Simulation_definition::read_spec_file()
     }
 
     if (errors_occurred || parser->getErrorCount() > 0) {
-        throw(std::runtime_error( "There were errors parsing the simulation specification file." ));
+        throw runtime_error( "There were errors parsing the simulation specification file." );
     }
 
     // no need to free this pointer - owned by the parent parser object
@@ -184,7 +184,7 @@ void Simulation_definition::read_spec_file()
     DOMElement* element_root = xml_doc->getDocumentElement();
     if ( !element_root ) {
         // The error count check should prevent us from ever getting here.
-        throw(std::runtime_error( "empty XML document" ));
+        throw runtime_error( "empty XML document" );
     }
 
     DOMNodeList* children = element_root->getChildNodes();
@@ -256,9 +256,10 @@ void Simulation_definition::populate_mapping(DOMElement* current_element, state_
                     = current_element->getAttribute(ATTR_value);
                 string string_value = XMLString::transcode(value);
                 try {
-                    double variable_value = std::stod(string_value);
+                    double variable_value = stod(string_value);
                     mapping[key] = variable_value;
-                } catch( std::invalid_argument& e ) {
+                }
+                catch( invalid_argument& e ) {
                     cout << e.what() << endl;
                     cout << "tried to convert \"" << string_value << "\", the value of " << key << ", to a double" << endl;
                     exit(1);
@@ -276,6 +277,8 @@ void Simulation_definition::populate_mapping(DOMElement* current_element, state_
     DOMNodeList* children = current_element->getChildNodes();
     const XMLSize_t node_count = children->getLength();
 
+    int row_number{0};
+
     for ( XMLSize_t i = 0; i < node_count; ++i )
     {
         DOMNode* current_node = children->item(i);
@@ -287,17 +290,34 @@ void Simulation_definition::populate_mapping(DOMElement* current_element, state_
                 = dynamic_cast< DOMElement* >( current_node );
 
             if ( XMLString::equals(current_element->getTagName(), TAG_row)) {
-                process_row(current_element, drivers);
+                ++row_number;
+
+                auto variable_set = process_row(current_element, drivers);
+
+                if (row_number == 1) {
+                    driver_variable_set = variable_set;
+                }
+                else {
+                    try {
+                        check_driver_variable_set(variable_set);
+                    }
+                    catch (runtime_error& e) {
+                        throw runtime_error("Error in row " + to_string(row_number) + ": " + e.what());
+                    }
+                }
             } else {
-                cout << "shouldn't EVER get here!" << endl;
+                // schema validation should prevent getting here
+                throw runtime_error("Unexpected child element of drivers found");
             }
         } // if child node is an element
     } // for children of current_element
 }
 
-void Simulation_definition::process_row(DOMElement* row, state_vector_map& mapping) {
+set<string> Simulation_definition::process_row(DOMElement* row, state_vector_map& mapping) {
     DOMNodeList* children = row->getChildNodes();
     const XMLSize_t node_count = children->getLength();
+
+    set<string> variable_set{};
 
     for ( XMLSize_t j = 0; j < node_count; ++j) {
         DOMNode* current_node = children->item(j);
@@ -314,24 +334,30 @@ void Simulation_definition::process_row(DOMElement* row, state_vector_map& mappi
                 const XMLCh* name
                     = current_element->getAttribute(ATTR_name);
                 string key = XMLString::transcode(name);
+                variable_set.insert(key);
+
                 const XMLCh* value
                     = current_element->getAttribute(ATTR_value);
                 string string_value = XMLString::transcode(value);
                 try {
-                    double variable_value = std::stod(string_value);
+                    double variable_value = stod(string_value);
                     mapping[key].push_back(variable_value);
-                } catch( std::invalid_argument& e ) {
+                }
+                catch( invalid_argument& e ) {
+                    // schema validation should prevent getting here
                     cout << e.what() << endl;
                     cout << "tried to convert \"" << string_value << "\", the value of " << key << ", to a double" << endl;
-                    exit(1);
+                    throw;
                 }
             } // if element is a "variable" element
             else {
-                // shouldn't get here
+                // schema validation should prevent getting here
+                throw runtime_error("Unexpected child element of row found");
             }
 
         }
     }
+    return variable_set;
 }
 
 void Simulation_definition::set_module_list(DOMElement* current_element, mc_vector& vec) {
@@ -367,15 +393,15 @@ void Simulation_definition::check_spec_file_status() {
     if (stat(specification_file.c_str(), &file_status) == -1) // ==0 ok; ==-1 error
     {
         if ( errno == ENOENT )      // errno declared by include file errno.h
-            throw ( std::runtime_error("Path file_name does not exist, or path is an empty string.") );
+            throw  runtime_error("Path file_name does not exist, or path is an empty string.");
         else if ( errno == ENOTDIR )
-            throw ( std::runtime_error("A component of the path is not a directory."));
+            throw runtime_error("A component of the path is not a directory.");
         else if ( errno == ELOOP )
-            throw ( std::runtime_error("Too many symbolic links encountered while traversing the path."));
+            throw runtime_error("Too many symbolic links encountered while traversing the path.");
         else if ( errno == EACCES )
-            throw ( std::runtime_error("Permission denied."));
+            throw runtime_error("Permission denied.");
         else if ( errno == ENAMETOOLONG )
-            throw ( std::runtime_error("File can not be read\n"));
+            throw runtime_error("File can not be read\n");
     }
 }
 
@@ -400,4 +426,10 @@ void Simulation_definition::set_validation_scheme() {
                                        : setting == "never"  ? XercesDOMParser::Val_Never
                                        :                       XercesDOMParser::Val_Always; // should never get here
     parser->setValidationScheme(scheme);
+}
+
+void Simulation_definition::check_driver_variable_set(set<string> variable_set) {
+    if (variable_set != driver_variable_set) {
+        throw runtime_error("The set of variables in the current row doesn't match that of the first row");
+    }
 }

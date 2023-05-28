@@ -11,6 +11,7 @@
 
 /* Standard Library */
 #include <string>
+#include <set>
 
 /* BioCro */
 #include <framework/module_factory.h>
@@ -18,6 +19,7 @@
 #include <module_library/module_library.h>
 
 using std::string;
+using std::set;
 using xercesc::DOMElement;
 
 using Option_map = std::unordered_map<string, string>;
@@ -45,14 +47,15 @@ public:
     mc_vector get_differential_modules();
 
 private:
-    void read_spec_file() throw(std::runtime_error);
+    void read_spec_file();
     void check_spec_file_status();
     void configure_parser();
     void set_validation_scheme();
     void populate_mapping(DOMElement* current_element, state_map& mapping);
     void populate_mapping(DOMElement* current_element, state_vector_map& mapping);
-    void process_row(DOMElement* row, state_vector_map& mapping);
+    set<string> process_row(DOMElement* row, state_vector_map& mapping);
     void set_module_list(DOMElement* current_element, mc_vector& vec);
+    void check_driver_variable_set(set<string> variable_set);
 
     xercesc::XercesDOMParser *parser;
 
@@ -67,7 +70,13 @@ private:
 
     const char* default_schema_file {"simulation_input.xsd"};
 
-    // Internal class use only. Hold Xerces data in UTF-16 SMLCh type.
+
+    // Internal class use only.
+
+    // Use for validating consistency of driver variables
+    set<string> driver_variable_set;
+
+    // Hold Xerces data in UTF-16 SMLCh type.
 
     XMLCh* TAG_initial_values;
     XMLCh* TAG_parameters;
