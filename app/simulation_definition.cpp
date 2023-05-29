@@ -436,4 +436,4 @@ void Simulation_definition::check_driver_variable_set(set<string> variable_set) 
 }
 
 // Use macro from compilation_options.h:
-const char* Simulation_definition::default_schema_file = SIMULATION_INPUT_SCHEMA_URI;
+const char* Simulation_definition::default_schema_file = SIMULATION_INPUT_SCHEMA_URI_STRING;
