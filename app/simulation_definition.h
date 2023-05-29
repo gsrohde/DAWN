@@ -68,7 +68,7 @@ private:
     mc_vector direct_modules;
     mc_vector differential_modules;
 
-    const char* default_schema_file {"simulation_input.xsd"};
+    static const char* default_schema_file;
 
 
     // Internal class use only.

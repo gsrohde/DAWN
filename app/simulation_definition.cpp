@@ -13,6 +13,7 @@
 #include <xercesc/util/OutOfMemoryException.hpp>
 
 #include "simulation_definition.h"
+#include "compilation_options.h"
 #include "DOMTreeErrorReporter.hpp"
 #include "StrX.h"
 
@@ -433,3 +434,6 @@ void Simulation_definition::check_driver_variable_set(set<string> variable_set) 
         throw runtime_error("The set of variables in the current row doesn't match that of the first row");
     }
 }
+
+// Use macro from compilation_options.h:
+const char* Simulation_definition::default_schema_file = SIMULATION_INPUT_SCHEMA_URI;
