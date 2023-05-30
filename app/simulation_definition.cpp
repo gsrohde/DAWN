@@ -394,7 +394,9 @@ void Simulation_definition::check_spec_file_status() {
     if (stat(specification_file.c_str(), &file_status) == -1) // ==0 ok; ==-1 error
     {
         if ( errno == ENOENT )      // errno declared by include file errno.h
-            throw  runtime_error("Path file_name does not exist, or path is an empty string.");
+            throw  runtime_error(string("Path file_name \"") +
+                                 specification_file +
+                                 "\" does not exist, or path is an empty string.");
         else if ( errno == ENOTDIR )
             throw runtime_error("A component of the path is not a directory.");
         else if ( errno == ELOOP )
