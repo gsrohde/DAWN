@@ -3,12 +3,13 @@
   <parameters>
     <variable name="timestep" value="1"/>
   </parameters>
-  <initial-values/>
+  <initial-values>
+    <variable name="velocity" value="1"/>
+    <variable name="velocity" value="2"/>
+  </initial-values>
   <drivers>
-    <row number="1">
+    <row>
       <variable name="some_driver_variable" value="0"/>
     </row>
   </drivers>
-  <direct-modules/>
-  <differential-modules/>
 </dynamical-system>

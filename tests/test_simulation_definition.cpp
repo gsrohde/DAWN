@@ -2,6 +2,16 @@
 
 #include <simulation_definition.h>
 
+// As a baseline, parsing minimal_system.xml shouldn't throw any
+// exceptions, even with validation turned on.
+
+TEST(SimulationDefinitionTest, MinimalSimulationDefinitionFile) {
+    ASSERT_NO_THROW({
+            Simulation_definition sim_def("test_input/minimal_system.xml",
+                                          { {"validation_scheme", "always"} });
+        });
+}
+
 // Test that some poorly-formed input files trigger exceptions, even
 // when schema validation is turned off.
 
