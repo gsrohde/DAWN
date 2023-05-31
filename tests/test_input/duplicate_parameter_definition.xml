@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynamical-system>
+  <parameters>
+    <variable name="timestep" value="1"/>
+  </parameters>
+  <initial-values/>
+  <drivers>
+    <row number="1">
+      <variable name="some_driver_variable" value="0"/>
+    </row>
+  </drivers>
+  <direct-modules/>
+  <differential-modules/>
+</dynamical-system>
