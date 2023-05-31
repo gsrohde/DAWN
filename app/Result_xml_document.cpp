@@ -27,7 +27,7 @@ Result_xml_document::Result_xml_document(const state_vector_map& result) {
 
            auto number_of_rows = some_column->second.size();
 
-           for (int i = 0; i < 5/*number_of_rows*/; ++i) {
+           for (int i = 0; i < number_of_rows; ++i) {
                add_row(result, i);
            }
            
