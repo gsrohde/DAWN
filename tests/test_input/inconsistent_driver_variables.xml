@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynamical-system>
+  <parameters>
+    <variable name="timestep" value="1"/>
+  </parameters>
+  <drivers>
+    <row>
+      <variable name="some_driver_variable" value="0"/>
+    </row>
+    <!-- Each row of the drivers should have the same variables defined. -->
+    <row>
+      <variable name="some_other_driver_variable" value="-9"/>
+    </row>
+  </drivers>
+</dynamical-system>

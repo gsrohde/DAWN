@@ -28,3 +28,17 @@ TEST(SimulationDefinitionTest, DISABLED_DuplicateParameterDefinitions) {
                                           { {"validation_scheme", "never"} });
         });
 }
+
+TEST(SimulationDefinitionTest, DISABLED_DuplicateDriverVariables) {
+    ASSERT_ANY_THROW({
+            Simulation_definition sim_def("test_input/duplicate_driver_variables.xml",
+                                          { {"validation_scheme", "never"} });
+        });
+}
+
+TEST(SimulationDefinitionTest, InconsistentDriverVariables) {
+    ASSERT_ANY_THROW({
+            Simulation_definition sim_def("test_input/inconsistent_driver_variables.xml",
+                                          { {"validation_scheme", "always"} });
+        });
+}
