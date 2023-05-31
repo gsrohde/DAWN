@@ -3,10 +3,10 @@
   <parameters>
     <variable name="timestep" value="1"/>
   </parameters>
-  <initial-values>
+  <initial-state>
     <variable name="velocity" value="1"/>
     <variable name="velocity" value="2"/>
-  </initial-values>
+  </initial-state>
   <drivers>
     <row>
       <variable name="some_driver_variable" value="0"/>

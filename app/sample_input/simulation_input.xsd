@@ -11,7 +11,7 @@
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
-      <xsd:element name="initial-values" minOccurs="0">
+      <xsd:element name="initial-state" minOccurs="0">
         <xsd:complexType>
           <xsd:sequence>
             <xsd:element name="variable" type="variable" minOccurs="0" maxOccurs="unbounded"/>

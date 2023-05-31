@@ -6,10 +6,10 @@
     <variable name="spring_constant" value="1"/>
     <variable name="timestep" value="0.001"/>
   </parameters>
-  <initial-values>
+  <initial-state>
     <variable name="position" value="10"/>
     <variable name="velocity" value="0"/>
-  </initial-values>
+  </initial-state>
   <drivers>
     <row>
       <variable name="time" value="0"/>

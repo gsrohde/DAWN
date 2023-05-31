@@ -78,7 +78,7 @@ private:
 
     // Hold Xerces data in UTF-16 SMLCh type.
 
-    XMLCh* TAG_initial_values;
+    XMLCh* TAG_initial_state;
     XMLCh* TAG_parameters;
     XMLCh* TAG_drivers;
     XMLCh* TAG_direct_modules;

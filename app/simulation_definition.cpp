@@ -48,7 +48,7 @@ Simulation_definition::Simulation_definition(string specification_file, Option_m
 
     // Tags and attributes used in XML file.
     // Can't call transcode till after Xerces Initialize()
-    TAG_initial_values = XMLString::transcode("initial-values");
+    TAG_initial_state = XMLString::transcode("initial-state");
     TAG_parameters = XMLString::transcode("parameters");
     TAG_drivers = XMLString::transcode("drivers");
     TAG_direct_modules = XMLString::transcode("direct-modules");
@@ -94,7 +94,7 @@ Simulation_definition::~Simulation_definition()
 
     try
     {
-        XMLString::release( &TAG_initial_values );
+        XMLString::release( &TAG_initial_state );
         XMLString::release( &TAG_parameters );
         XMLString::release( &TAG_drivers );
         XMLString::release( &TAG_direct_modules );
@@ -202,9 +202,9 @@ void Simulation_definition::read_spec_file()
             // Found node which is an Element. Re-cast node as element
             DOMElement* current_element
                 = dynamic_cast< DOMElement* >( current_node );
-            if ( XMLString::equals(current_element->getTagName(), TAG_initial_values))
+            if ( XMLString::equals(current_element->getTagName(), TAG_initial_state))
             {
-                // Already tested node as type element and of name "initial_values".
+                // Already tested node as type element and of name "initial_state".
                 populate_mapping(current_element, initial_state);
             }
             else if ( XMLString::equals(current_element->getTagName(), TAG_parameters))

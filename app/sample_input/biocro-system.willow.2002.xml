@@ -116,7 +116,7 @@
     <variable name="windspeed_height" value="5"/>
     <variable name="wsFun" value="2"/>
   </parameters>
-  <initial-values>
+  <initial-state>
     <variable name="cws1" value="0.32"/>
     <variable name="cws2" value="0.32"/>
     <variable name="Grain" value="0"/>
@@ -135,7 +135,7 @@
     <variable name="StemLitter" value="0"/>
     <variable name="stem_senescence_index" value="0"/>
     <variable name="TTc" value="0"/>
-  </initial-values>
+  </initial-state>
   <drivers>
     <row>
       <variable name="year" value="2002"/>
