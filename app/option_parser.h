@@ -30,7 +30,7 @@ class Option_parser {
             }
 
             // Watch for special case help request
-            if (!strcmp(argV[parmInd], "-?")) {
+            if (!strcmp(argV[parmInd], "-h")) {
                 usage();
                 exit(2);
             }
@@ -80,9 +80,9 @@ class Option_parser {
             "This program reads the dynamical system specification <XML file>, \n"
             "runs the simulation, and writes the result to standard output.\n"
             "Options:\n"
-            "    -v=xxx      Validation scheme [always | never | auto*].\n"
+            "    -v=xxx      Validation scheme [always* | never | auto].\n"
             "    -wfile=xxx  Write to a file instead of stdout.\n"
-            "    -?          Show this help.\n\n"
+            "    -h          Show this help.\n\n"
             "  * = Default if not provided explicitly.\n\n"
             "The parser has intrinsic support for the following encodings:\n"
             "    UTF-8, US-ASCII, ISO8859-1, UTF-16[BL]E, UCS-4[BL]E,\n"
