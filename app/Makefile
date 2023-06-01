@@ -10,20 +10,53 @@ BIOCRO_LIB_FILE = $(BIOCRO_SOURCE_PATH)/$(BIOCRO_LIB_NAME)$(LIBRARY_FILE_EXTENSI
 # root directory for BioCro header files
 BIOCRO_INCLUDES = $(BIOCRO_SOURCE_PATH)
 
-.PHONY: run clean
 
-run: main
-	./main
+SOURCES = $(wildcard *.cpp)
+OBJECTS = $(SOURCES:.cpp=.o)
 
-main: main.cpp simulation_definition.cpp Result_xml_document.cpp $(BIOCRO_LIB_FILE) DOMTreeErrorReporter.cpp
-	clang++ -std=c++11 -g -Wall -pedantic -I $(BIOCRO_INCLUDES) $(BIOCRO_LIB_FILE) -lxerces-c main.cpp simulation_definition.cpp Result_xml_document.cpp DOMTreeErrorReporter.cpp -o main
 
-main-debug: main.cpp simulation_definition.cpp Result_xml_document.cpp $(BIOCRO_LIB_FILE)
-	clang++ -std=c++11 -g -O0 -Wall -pedantic -I $(BIOCRO_INCLUDES) $(BIOCRO_LIB_FILE) -lxerces-c main.cpp simulation_definition.cpp Result_xml_document.cpp DOMTreeErrorReporter.cpp -o main-debug
+OUTPUT_OPTION = -o $@
+COMPILE.cpp = $(CXX11) $(CXX11STD) $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) -c
+
+
+.PHONY: clean main-debug
+
+main:  $(OBJECTS)
+	$(LINK) -o $@ $(OBJECTS) $(ALL_LIBS);
+
+# To switch between building the production and debug versions of
+# main, do "make clean" first.
+main-debug: main
+
+main-debug: CXX11FLAGS = -Wall -g -O0
+
+$(OBJECTS) : %.o : %.cpp
+	$(COMPILE.cpp) $(OUTPUT_OPTION) $<
 
 clean:
-	rm -f main main-debug
+	rm -f main
+	rm $(OBJECTS)
 	rm -fr main.dSYM main-debug.dSYM
+
+
+
+
+ADDL_CPPFLAGS = -I $(BIOCRO_INCLUDES)
+CPPFLAGS = -I/usr/local/include # needed?
+CXXFLAGS = $(CXX11FLAGS)
+CXXPICFLAGS = $(CXX11PICFLAGS)
+CXX11 = clang++ -mmacosx-version-min=10.13 # macOS-specific
+CXX11FLAGS = -Wall -g -O2 # overridden to use -O0 by main-debug target
+CXX11PICFLAGS = -fPIC # needed?
+CXX11STD = -std=gnu++11
+LDFLAGS = -L/usr/local/lib # needed?
+CXX11LD = $(CXX11) $(CXX11STD)
+CXX11LDFLAGS =# -dynamiclib -Wl,-headerpad_max_install_names -undefined dynamic_lookup -single_module -multiply_defined suppress# $(CXX11FLAGS) $(CXX11PICFLAGS) # commented out for now
+LINK = $(CXX11LD) $(CXX11LDFLAGS) $(LDFLAGS)
+ALL_CPPFLAGS =  -DNDEBUG $(ADDL_CPPFLAGS) $(CPPFLAGS) 
+ALL_CXXFLAGS =  $(CXXPICFLAGS) $(CXXFLAGS)
+ALL_LIBS =  $(BIOCRO_LIB_FILE) -lxerces-c
+
 
 # For macOS only:
 
