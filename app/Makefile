@@ -19,6 +19,8 @@ OUTPUT_OPTION = -o $@
 COMPILE.cpp = $(CXX11) $(CXX11STD) $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) -c
 
 
+
+
 .PHONY: clean main-debug
 
 main:  $(OBJECTS)
@@ -32,6 +34,16 @@ main-debug: CXX11FLAGS = -Wall -g -O0
 
 $(OBJECTS) : %.o : %.cpp
 	$(COMPILE.cpp) $(OUTPUT_OPTION) $<
+
+# Additional object file dependencies (on header files).  This is
+# simple enough that using automatically-generated dependency files is
+# probably not warranted.
+DOMTreeErrorReporter.o: DOMTreeErrorReporter.hpp StrX.h
+Result_xml_document.cpp: Result_xml_document.h
+main.o: option_parser.h simulation_definition.h print_result.h Result_XML_document.h
+simulation_definition.o: simulation_definition.h compilation_options.h DOMTreeErrorReporter.hpp StrX.h
+
+
 
 clean:
 	rm -f main
