@@ -82,6 +82,7 @@ void Result_xml_document::add_row(state_vector_map result, int i) {
 
         auto variable = doc->createElement(X("variable"));
         row->appendChild(variable);
+        row->setAttribute(X("step-number"), X(std::to_string(i).c_str()));
         variable->setAttribute(X("name"), X(key.c_str()));
         variable->setAttribute(X("value"), X(std::to_string(value).c_str()));
     }
