@@ -19,9 +19,40 @@ OUTPUT_OPTION = -o $@
 COMPILE.cpp = $(CXX11) $(CXX11STD) $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) -c
 
 
+ifdef schema_uri
+  ifeq ($(schema_uri),none)
+    VARIABLE_SETTINGS = -DSIMULATION_INPUT_SCHEMA_URI=
+  else
+    VARIABLE_SETTINGS = -DSIMULATION_INPUT_SCHEMA_URI='$(schema_uri)'
+  endif
+endif
 
+.PHONY: clean main-debug help
 
-.PHONY: clean main-debug
+help: # Show make targets and options.
+	@echo
+	@echo "Targets:"
+	@echo
+	@echo "    make main: Build the app executable \"main\""
+	@echo "    make main-debug: Build a version of the app executable \"main\" suitable for"
+	@echo "                     use with a debugger"
+	@echo "    make clean: Remove all build products"
+	@echo
+	@echo "    Note: Run \"make clean\" in between switching between building the debug and"
+	@echo "          production versions of main."
+	@echo
+	@echo "Variable settings:"
+	@echo
+	@echo "    make schema_uri=<alternate uri> -B main: Build a version of main with a"
+	@echo "                                             different default schema URI."
+	@echo
+	@echo "    make schema_uri=none -B main: Build a version of main with no default schema"
+	@echo "                                  URI, allowing the schema to be specified in the"
+	@echo "                                  XML docuements themselves."
+	@echo
+	@echo "    Note: The -B option forces all object files to be recompiled, ensuring they"
+	@echo "          get the new schema_uri setting."
+	@echo
 
 main:  $(OBJECTS)
 	$(LINK) -o $@ $(OBJECTS) $(ALL_LIBS);
@@ -33,7 +64,7 @@ main-debug: main
 main-debug: CXX11FLAGS = -Wall -g -O0
 
 $(OBJECTS) : %.o : %.cpp
-	$(COMPILE.cpp) $(OUTPUT_OPTION) $<
+	$(COMPILE.cpp) $(VARIABLE_SETTINGS) $(OUTPUT_OPTION) $<
 
 # Additional object file dependencies (on header files).  This is
 # simple enough that using automatically-generated dependency files is

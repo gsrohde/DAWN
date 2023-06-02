@@ -29,7 +29,14 @@ Option_parser::Option_parser(int argC, char* argV[]) {
             exit(0);
         }
         else if (!strncmp(argV[parmInd], "-show_default_schema_uri", 24)) {
-            cout << "Default schema URI: " << SIMULATION_INPUT_SCHEMA_URI_STRING << endl;
+            cout << "Default schema URI: ";
+            if (!strcmp(SIMULATION_INPUT_SCHEMA_URI_STRING, "")) {
+                cout << "(none)";
+            }
+            else {
+                cout << "\"" << SIMULATION_INPUT_SCHEMA_URI_STRING << "\"";
+            }
+            cout << endl;
             exit(0);
         }
         else if (!strncmp(argV[parmInd], "-v=", 3)) {
