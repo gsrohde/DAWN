@@ -11,17 +11,14 @@ Result_xml_document::Result_xml_document(const state_vector_map& result) {
       // throw exception here to return ERROR_XERCES_INIT
    }
 
-
-
-
    DOMImplementation* impl =  DOMImplementationRegistry::getDOMImplementation(X("Core"));
 
    if (impl != NULL) {
        try {
            doc = impl->createDocument(
-                                                   0,                    // root element namespace URI.
-                                                   X("simulation-result"),         // root element name
-                                                   0);                   // document type object (DTD).
+                           nullptr,                    // root element namespace URI.
+                           X("simulation-result"),     // root element name
+                           nullptr);                   // document type object (DTD).
            
            auto some_column = result.begin();
 
