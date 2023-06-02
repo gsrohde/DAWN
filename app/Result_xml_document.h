@@ -47,7 +47,7 @@ private :
     //  fUnicodeForm
     //      This is the Unicode XMLCh format of the string.
     // -----------------------------------------------------------------------
-    XMLCh*   fUnicodeForm;
+    XMLCh* fUnicodeForm;
 };
 
 #define X(str) XStr(str).unicodeForm()
@@ -65,7 +65,6 @@ private:
     void add_row(state_vector_map result, int row_number);
     
     DOMDocument* doc;
-    int errorCode = 0;
 };
 
 #endif
