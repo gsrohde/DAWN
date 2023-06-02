@@ -41,6 +41,7 @@ $(OBJECTS) : %.o : %.cpp
 DOMTreeErrorReporter.o: DOMTreeErrorReporter.hpp StrX.h
 Result_xml_document.cpp: Result_xml_document.h
 main.o: option_parser.h simulation_definition.h print_result.h Result_XML_document.h
+option_parser.o: option_parser.h
 simulation_definition.o: simulation_definition.h compilation_options.h DOMTreeErrorReporter.hpp StrX.h
 
 
