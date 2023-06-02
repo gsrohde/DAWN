@@ -27,7 +27,6 @@ Result_xml_document::Result_xml_document(const state_vector_map& result) {
             for (int i = 0; i < number_of_rows; ++i) {
                 add_row(result, i);
             }
-           
         }
         catch (const OutOfMemoryException&) {
             cerr << "OutOfMemoryException" << endl;
@@ -70,6 +69,17 @@ void Result_xml_document::add_row(state_vector_map result, int i) {
     for (auto column : result) {
         auto key = column.first;
         auto value = column.second[i];
+
+        // Since ncalls is constant, don't make it a variable in each
+        // row; instead, write it once, as the attribute of the
+        // document element.
+        if (key == "ncalls") {
+            if (i == 0) {
+                root_element->setAttribute(X("ncalls"), X(std::to_string(value).c_str()));
+            }
+            continue;
+        }
+
         auto variable = doc->createElement(X("variable"));
         row->appendChild(variable);
         variable->setAttribute(X("name"), X(key.c_str()));
