@@ -32,7 +32,7 @@ class Option_parser {
             // Watch for special case help request
             if (!strcmp(argV[parmInd], "-h")) {
                 usage();
-                exit(2);
+                exit(0);
             }
             else if (!strncmp(argV[parmInd], "-v=", 3)) {
                 const char* const parm = &argV[parmInd][3];
@@ -42,7 +42,7 @@ class Option_parser {
                 }
                 else {
                     cerr << "Unknown -v= value: " << parm << endl;
-                    exit(2);
+                    exit(1);
                 }
             }
             else if (!strncmp(argV[parmInd], "-wfile=", 7)) {
