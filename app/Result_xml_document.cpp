@@ -1,6 +1,20 @@
-#include <string> // for std::to_string
+/* Standard Library */
+#include <string>
+
+/* Xerces Library */
+#include <xercesc/util/OutOfMemoryException.hpp>
+#include <xercesc/framework/StdOutFormatTarget.hpp>
+#include <xercesc/framework/LocalFileFormatTarget.hpp>
+
+/* DAWN app */
 #include "Result_xml_document.h"
 #include "StrX.h"
+#include "xstr.h" // includes X() macro
+
+using std::cerr;
+using std::endl;
+using std::string;
+using std::to_string;
 
 Result_xml_document::Result_xml_document(const state_vector_map& result) {
     try {
@@ -75,16 +89,16 @@ void Result_xml_document::add_row(state_vector_map result, int i) {
         // document element.
         if (key == "ncalls") {
             if (i == 0) {
-                root_element->setAttribute(X("ncalls"), X(std::to_string(value).c_str()));
+                root_element->setAttribute(X("ncalls"), X(to_string(value).c_str()));
             }
             continue;
         }
 
         auto variable = doc->createElement(X("variable"));
         row->appendChild(variable);
-        row->setAttribute(X("step-number"), X(std::to_string(i).c_str()));
+        row->setAttribute(X("step-number"), X(to_string(i).c_str()));
         variable->setAttribute(X("name"), X(key.c_str()));
-        variable->setAttribute(X("value"), X(std::to_string(value).c_str()));
+        variable->setAttribute(X("value"), X(to_string(value).c_str()));
     }
 }
 

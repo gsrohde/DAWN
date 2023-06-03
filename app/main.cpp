@@ -15,6 +15,8 @@ int main(int argC, char* argV[]) {
         Simulation_definition sim_def(op.get_spec_file(),
                                       op.get_parser_options());
 
+        auto solver = sim_def.solver();
+
         biocro_simulation sim {
             sim_def.get_initial_state(),
             sim_def.get_parameters(),
@@ -22,11 +24,11 @@ int main(int argC, char* argV[]) {
             sim_def.get_direct_modules(),
             sim_def.get_differential_modules(),
 
-            "homemade_euler",
-            1,
-            0.0001,
-            0.0001,
-            200
+            solver.name,
+            solver.step_size,
+            solver.relative_tolerance,
+            solver.absolute_tolerance,
+            solver.max_steps
         };
 
         auto result = sim.run_simulation();

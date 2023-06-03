@@ -1,3 +1,4 @@
+/* Standard Library */
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -5,17 +6,21 @@
 #include <list>
 #include <set>
 
+/* C Library */
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <errno.h>
 
+/* Xerces Library */
 #include <xercesc/util/OutOfMemoryException.hpp>
 
+/* DAWN app */
 #include "simulation_definition.h"
 #include "compilation_options.h"
 #include "DOMTreeErrorReporter.hpp"
 #include "StrX.h"
+#include "xstr.h" // includes X() macro
 
 using namespace std; // invalid_argument, runtime_error, stod
 using xercesc::DOMElement;
@@ -45,19 +50,6 @@ Simulation_definition::Simulation_definition(string specification_file, Option_m
              << StrX(e.getMessage()) << endl;
         // throw exception here
     }
-
-    // Tags and attributes used in XML file.
-    // Can't call transcode till after Xerces Initialize()
-    TAG_initial_state = XMLString::transcode("initial-state");
-    TAG_parameters = XMLString::transcode("parameters");
-    TAG_drivers = XMLString::transcode("drivers");
-    TAG_direct_modules = XMLString::transcode("direct-modules");
-    TAG_differential_modules = XMLString::transcode("differential-modules");
-    TAG_module = XMLString::transcode("module");
-    TAG_row = XMLString::transcode("row");
-    TAG_variable = XMLString::transcode("variable");
-    ATTR_name = XMLString::transcode("name");
-    ATTR_value = XMLString::transcode("value");
 
     parser = new XercesDOMParser;
 
@@ -91,26 +83,6 @@ Simulation_definition::~Simulation_definition()
     // Free memory
 
     delete parser;
-
-    try
-    {
-        XMLString::release( &TAG_initial_state );
-        XMLString::release( &TAG_parameters );
-        XMLString::release( &TAG_drivers );
-        XMLString::release( &TAG_direct_modules );
-        XMLString::release( &TAG_differential_modules );
-
-        XMLString::release( &TAG_module );
-        XMLString::release( &TAG_row );
-
-        XMLString::release( &TAG_variable );
-        XMLString::release( &ATTR_name );
-        XMLString::release( &ATTR_value );
-    }
-    catch( ... )
-    {
-        cerr << "Unknown exception encountered when releasing XMLCh pointers" << endl;
-    }
 
     // Terminate Xerces
 
@@ -180,15 +152,21 @@ void Simulation_definition::read_spec_file()
     // no need to free this pointer - owned by the parent parser object
     DOMDocument* xml_doc = parser->getDocument();
 
-    // Get the top-level element
+    // Get the dynamical-system element
 
-    DOMElement* element_root = xml_doc->getDocumentElement();
-    if ( !element_root ) {
-        // The error count check should prevent us from ever getting here.
-        throw runtime_error( "empty XML document" );
+    DOMNodeList* dyn_sys_list = xml_doc->getElementsByTagName(X("dynamical-system"));
+    if (dyn_sys_list->getLength() == 0) {
+        // If schema validation is turned on, we shouldn't ever get here.
+        throw runtime_error( "The dynamical-system element is missing from simulation specification." );
+    }
+    else if (dyn_sys_list->getLength() > 1) {
+        // If schema validation is turned on, we shouldn't ever get here.
+        throw runtime_error( "The dynamical-system element must be unique." );
     }
 
-    DOMNodeList* children = element_root->getChildNodes();
+    DOMNode* dynamical_system_root = dyn_sys_list->item(0);
+
+    DOMNodeList* children = dynamical_system_root->getChildNodes();
     const XMLSize_t node_count = children->getLength();
 
     // For all nodes, children of "" in the XML tree.
@@ -202,25 +180,25 @@ void Simulation_definition::read_spec_file()
             // Found node which is an Element. Re-cast node as element
             DOMElement* current_element
                 = dynamic_cast< DOMElement* >( current_node );
-            if ( XMLString::equals(current_element->getTagName(), TAG_initial_state))
+            if ( XMLString::equals(current_element->getTagName(), X("initial-state")))
             {
                 // Already tested node as type element and of name "initial_state".
                 populate_mapping(current_element, initial_state);
             }
-            else if ( XMLString::equals(current_element->getTagName(), TAG_parameters))
+            else if ( XMLString::equals(current_element->getTagName(), X("parameters")))
             {
                 // Already tested node as type element and of name "parameters".
                 populate_mapping(current_element, parameters);
             }
-            else if ( XMLString::equals(current_element->getTagName(), TAG_drivers))
+            else if ( XMLString::equals(current_element->getTagName(), X("drivers")))
             {
                 populate_mapping(current_element, drivers);
             }
-            else if ( XMLString::equals(current_element->getTagName(), TAG_direct_modules))
+            else if ( XMLString::equals(current_element->getTagName(), X("direct-modules")))
             {
                 set_module_list(current_element, direct_modules);
             }
-            else if ( XMLString::equals(current_element->getTagName(), TAG_differential_modules))
+            else if ( XMLString::equals(current_element->getTagName(), X("differential-modules")))
             {
                 set_module_list(current_element, differential_modules);
             }
@@ -246,15 +224,15 @@ void Simulation_definition::populate_mapping(DOMElement* current_element, state_
             DOMElement* current_element
                 = dynamic_cast< DOMElement* >( current_node );
 
-            if ( XMLString::equals(current_element->getTagName(), TAG_variable))
+            if ( XMLString::equals(current_element->getTagName(), X("variable")))
             {
                 // Read attributes of element "variable".
                 const XMLCh* name
-                    = current_element->getAttribute(ATTR_name);
+                    = current_element->getAttribute(X("name"));
                 string key = XMLString::transcode(name);
 
                 const XMLCh* value
-                    = current_element->getAttribute(ATTR_value);
+                    = current_element->getAttribute(X("value"));
                 string string_value = XMLString::transcode(value);
                 try {
                     double variable_value = stod(string_value);
@@ -290,7 +268,7 @@ void Simulation_definition::populate_mapping(DOMElement* current_element, state_
             DOMElement* current_element
                 = dynamic_cast< DOMElement* >( current_node );
 
-            if ( XMLString::equals(current_element->getTagName(), TAG_row)) {
+            if ( XMLString::equals(current_element->getTagName(), X("row"))) {
                 ++row_number;
 
                 auto variable_set = process_row(current_element, drivers);
@@ -329,16 +307,16 @@ set<string> Simulation_definition::process_row(DOMElement* row, state_vector_map
             DOMElement* current_element
                 = dynamic_cast< DOMElement* >( current_node );
 
-            if ( XMLString::equals(current_element->getTagName(), TAG_variable))
+            if ( XMLString::equals(current_element->getTagName(), X("variable")))
             {
                 // Read attributes of element "variable".
                 const XMLCh* name
-                    = current_element->getAttribute(ATTR_name);
+                    = current_element->getAttribute(X("name"));
                 string key = XMLString::transcode(name);
                 variable_set.insert(key);
 
                 const XMLCh* value
-                    = current_element->getAttribute(ATTR_value);
+                    = current_element->getAttribute(X("value"));
                 string string_value = XMLString::transcode(value);
                 try {
                     double variable_value = stod(string_value);
@@ -375,11 +353,11 @@ void Simulation_definition::set_module_list(DOMElement* current_element, mc_vect
             DOMElement* current_element
                 = dynamic_cast< DOMElement* >( current_node );
 
-            if ( XMLString::equals(current_element->getTagName(), TAG_module))
+            if ( XMLString::equals(current_element->getTagName(), X("module")))
             {
                 // Read name attribute of module.
                 const XMLCh* name
-                    = current_element->getAttribute(ATTR_name);
+                    = current_element->getAttribute(X("name"));
                 string module_name = XMLString::transcode(name);
                 vec.push_back(module_factory<standardBML::module_library>::retrieve(module_name));
             }

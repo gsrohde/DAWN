@@ -18,6 +18,9 @@
 #include <framework/state_map.h>
 #include <module_library/module_library.h>
 
+/* DAWN app */
+#include "solver.h"
+
 using std::string;
 using std::set;
 using xercesc::DOMElement;
@@ -46,6 +49,10 @@ public:
     mc_vector get_direct_modules();
     mc_vector get_differential_modules();
 
+    Solver solver() {
+        return solver_spec;
+    }
+
 private:
     void read_spec_file();
     void check_spec_file_status();
@@ -68,27 +75,11 @@ private:
     mc_vector direct_modules;
     mc_vector differential_modules;
 
+    Solver solver_spec {};
+
     static const char* default_schema_file;
-
-
-    // Internal class use only.
 
     // Use for validating consistency of driver variables
     set<string> driver_variable_set;
-
-    // Hold Xerces data in UTF-16 SMLCh type.
-
-    XMLCh* TAG_initial_state;
-    XMLCh* TAG_parameters;
-    XMLCh* TAG_drivers;
-    XMLCh* TAG_direct_modules;
-    XMLCh* TAG_differential_modules;
-
-    XMLCh* TAG_module;
-    XMLCh* TAG_row;
-
-    XMLCh* TAG_variable;
-    XMLCh* ATTR_name;
-    XMLCh* ATTR_value;
 };
 #endif

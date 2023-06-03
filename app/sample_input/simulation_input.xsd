@@ -1,9 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
+<xsd:element name="simulation-specification">
+  <xsd:complexType>
+    <xsd:all>
+      <xsd:element ref="dynamical-system"/>
+      <xsd:element ref="solver-specification" minOccurs="0"/>
+    </xsd:all>
+  </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="solver-specification">
+  <xsd:complexType>
+    <xsd:attribute name="name" type="xsd:string" use="required"/><!-- should be one of auto, boost_euler, boost_rk4, boost_rkck54, boost_rosenbrock, and homemade_euler. -->
+    <xsd:attribute name="output-step-size" type="xsd:decimal"/><!-- should be a positive integer or equal to 1 over a positive integer; defaults to 1 if not provided -->
+    <xsd:attribute name="adaptive-relative-error-tolerance" type="xsd:decimal"/><!-- should be a positive real number -->
+    <xsd:attribute name="adaptive-absolute-error-tolerance" type="xsd:decimal"/><!-- should be a positive real number -->
+    <xsd:attribute name="adaptive-maximum-steps" type="xsd:decimal"/><!-- should be a positive integer -->
+  </xsd:complexType>
+</xsd:element>
+
 <xsd:element name="dynamical-system">
   <xsd:complexType>
-    <xsd:sequence>
+    <xsd:all>
       <xsd:element name="parameters">
         <xsd:complexType>
           <xsd:sequence>
@@ -21,7 +40,7 @@
       <xsd:element ref="drivers"/>
       <xsd:element name="direct-modules" type="module-set" minOccurs="0"/>
       <xsd:element name="differential-modules" type="module-set" minOccurs="0"/>
-    </xsd:sequence>
+    </xsd:all>
   </xsd:complexType>
 </xsd:element>
 
