@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include <framework/biocro_simulation.h>
 #include <simulation_definition.h>
 
 // As a baseline, parsing minimal_system.xml shouldn't throw any
@@ -41,4 +42,73 @@ TEST(SimulationDefinitionTest, InconsistentDriverVariables) {
             Simulation_definition sim_def("test_input/inconsistent_driver_variables.xml",
                                           { {"validation_scheme", "always"} });
         });
+}
+
+// Ensure a bad driver definition won't cause a segfault:
+TEST(SimulationDefinitionTest, NoDriverVariablesWithValidation) {
+
+    ASSERT_EXIT(({
+        try {
+            Simulation_definition sim_def("test_input/no_driver_variables.xml",
+                                          { {"validation_scheme", "always"} });
+
+            biocro_simulation sim {
+                sim_def.get_initial_state(),
+                sim_def.get_parameters(),
+                sim_def.get_drivers(),
+                sim_def.get_direct_modules(),
+                sim_def.get_differential_modules(),
+
+                "homemade_euler",
+                1,
+                0.0001,
+                0.0001,
+                200
+            };
+
+            // The parser should throw an exception before we get here
+            // and segfault.
+            auto result = sim.run_simulation();
+        }
+        catch(std::exception) {
+        }
+        exit(0);
+    }),
+    ::testing::ExitedWithCode(0),
+    ".*");
+}
+
+// Ensure a bad driver definition won't cause a segfault, even with validation
+// turned off:
+TEST(SimulationDefinitionTest, DISABLED_NoDriverVariablesWithoutValidation) {
+
+    ASSERT_EXIT(({
+        try {
+            Simulation_definition sim_def("test_input/no_driver_variables.xml",
+                                          { {"validation_scheme", "never"} });
+
+            biocro_simulation sim {
+                sim_def.get_initial_state(),
+                sim_def.get_parameters(),
+                sim_def.get_drivers(),
+                sim_def.get_direct_modules(),
+                sim_def.get_differential_modules(),
+
+                "homemade_euler",
+                1,
+                0.0001,
+                0.0001,
+                200
+            };
+
+            // The parser should throw an exception before we get here
+            // and segfault.
+            auto result = sim.run_simulation();
+        }
+        catch(std::exception) {
+        }
+        exit(0);
+    }),
+    ::testing::ExitedWithCode(0),
+    ".*") << "Without schema validation, the parsing code fails to ward off a segmentation fault";
 }
