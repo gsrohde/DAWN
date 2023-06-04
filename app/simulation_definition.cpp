@@ -25,6 +25,8 @@
 using namespace std; // invalid_argument, runtime_error, stod
 using xercesc::DOMElement;
 
+bool non_empty(const XMLCh* str); // see below
+
 /**
  *  Constructor initializes Xerces-C++ libraries.
  *  The XML tags and attributes which we seek are defined.
@@ -207,6 +209,48 @@ void Simulation_definition::read_spec_file()
                 cerr << XMLString::transcode(current_element->getTagName()) << endl;
             }
         }
+    }
+
+    DOMNodeList* solver_spec_list = xml_doc->getElementsByTagName(X("solver-specification"));
+    if (solver_spec_list->getLength() > 1) {
+        // If schema validation is turned on, we shouldn't ever get here.
+        throw runtime_error( "The dynamical-system element must be unique." );
+    }
+    else if (solver_spec_list->getLength() == 0) {
+        // Nothing left to do here.  Fall back on solver defaults.
+        return;
+    }
+
+    // The simulation specification file contained solver information.
+    // Use it to update the defaults.
+    DOMNode* solver_spec_node = solver_spec_list->item(0);
+    update_solver_specification(solver_spec_node);
+}
+
+void Simulation_definition::update_solver_specification(DOMNode* solver_spec_node) {
+    DOMElement* solver_spec = dynamic_cast<DOMElement*>( solver_spec_node );
+
+    const XMLCh* name = solver_spec->getAttribute(X("name"));
+    dynamical_system_solver.name = XMLString::transcode(name);
+
+    const XMLCh* step_size = solver_spec->getAttribute(X("output-step-size"));
+    if (non_empty(step_size)) {
+        dynamical_system_solver.step_size = stod(XMLString::transcode(step_size));
+    }
+
+    const XMLCh* relative_tolerance = solver_spec->getAttribute(X("adaptive-relative-error-tolerance"));
+    if (non_empty(relative_tolerance)) {
+        dynamical_system_solver.relative_tolerance = stod(XMLString::transcode(relative_tolerance));
+    }
+
+    const XMLCh* absolute_tolerance = solver_spec->getAttribute(X("adaptive-absolute-error-tolerance"));
+    if (non_empty(absolute_tolerance)) {
+        dynamical_system_solver.absolute_tolerance = stod(XMLString::transcode(absolute_tolerance));
+    }
+
+    const XMLCh* max_steps = solver_spec->getAttribute(X("adaptive-maximum-steps"));
+    if (non_empty(max_steps)) {
+        dynamical_system_solver.max_steps = stoi(XMLString::transcode(max_steps));
     }
 }
 
@@ -413,6 +457,10 @@ void Simulation_definition::check_driver_variable_set(set<string> variable_set) 
     if (variable_set != driver_variable_set) {
         throw runtime_error("The set of variables in the current row doesn't match that of the first row");
     }
+}
+
+bool non_empty(const XMLCh* str) {
+    return XMLString::stringLen(str) > 0;
 }
 
 // Use macro from compilation_options.h:

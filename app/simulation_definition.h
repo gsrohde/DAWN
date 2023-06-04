@@ -24,6 +24,7 @@
 using std::string;
 using std::set;
 using xercesc::DOMElement;
+using xercesc::DOMNode;
 
 using Option_map = std::unordered_map<string, string>;
 using Flag_map = std::unordered_map<string, bool>;
@@ -50,7 +51,7 @@ public:
     mc_vector get_differential_modules();
 
     Solver solver() {
-        return solver_spec;
+        return dynamical_system_solver;
     }
 
 private:
@@ -63,6 +64,7 @@ private:
     set<string> process_row(DOMElement* row, state_vector_map& mapping);
     void set_module_list(DOMElement* current_element, mc_vector& vec);
     void check_driver_variable_set(set<string> variable_set);
+    void update_solver_specification(DOMNode* solver_spec_node);
 
     xercesc::XercesDOMParser *parser;
 
@@ -75,7 +77,7 @@ private:
     mc_vector direct_modules;
     mc_vector differential_modules;
 
-    Solver solver_spec {};
+    Solver dynamical_system_solver {};
 
     static const char* default_schema_file;
 
