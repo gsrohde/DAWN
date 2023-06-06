@@ -1,5 +1,6 @@
 /* Standard Library */
 #include <string>
+#include <sstream>
 
 /* Xerces Library */
 #include <xercesc/util/OutOfMemoryException.hpp>
@@ -14,7 +15,14 @@
 using std::cerr;
 using std::endl;
 using std::string;
-using std::to_string;
+
+// This makes for better formatting of variable values than does
+// std::to_string.
+std::string to_string(double const& value) {
+    std::stringstream sstr {};
+    sstr << value;
+    return sstr.str();
+}
 
 Result_xml_document::Result_xml_document(const state_vector_map& result) {
     try {
