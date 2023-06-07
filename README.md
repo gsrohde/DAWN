@@ -25,7 +25,7 @@ installed on many platforms using a package manager.
 
 2. CD into the `DAWN/app` directory.
 
-3. Run `make` in this directory.
+3. Run `make main` in this directory.
 
 ## Run the application.
 
