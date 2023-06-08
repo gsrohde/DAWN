@@ -1,6 +1,7 @@
 /* Standard Library */
-#include <string>
+#include <algorithm>
 #include <sstream>
+#include <string>
 
 /* Xerces Library */
 #include <xercesc/util/OutOfMemoryException.hpp>
@@ -18,7 +19,7 @@ using std::string;
 
 // This makes for better formatting of variable values than does
 // std::to_string.
-std::string to_string(double const& value) {
+string to_string(double const& value) {
     std::stringstream sstr {};
     sstr << value;
     return sstr.str();
@@ -88,9 +89,16 @@ void Result_xml_document::add_row(state_vector_map result, int i) {
     DOMElement* root_element = doc->getDocumentElement();
     root_element->appendChild(row);
 
+    // Make a vector of sorted keys so we can print out the variables
+    // in alphabetical order.
+    std::vector<string> keys {};
     for (auto column : result) {
-        auto key = column.first;
-        auto value = column.second[i];
+        keys.push_back(column.first);
+    }
+    std::sort(keys.begin(), keys.end());
+
+    for (auto key : keys) {
+        double value {result[key][i]};
 
         // Since ncalls is constant, don't make it a variable in each
         // row; instead, write it once, as the attribute of the
