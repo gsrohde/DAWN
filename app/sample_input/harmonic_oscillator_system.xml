@@ -12,7 +12,7 @@
       adaptive-maximum-steps="200"/>
   -->
 
-  <dynamical-system xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <dynamical-system>
     <parameters>
       <variable name="mass" value="1"/>
       <variable name="spring_constant" value="1"/>

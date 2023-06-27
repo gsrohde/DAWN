@@ -45,3 +45,6 @@ results to standard output.  To write to a file instead, use the
 
     ./main -wfile=harmonic_oscillator_result.xml sample_input/harmonic_oscillator_system.xml
 
+To try this on a crop model, try using the input file `sample_input/biocro-system.miscanthus.2002.xml`:
+
+    ./main -wfile=miscanthus_simulation_result.xml sample_input/biocro-system.miscanthus.2002.xml
