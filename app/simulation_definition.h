@@ -41,7 +41,8 @@ enum {
 class Simulation_definition
 {
 public:
-    Simulation_definition(string specification_file, Option_map parser_options);
+    Simulation_definition(string specification_file, string drivers_file,
+                          Option_map parser_options);
     ~Simulation_definition();
 
     state_map get_initial_state();
@@ -56,7 +57,8 @@ public:
 
 private:
     void read_spec_file();
-    void check_spec_file_status();
+    void read_drivers_file();
+    void check_file_status(string filename);
     void configure_parser();
     void set_validation_scheme();
     void populate_mapping(DOMElement* current_element, state_map& mapping);
@@ -69,6 +71,7 @@ private:
     xercesc::XercesDOMParser *parser;
 
     string specification_file;
+    string drivers_file;
     Option_map parser_options;
 
     state_map initial_state;

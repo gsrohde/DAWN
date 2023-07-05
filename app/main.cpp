@@ -13,6 +13,7 @@ int main(int argC, char* argV[]) {
 
     try {
         Simulation_definition sim_def(op.get_spec_file(),
+                                      op.get_drivers_file(),
                                       op.get_parser_options());
 
         auto solver = sim_def.solver();

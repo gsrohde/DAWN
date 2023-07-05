@@ -50,6 +50,9 @@ Option_parser::Option_parser(int argC, char* argV[]) {
                 exit(1);
             }
         }
+        else if (!strncmp(argV[parmInd], "-driversfile=", 13)) {
+            drivers_file =  &(argV[parmInd][13]);
+        }
         else if (!strncmp(argV[parmInd], "-wfile=", 7)) {
             output_file =  &(argV[parmInd][7]);
         }

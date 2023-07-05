@@ -35,8 +35,11 @@ bool non_empty(const XMLCh* str); // see below
  *  @param in specification_file The name of the XML file giving the specifications for the simulation.
  */
 
-Simulation_definition::Simulation_definition(string specification_file, Option_map parser_options)
+Simulation_definition::Simulation_definition(string specification_file,
+                                             string drivers_file,
+                                             Option_map parser_options)
     : specification_file{specification_file},
+      drivers_file{drivers_file},
       parser_options{parser_options}
 {
 
@@ -56,6 +59,9 @@ Simulation_definition::Simulation_definition(string specification_file, Option_m
     parser = new XercesDOMParser;
 
     read_spec_file();
+    if (drivers_file.length() > 0) {
+        read_drivers_file();
+    }
 }
 
 state_map Simulation_definition::get_initial_state() {
@@ -109,7 +115,7 @@ Simulation_definition::~Simulation_definition()
 
 void Simulation_definition::read_spec_file()
 {
-    check_spec_file_status();
+    check_file_status(specification_file);
     configure_parser();
 
     bool errors_occurred = false;
@@ -194,7 +200,7 @@ void Simulation_definition::read_spec_file()
             }
             else if ( XMLString::equals(current_element->getTagName(), X("drivers")))
             {
-                populate_mapping(current_element, drivers);
+                // The drivers are populated by the read_drivers_file function.
             }
             else if ( XMLString::equals(current_element->getTagName(), X("direct-modules")))
             {
@@ -226,6 +232,77 @@ void Simulation_definition::read_spec_file()
     DOMNode* solver_spec_node = solver_spec_list->item(0);
     update_solver_specification(solver_spec_node);
 }
+
+/**
+ *  This function:
+ *  - Tests the access and availability of the drivers file.
+ *  - Configures the Xerces-C++ DOM parser.
+ *  - Reads, extracts, and stores the pertinent information from the file.
+ */
+
+void Simulation_definition::read_drivers_file()
+{
+    check_file_status(drivers_file);
+    configure_parser();
+
+    bool errors_occurred = false;
+    try
+    {
+        parser->parse( drivers_file.c_str() );
+    }
+    catch (const OutOfMemoryException&)
+    {
+        cerr << "OutOfMemoryException" << endl;
+        errors_occurred = true;
+    }
+    catch (const XMLException& e)
+    {
+        cerr << "An error occurred during parsing\n   Message: "
+             << StrX(e.getMessage()) << endl;
+        errors_occurred = true;
+    }
+    catch (const DOMException& e)
+    {
+        const unsigned int max_chars = 2047;
+        XMLCh err_text[max_chars + 1];
+
+        cerr << "\nDOM Error during parsing: '" << drivers_file << "'\n"
+             << "DOMException code is:  " << e.code << endl;
+
+        if (DOMImplementation::loadDOMExceptionMsg(e.code, err_text, max_chars))
+             cerr << "Message is: " << StrX(err_text) << endl;
+
+        errors_occurred = true;
+    }
+    catch (...)
+    {
+        cerr << "An error occurred during parsing\n " << endl;
+        errors_occurred = true;
+    }
+
+    if (errors_occurred || parser->getErrorCount() > 0) {
+        throw runtime_error( "There were errors parsing the simulation specification file." );
+    }
+
+    // no need to free this pointer - owned by the parent parser object
+    DOMDocument* xml_doc = parser->getDocument();
+
+    // Get the drivers element
+
+    DOMNodeList* drivers_list = xml_doc->getElementsByTagName(X("drivers"));
+    if (drivers_list->getLength() == 0) {
+        // If schema validation is turned on, we shouldn't ever get here.
+        throw runtime_error( "The dynamical-system element is missing from simulation specification." );
+    }
+    else if (drivers_list->getLength() > 1) {
+        // If schema validation is turned on, we shouldn't ever get here.
+        throw runtime_error( "The dynamical-system element must be unique." );
+    }
+
+    DOMElement* drivers_element = dynamic_cast< DOMElement* >(drivers_list->item(0));
+
+    populate_mapping(drivers_element, drivers);
+ }
 
 void Simulation_definition::update_solver_specification(DOMNode* solver_spec_node) {
     DOMElement* solver_spec = dynamic_cast<DOMElement*>( solver_spec_node );
@@ -409,15 +486,15 @@ void Simulation_definition::set_module_list(DOMElement* current_element, mc_vect
     }
 }
 
-void Simulation_definition::check_spec_file_status() {
+void Simulation_definition::check_file_status(string filename) {
     struct stat file_status;
 
     errno = 0;
-    if (stat(specification_file.c_str(), &file_status) == -1) // ==0 ok; ==-1 error
+    if (stat(filename.c_str(), &file_status) == -1) // ==0 ok; ==-1 error
     {
         if ( errno == ENOENT )      // errno declared by include file errno.h
             throw  runtime_error(string("Path file_name \"") +
-                                 specification_file +
+                                 filename +
                                  "\" does not exist, or path is an empty string.");
         else if ( errno == ENOTDIR )
             throw runtime_error("A component of the path is not a directory.");

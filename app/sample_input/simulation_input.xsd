@@ -62,7 +62,7 @@
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
-      <xsd:element ref="drivers"/>
+      <xsd:element ref="drivers" minOccurs="0"/>
       <xsd:element name="direct-modules" type="module-set" minOccurs="0"/>
       <xsd:element name="differential-modules" type="module-set" minOccurs="0"/>
     </xsd:all>
