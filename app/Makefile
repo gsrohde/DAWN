@@ -12,6 +12,8 @@ BIOCRO_LIB_FILE = $(BIOCRO_SOURCE_PATH)/$(BIOCRO_LIB_NAME)$(LIBRARY_FILE_EXTENSI
 # root directory for BioCro header files
 BIOCRO_INCLUDES = -I $(BIOCRO_SOURCE_PATH) -I $(BOOST_PATH)
 
+# for installations that need it:
+HOMEBREW_APPLE_SILICON_PREFIX = /opt/homebrew
 
 SOURCES = $(wildcard *.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)
@@ -88,14 +90,14 @@ clean:
 
 
 ADDL_CPPFLAGS = $(BIOCRO_INCLUDES)
-CPPFLAGS = -I/usr/local/include # needed?
+CPPFLAGS = -I/usr/local/include -I$(HOMEBREW_APPLE_SILICON_PREFIX)/include
 CXXFLAGS = $(CXX11FLAGS)
 CXXPICFLAGS = $(CXX11PICFLAGS)
 CXX11 = clang++ -mmacosx-version-min=10.13 # macOS-specific
 CXX11FLAGS = -Wall -g -O2 # overridden to use -O0 by main-debug target
 CXX11PICFLAGS = -fPIC # needed?
 CXX11STD = -std=gnu++11
-LDFLAGS = -L/usr/local/lib # needed?
+LDFLAGS = -L/usr/local/lib -L$(HOMEBREW_APPLE_SILICON_PREFIX)/lib
 CXX11LD = $(CXX11) $(CXX11STD)
 CXX11LDFLAGS =# -dynamiclib -Wl,-headerpad_max_install_names -undefined dynamic_lookup -single_module -multiply_defined suppress# $(CXX11FLAGS) $(CXX11PICFLAGS) # commented out for now
 LINK = $(CXX11LD) $(CXX11LDFLAGS) $(LDFLAGS)
