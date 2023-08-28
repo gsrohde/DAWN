@@ -292,7 +292,7 @@ void Simulation_definition::read_drivers_file()
     DOMNodeList* drivers_list = xml_doc->getElementsByTagName(X("drivers"));
     if (drivers_list->getLength() == 0) {
         // If schema validation is turned on, we shouldn't ever get here.
-        throw runtime_error( "The dynamical-system element is missing from simulation specification." );
+        throw runtime_error( "The drivers element is missing from simulation specification." );
     }
     else if (drivers_list->getLength() > 1) {
         // If schema validation is turned on, we shouldn't ever get here.
