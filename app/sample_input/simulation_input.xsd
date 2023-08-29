@@ -62,7 +62,7 @@
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
-      <xsd:element ref="drivers" minOccurs="0"/>
+      <xsd:element ref="driver-info"/>
       <xsd:element name="direct-modules" type="module-set" minOccurs="0"/>
       <xsd:element name="differential-modules" type="module-set" minOccurs="0"/>
     </xsd:all>
@@ -74,11 +74,32 @@
   <xsd:attribute name="value" type="xsd:double" use="required"/>
 </xsd:complexType>
 
-<xsd:element name="drivers">
+<xsd:element name="driver-info" type="driver-info" abstract="true"/>
+
+<xsd:complexType name="driver-info">
+    <xsd:attribute name="drivers-defined-externally" type="xsd:boolean"/>
+</xsd:complexType>
+
+<xsd:element name="drivers" substitutionGroup="driver-info">
   <xsd:complexType>
-    <xsd:sequence>
-      <xsd:element name="row" type="row" maxOccurs="unbounded"/>
-    </xsd:sequence>
+    <xsd:complexContent>
+      <xsd:restriction base="driver-info">
+        <xsd:sequence>
+          <xsd:element name="row" type="row" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="drivers-defined-externally" type="xsd:boolean" fixed="false"/>
+      </xsd:restriction>
+    </xsd:complexContent>
+  </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="driver-placeholder" substitutionGroup="driver-info">
+  <xsd:complexType>
+    <xsd:complexContent>
+      <xsd:restriction base="driver-info">
+        <xsd:attribute name="drivers-defined-externally" type="xsd:boolean" fixed="true"/>
+      </xsd:restriction>
+    </xsd:complexContent>
   </xsd:complexType>
 </xsd:element>
 

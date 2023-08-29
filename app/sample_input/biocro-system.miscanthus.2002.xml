@@ -150,6 +150,7 @@
       <variable name="stem_senescence_index" value="0"/>
       <variable name="TTc" value="0"/>
     </initial-state>
+    <driver-placeholder drivers-defined-externally="true"/>
     <direct-modules>
       <module name="stomata_water_stress_linear"/>
       <module name="leaf_water_stress_exponential"/>
