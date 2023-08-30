@@ -12,9 +12,7 @@ int main(int argC, char* argV[]) {
     Option_parser op(argC, argV);
 
     try {
-        Simulation_definition sim_def(op.get_spec_file(),
-                                      op.get_drivers_file(),
-                                      op.get_parser_options());
+        Simulation_definition sim_def(op);
 
         auto solver = sim_def.solver();
 

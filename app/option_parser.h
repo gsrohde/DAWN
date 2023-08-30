@@ -1,3 +1,6 @@
+#ifndef OPTION_PARSER_H
+#define OPTION_PARSER_H
+
 #include <iostream>
 #include <string>
 #include <unordered_map>
@@ -40,7 +43,7 @@ class Option_parser {
             "This program reads the dynamical system specification <XML file>, \n"
             "runs the simulation, and writes the result to standard output.\n\n"
             "Options:\n"
-            "    -driversfile=xxx          Read the driver information from a separate XML file"
+            "    -driversfile=xxx          Read the driver information from a separate XML file.\n"
             "    -v=xxx                    Validation scheme [always* | never | auto].\n"
             "    -wfile=xxx                Write to a file instead of stdout.\n"
             "    -h                        Show this help.\n"
@@ -61,3 +64,5 @@ class Option_parser {
     string output_file{};
     string drivers_file{};
 };
+
+#endif

@@ -35,6 +35,13 @@ bool non_empty(const XMLCh* str); // see below
  *  @param in specification_file The name of the XML file giving the specifications for the simulation.
  */
 
+Simulation_definition::Simulation_definition(Option_parser op)
+    : Simulation_definition{op.get_spec_file(),
+                            op.get_drivers_file(),
+                            op.get_parser_options()}
+{
+}
+
 Simulation_definition::Simulation_definition(string specification_file,
                                              string drivers_file,
                                              Option_map parser_options)

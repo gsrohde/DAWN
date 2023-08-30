@@ -20,6 +20,7 @@
 
 /* DAWN app */
 #include "solver.h"
+#include "option_parser.h"
 
 using std::string;
 using std::set;
@@ -43,6 +44,7 @@ class Simulation_definition
 public:
     Simulation_definition(string specification_file, string drivers_file,
                           Option_map parser_options);
+    Simulation_definition(Option_parser op);
     ~Simulation_definition();
 
     state_map get_initial_state();
