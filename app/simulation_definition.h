@@ -69,6 +69,9 @@ private:
     void set_module_list(DOMElement* current_element, mc_vector& vec);
     void check_driver_variable_set(set<string> variable_set);
     void update_solver_specification(DOMNode* solver_spec_node);
+    inline bool use_external_drivers_file() {
+        return drivers_file.length() > 0;
+    }
 
     xercesc::XercesDOMParser *parser;
 

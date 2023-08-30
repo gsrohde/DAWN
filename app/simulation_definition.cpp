@@ -66,7 +66,7 @@ Simulation_definition::Simulation_definition(string specification_file,
     parser = new XercesDOMParser;
 
     read_spec_file();
-    if (drivers_file.length() > 0) {
+    if (use_external_drivers_file()) {
         read_drivers_file();
     }
 }
@@ -207,11 +207,17 @@ void Simulation_definition::read_spec_file()
             }
             else if ( XMLString::equals(current_element->getTagName(), X("drivers")))
             {
-                // The drivers are populated by the read_drivers_file function.
+                if (!use_external_drivers_file()) {
+                    populate_mapping(current_element, drivers);
+                }
+                // else the user specified an external drivers file to
+                // override the drivers specified in this element
             }
             else if ( XMLString::equals(current_element->getTagName(), X("driver-placeholder")))
             {
-                // The drivers are populated by the read_drivers_file function.
+                if (!use_external_drivers_file()) {
+                    throw runtime_error( "The spec file says drivers are defined externally but no drivers file was provided." );
+                }
             }
             else if ( XMLString::equals(current_element->getTagName(), X("direct-modules")))
             {

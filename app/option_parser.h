@@ -31,7 +31,7 @@ class Option_parser {
     }
 
     string get_drivers_file() {
-        return drivers_file.length() > 0 ? drivers_file : specification_file;
+        return drivers_file;
     }
 
     void usage()
