@@ -48,3 +48,22 @@ results to standard output.  To write to a file instead, use the
 To try this on a crop model, try using the input file `sample_input/biocro-system.miscanthus.2002.xml`:
 
     ./main -wfile=miscanthus_simulation_result.xml sample_input/biocro-system.miscanthus.2002.xml
+
+### Using external drivers files
+
+Since the drivers specification tends to comprise a large amount of
+data, and since it may sometimes be desirable to run a simulation
+using different driver sets with everything else kept the same, an
+option has been added to specify the drivers in a file separate from
+the other simulation specifications.  The command-line option to use
+is called `-driversfile`.
+
+For example, the file `sample_input/biocro-system.miscanthus.xml` is
+just like `biocro-system.miscanthus.2002.xml` except that the
+`drivers` element has been replaced by a `driver-placeholder` element.
+The driver data removed has been placed in a file called
+`sample_input/2002_weather.xml`.  Using these two files, we can get
+the same result as in the last example above by calling
+
+    ./main -wfile=miscanthus_simulation_result.xml -driversfile=sample_input/2002_weather.xml \
+               sample_input/biocro-system.miscanthus.xml
