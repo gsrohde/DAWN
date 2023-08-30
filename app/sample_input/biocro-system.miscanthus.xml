@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simulation-specification xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                          xsi:noNamespaceSchemaLocation="simulation_input.xsd">
+  <solver-specification
+      name="homemade_euler"
+      output-step-size="1"
+      adaptive-relative-error-tolerance="1e-5"
+      adaptive-absolute-error-tolerance="1e-5"
+      adaptive-maximum-steps="200"/>
+  <dynamical-system>
+    <parameters>
+      <variable name="absorptivity_par" value="0.8"/>
+      <variable name="alpha1" value="0.04"/>
+      <variable name="alphab1" value="0"/>
+      <variable name="atmospheric_pressure" value="101325"/>
+      <variable name="b0" value="0.08"/>
+      <variable name="b1" value="3"/>
+      <variable name="beta" value="0.93"/>
+      <variable name="Catm" value="400"/>
+      <variable name="chil" value="1"/>
+      <variable name="et_equation" value="0"/>
+      <variable name="Gs_min" value="0.001"/>
+      <variable name="heightf" value="3"/>
+      <variable name="hydrDist" value="0"/>
+      <variable name="iSp" value="1.7"/>
+      <variable name="kd" value="0.1"/>
+      <variable name="kGrain1" value="0"/>
+      <variable name="kGrain2" value="0"/>
+      <variable name="kGrain3" value="0"/>
+      <variable name="kGrain4" value="0"/>
+      <variable name="kGrain5" value="0"/>
+      <variable name="kGrain6" value="0"/>
+      <variable name="kLeaf1" value="0.33"/>
+      <variable name="kLeaf2" value="0.14"/>
+      <variable name="kLeaf3" value="0.01"/>
+      <variable name="kLeaf4" value="0.01"/>
+      <variable name="kLeaf5" value="0.01"/>
+      <variable name="kLeaf6" value="0.01"/>
+      <variable name="kparm" value="0.7"/>
+      <variable name="kpLN" value="0.2"/>
+      <variable name="kRhizome1" value="-8e-04"/>
+      <variable name="kRhizome2" value="-5e-04"/>
+      <variable name="kRhizome3" value="0.35"/>
+      <variable name="kRhizome4" value="0.35"/>
+      <variable name="kRhizome5" value="0.35"/>
+      <variable name="kRhizome6" value="0.35"/>
+      <variable name="kRoot1" value="0.3"/>
+      <variable name="kRoot2" value="0.01"/>
+      <variable name="kRoot3" value="0.01"/>
+      <variable name="kRoot4" value="0.01"/>
+      <variable name="kRoot5" value="0.01"/>
+      <variable name="kRoot6" value="0.01"/>
+      <variable name="kShell" value="0"/>
+      <variable name="kStem1" value="0.37"/>
+      <variable name="kStem2" value="0.85"/>
+      <variable name="kStem3" value="0.63"/>
+      <variable name="kStem4" value="0.63"/>
+      <variable name="kStem5" value="0.63"/>
+      <variable name="kStem6" value="0.63"/>
+      <variable name="lat" value="40"/>
+      <variable name="LeafN" value="2"/>
+      <variable name="LeafN_0" value="2"/>
+      <variable name="leafwidth" value="0.04"/>
+      <variable name="leaf_reflectance" value="0.2"/>
+      <variable name="leaf_transmittance" value="0.2"/>
+      <variable name="lnfun" value="0"/>
+      <variable name="longitude" value="-88"/>
+      <variable name="lowerT" value="3"/>
+      <variable name="minimum_gbw" value="0.34"/>
+      <variable name="mrc1" value="0.02"/>
+      <variable name="mrc2" value="0.03"/>
+      <variable name="nalphab0" value="0.02367"/>
+      <variable name="nalphab1" value="0.000488"/>
+      <variable name="net_assimilation_rate_shell" value="0"/>
+      <variable name="nileafn" value="85"/>
+      <variable name="nkln" value="0.5"/>
+      <variable name="nkpLN" value="0.17"/>
+      <variable name="nlayers" value="10"/>
+      <variable name="nlnb0" value="-5"/>
+      <variable name="nlnb1" value="18"/>
+      <variable name="nRdb0" value="-4.5917"/>
+      <variable name="nRdb1" value="0.1247"/>
+      <variable name="nvmaxb0" value="-16.25"/>
+      <variable name="nvmaxb1" value="0.6938"/>
+      <variable name="par_energy_content" value="0.235"/>
+      <variable name="par_energy_fraction" value="0.5"/>
+      <variable name="phi1" value="0.01"/>
+      <variable name="phi2" value="10"/>
+      <variable name="Rd" value="0.8"/>
+      <variable name="remobilization_fraction" value="0.6"/>
+      <variable name="retrans" value="0.9"/>
+      <variable name="retrans_rhizome" value="1"/>
+      <variable name="rfl" value="0.2"/>
+      <variable name="rsdf" value="0.44"/>
+      <variable name="rsec" value="0.2"/>
+      <variable name="seneLeaf" value="3000"/>
+      <variable name="seneRhizome" value="4000"/>
+      <variable name="seneRoot" value="4000"/>
+      <variable name="seneStem" value="3500"/>
+      <variable name="soil_air_entry" value="-2.6"/>
+      <variable name="soil_bulk_density" value="1.35"/>
+      <variable name="soil_b_coefficient" value="5.2"/>
+      <variable name="soil_clay_content" value="0.34"/>
+      <variable name="soil_clod_size" value="0.04"/>
+      <variable name="soil_depth1" value="0"/>
+      <variable name="soil_depth2" value="2.5"/>
+      <variable name="soil_depth3" value="10"/>
+      <variable name="soil_field_capacity" value="0.32"/>
+      <variable name="soil_reflectance" value="0.2"/>
+      <variable name="soil_sand_content" value="0.32"/>
+      <variable name="soil_saturated_conductivity" value="6.4e-05"/>
+      <variable name="soil_saturation_capacity" value="0.52"/>
+      <variable name="soil_silt_content" value="0.34"/>
+      <variable name="soil_transmission" value="0.01"/>
+      <variable name="soil_wilting_point" value="0.2"/>
+      <variable name="sowing_time" value="0"/>
+      <variable name="specific_heat_of_air" value="1010"/>
+      <variable name="Sp_thermal_time_decay" value="0"/>
+      <variable name="tbase" value="0"/>
+      <variable name="theta" value="0.83"/>
+      <variable name="timestep" value="1"/>
+      <variable name="tp1" value="562"/>
+      <variable name="tp2" value="1312"/>
+      <variable name="tp3" value="2063"/>
+      <variable name="tp4" value="2676"/>
+      <variable name="tp5" value="3211"/>
+      <variable name="upperT" value="37.5"/>
+      <variable name="vmax1" value="39"/>
+      <variable name="vmax_n_intercept" value="0"/>
+      <variable name="water_stress_approach" value="1"/>
+      <variable name="wsFun" value="2"/>
+    </parameters>
+    <initial-state>
+      <variable name="cws1" value="0.32"/>
+      <variable name="cws2" value="0.32"/>
+      <variable name="Grain" value="0"/>
+      <variable name="Shell" value="0"/>
+      <variable name="Leaf" value="7e-04"/>
+      <variable name="LeafLitter" value="0"/>
+      <variable name="leaf_senescence_index" value="0"/>
+      <variable name="Rhizome" value="7"/>
+      <variable name="RhizomeLitter" value="0"/>
+      <variable name="rhizome_senescence_index" value="0"/>
+      <variable name="Root" value="0.007"/>
+      <variable name="RootLitter" value="0"/>
+      <variable name="root_senescence_index" value="0"/>
+      <variable name="soil_water_content" value="0.32"/>
+      <variable name="Stem" value="0.007"/>
+      <variable name="StemLitter" value="0"/>
+      <variable name="stem_senescence_index" value="0"/>
+      <variable name="TTc" value="0"/>
+    </initial-state>
+    <driver-placeholder drivers-defined-externally="true"/>
+    <direct-modules>
+      <module name="stomata_water_stress_linear"/>
+      <module name="leaf_water_stress_exponential"/>
+      <module name="parameter_calculator"/>
+      <module name="soil_evaporation"/>
+      <module name="solar_position_michalsky"/>
+      <module name="c4_canopy"/>
+      <module name="partitioning_coefficient_selector"/>
+      <module name="partitioning_growth_calculator"/>
+    </direct-modules>
+    <differential-modules>
+      <module name="thermal_time_senescence"/>
+      <module name="partitioning_growth"/>
+      <module name="thermal_time_linear"/>
+      <module name="two_layer_soil_profile"/>
+    </differential-modules>
+  </dynamical-system>
+</simulation-specification>

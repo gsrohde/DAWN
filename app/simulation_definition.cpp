@@ -202,6 +202,10 @@ void Simulation_definition::read_spec_file()
             {
                 // The drivers are populated by the read_drivers_file function.
             }
+            else if ( XMLString::equals(current_element->getTagName(), X("driver-placeholder")))
+            {
+                // The drivers are populated by the read_drivers_file function.
+            }
             else if ( XMLString::equals(current_element->getTagName(), X("direct-modules")))
             {
                 set_module_list(current_element, direct_modules);
