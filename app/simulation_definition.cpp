@@ -306,7 +306,7 @@ void Simulation_definition::read_drivers_file()
     }
 
     if (errors_occurred || parser->getErrorCount() > 0) {
-        throw runtime_error( "There were errors parsing the simulation specification file." );
+        throw runtime_error( "There were errors parsing the drivers file." );
     }
 
     // no need to free this pointer - owned by the parent parser object
