@@ -43,6 +43,14 @@ Simulation_definition::Simulation_definition(Option_parser op)
 }
 
 Simulation_definition::Simulation_definition(string specification_file,
+                                             Option_map parser_options)
+    : Simulation_definition{specification_file,
+                            "",
+                            parser_options}
+{
+}
+
+Simulation_definition::Simulation_definition(string specification_file,
                                              string drivers_file,
                                              Option_map parser_options)
     : specification_file{specification_file},

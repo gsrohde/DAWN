@@ -42,6 +42,8 @@ enum {
 class Simulation_definition
 {
 public:
+    Simulation_definition(string specification_file,
+                          Option_map parser_options);
     Simulation_definition(string specification_file, string drivers_file,
                           Option_map parser_options);
     Simulation_definition(Option_parser op);
