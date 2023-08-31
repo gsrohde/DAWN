@@ -7,7 +7,7 @@
 
 
 #ifndef SIMULATION_INPUT_SCHEMA_URI
-#define SIMULATION_INPUT_SCHEMA_URI https:\/\/gist.githubusercontent.com/gsrohde/3c1d3be487b94234de9ad1312be27491/raw
+#define SIMULATION_INPUT_SCHEMA_URI https:\/\/raw.githubusercontent.com/gsrohde/DAWN/develop/app/sample_input/simulation_input.xsd
 #endif
 
 #define SIMULATION_INPUT_SCHEMA_URI_STRING STR(SIMULATION_INPUT_SCHEMA_URI)
