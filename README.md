@@ -67,3 +67,36 @@ the same result as in the last example above by calling
 
     ./main -wfile=miscanthus_simulation_result.xml -driversfile=sample_input/2002_weather.xml \
                sample_input/biocro-system.miscanthus.xml
+
+With the ability to specify drivers independently of the main
+specification file, it is now easy to switch out one weather data set
+for another.  For example, if we want to use weather data from 2005,
+we merely have to specify a different drivers file:
+
+    ./main -wfile=miscanthus_simulation_result.xml -driversfile=sample_input/2005_weather.xml \
+               sample_input/biocro-system.miscanthus.xml
+
+(Note that if the simultation specification file *does* specify a set
+of drivers, using the `-driversfile` option will override whatever
+driver information is in the specification file so that it is
+effectively ignored.  For example, using
+`sample_input/biocro-system.miscanthus.2002.xml` in place of
+`sample_input/biocro-system.miscanthus.xml` in the previous command so
+that we have
+
+    ./main -wfile=miscanthus_simulation_result.xml -driversfile=sample_input/2005_weather.xml \
+               sample_input/biocro-system.miscanthus.2002.xml
+
+will yield the same result as before.)
+
+## Using a separate XML validator
+
+The diagnostic information provided by the app during validation of
+the XML input file is usually somewhat less than ideal.  Better
+diagnostic information is provided by `xmllint`, a command-line tool
+that comes with most Linux and macOS installations.  For example, to
+validate `sample_input/biocro-system.miscanthus.2002.xml` against the
+schema file `sample_input/simulation_input.xsd`, we can run
+
+    xmllint --noout --schema sample_input/simulation_input.xsd sample_input/biocro-system.miscanthus.2002.xml
+
