@@ -89,8 +89,6 @@ private:
 
     Solver dynamical_system_solver {};
 
-    static const char* default_schema_file;
-
     // Use for validating consistency of driver variables
     set<string> driver_variable_set;
 };

@@ -23,13 +23,20 @@ OUTPUT_OPTION = -o $@
 COMPILE.cpp = $(CXX11) $(CXX11STD) $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) -c
 
 
-ifdef schema_uri
-  ifeq ($(schema_uri),none)
-    VARIABLE_SETTINGS = -DSIMULATION_INPUT_SCHEMA_URI=
-  else
-    VARIABLE_SETTINGS = -DSIMULATION_INPUT_SCHEMA_URI='$(schema_uri)'
-  endif
+# Compilation options
+
+# Override with "make <target> USE_LOCAL_SCHEMA_FILE=true"
+USE_LOCAL_SCHEMA_FILE = false
+
+VARIABLE_SETTINGS := -DUSE_LOCAL_SCHEMA_FILE=$(USE_LOCAL_SCHEMA_FILE)
+
+# If we *are* using a local schema file, we need to pass its path to the compiler
+ifeq ($(USE_LOCAL_SCHEMA_FILE),true)
+    VARIABLE_SETTINGS += -DLOCAL_SCHEMA_FILEPATH=$(shell pwd)/simulation_input.xsd
 endif
+
+
+# Rules
 
 .PHONY: clean main-debug help
 

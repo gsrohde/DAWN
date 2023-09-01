@@ -30,11 +30,11 @@ Option_parser::Option_parser(int argC, char* argV[]) {
         }
         else if (!strncmp(argV[parmInd], "-show_default_schema_uri", 24)) {
             cout << "Default schema URI: ";
-            if (!strcmp(SIMULATION_INPUT_SCHEMA_URI_STRING, "")) {
+            if (get_schema_uri() == "") {
                 cout << "(none)";
             }
             else {
-                cout << "\"" << SIMULATION_INPUT_SCHEMA_URI_STRING << "\"";
+                cout << get_schema_uri();
             }
             cout << endl;
             exit(0);

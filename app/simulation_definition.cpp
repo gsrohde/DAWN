@@ -543,7 +543,7 @@ void Simulation_definition::configure_parser() {
 
     // Possible errors show up when the parser is actually used, not
     // here, so don't test for exceptions.
-    parser->setExternalNoNamespaceSchemaLocation(default_schema_file);
+    parser->setExternalNoNamespaceSchemaLocation(get_schema_uri().c_str());
 }
 
 void Simulation_definition::set_validation_scheme() {
@@ -564,6 +564,3 @@ void Simulation_definition::check_driver_variable_set(set<string> variable_set) 
 bool non_empty(const XMLCh* str) {
     return XMLString::stringLen(str) > 0;
 }
-
-// Use macro from compilation_options.h:
-const char* Simulation_definition::default_schema_file = SIMULATION_INPUT_SCHEMA_URI_STRING;
