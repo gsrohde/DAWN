@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <simulation-specification xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                          xsi:noNamespaceSchemaLocation="simulation_input.xsd">
+                          xsi:noNamespaceSchemaLocation="../xml_schema/simulation_input.xsd">
 
   <!--
   These are the defaults, so no need to specify here.
