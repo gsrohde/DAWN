@@ -14,7 +14,7 @@ inline string get_schema_uri() {
     return STR(LOCAL_SCHEMA_FILEPATH);
 #else
     return "https://raw.githubusercontent.com"
-        "/gsrohde/DAWN/revise_schema_setting_mechanism/"
+        "/gsrohde/DAWN/develop/"
         "app/xml_schema/simulation_input.xsd";
 #endif
 }
