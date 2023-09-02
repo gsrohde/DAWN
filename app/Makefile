@@ -25,14 +25,14 @@ COMPILE.cpp = $(CXX11) $(CXX11STD) $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) -c
 
 # Compilation options
 
-# Override with "make <target> USE_LOCAL_SCHEMA_FILE=true"
-USE_LOCAL_SCHEMA_FILE = false
+# Override with "make <target> use_local_schema_file=true"
+use_local_schema_file = false
 
-VARIABLE_SETTINGS := -DUSE_LOCAL_SCHEMA_FILE=$(USE_LOCAL_SCHEMA_FILE)
+VARIABLE_SETTINGS := -DUSE_LOCAL_SCHEMA_FILE=$(use_local_schema_file)
 
 # If we *are* using a local schema file, we need to pass its path to the compiler
-ifeq ($(USE_LOCAL_SCHEMA_FILE),true)
-    VARIABLE_SETTINGS += -DLOCAL_SCHEMA_FILEPATH=$(shell pwd)/simulation_input.xsd
+ifeq ($(use_local_schema_file),true)
+    VARIABLE_SETTINGS += -DLOCAL_SCHEMA_FILEPATH=$(shell pwd)/xml_schema/simulation_input.xsd
 endif
 
 
@@ -54,15 +54,11 @@ help: # Show make targets and options.
 	@echo
 	@echo "Variable settings:"
 	@echo
-	@echo "    make schema_uri=<alternate uri> -B main: Build a version of main with a"
-	@echo "                                             different default schema URI."
-	@echo
-	@echo "    make schema_uri=none -B main: Build a version of main with no default schema"
-	@echo "                                  URI, allowing the schema to be specified in the"
-	@echo "                                  XML docuements themselves."
+	@echo "    make use_local_schema_file=true -B main: Build a version of main that uses"
+	@echo "                                             the local copy of the schema."
 	@echo
 	@echo "    Note: The -B option forces all object files to be recompiled, ensuring they"
-	@echo "          get the new schema_uri setting."
+	@echo "          get the new schema location setting."
 	@echo
 
 main:  $(OBJECTS)
