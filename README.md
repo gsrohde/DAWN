@@ -98,5 +98,5 @@ that comes with most Linux and macOS installations.  For example, to
 validate `sample_input/biocro-system.miscanthus.2002.xml` against the
 schema file `sample_input/simulation_input.xsd`, we can run
 
-    xmllint --noout --schema sample_input/simulation_input.xsd sample_input/biocro-system.miscanthus.2002.xml
+    xmllint --noout --schema xml_schema/simulation_input.xsd sample_input/biocro-system.miscanthus.2002.xml
 
