@@ -1,5 +1,8 @@
 #include <gtest/gtest.h>
 
+#include <gmock/gmock.h>
+using testing::HasSubstr;
+
 #include <framework/biocro_simulation.h>
 #include <simulation_definition.h>
 
@@ -38,10 +41,21 @@ TEST(SimulationDefinitionTest, DISABLED_DuplicateDriverVariables) {
 }
 
 TEST(SimulationDefinitionTest, InconsistentDriverVariables) {
-    ASSERT_ANY_THROW({
-            Simulation_definition sim_def("test_input/inconsistent_driver_variables.xml",
+    EXPECT_THROW({
+        try {
+             Simulation_definition sim_def("test_input/inconsistent_driver_variables.xml",
                                           { {"validation_scheme", "always"} });
-        });
+        }
+        catch( const std::runtime_error& e )
+        {
+            // and this tests that it has the correct message
+            EXPECT_THAT(e.what(),
+                        HasSubstr("The set of variables in the current row"
+                                  " doesn't match that of the first row"));
+            throw;
+        }
+    },
+    std::runtime_error);
 }
 
 // Ensure a bad driver definition won't cause a segfault:

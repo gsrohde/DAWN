@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynamical-system>
   <!-- Every system must define the timestep parameter. -->
-  <parameters>
-    <variable name="timestep" value="1"/>
-  </parameters>
   <!-- Every system must define drivers, with at least one row having at least one variable. -->
-  <drivers>
+  <drivers timestep="1">
     <row>
       <variable name="some_driver_variable" value="0"/>
     </row>
