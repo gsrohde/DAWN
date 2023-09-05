@@ -8,7 +8,7 @@
 <xsd:element name="dynamical-system">
   <xsd:complexType>
     <xsd:all>
-      <xsd:element name="parameters" type="variable-settings"/>
+      <xsd:element name="parameters" minOccurs="0" type="variable-settings"/>
       <xsd:element name="initial-state" minOccurs="0" type="variable-settings"/>
       <xsd:element ref="driver-info"/>
       <xsd:element name="direct-modules" type="module-set" minOccurs="0"/>
