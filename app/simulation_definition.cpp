@@ -25,8 +25,6 @@
 using namespace std; // invalid_argument, runtime_error, stod
 using xercesc::DOMElement;
 
-bool non_empty(const XMLCh* str); // see below
-
 /**
  *  Constructor initializes Xerces-C++ libraries.
  *  The XML tags and attributes which we seek are defined.
@@ -380,15 +378,7 @@ void Simulation_definition::populate_mapping(DOMElement* current_element, state_
                 const XMLCh* value
                     = current_element->getAttribute(X("value"));
                 string string_value = XMLString::transcode(value);
-                try {
-                    double variable_value = stod(string_value);
-                    mapping[key] = variable_value;
-                }
-                catch( invalid_argument& e ) {
-                    cout << e.what() << endl;
-                    cout << "tried to convert \"" << string_value << "\", the value of " << key << ", to a double" << endl;
-                    exit(1);
-                }
+                mapping[key] = string_to_double(string_value);
 
             } // if element is a "variable" element
             else {
@@ -464,16 +454,8 @@ set<string> Simulation_definition::process_row(DOMElement* row, state_vector_map
                 const XMLCh* value
                     = current_element->getAttribute(X("value"));
                 string string_value = XMLString::transcode(value);
-                try {
-                    double variable_value = stod(string_value);
-                    mapping[key].push_back(variable_value);
-                }
-                catch( invalid_argument& e ) {
-                    // schema validation should prevent getting here
-                    cout << e.what() << endl;
-                    cout << "tried to convert \"" << string_value << "\", the value of " << key << ", to a double" << endl;
-                    throw;
-                }
+                mapping[key].push_back(string_to_double(string_value));
+
             } // if element is a "variable" element
             else {
                 // schema validation should prevent getting here
@@ -563,4 +545,16 @@ void Simulation_definition::check_driver_variable_set(set<string> variable_set) 
 
 bool non_empty(const XMLCh* str) {
     return XMLString::stringLen(str) > 0;
+}
+
+double string_to_double(string string_value) {
+    try {
+        return stod(string_value);
+    }
+    catch( invalid_argument& e ) {
+        // schema validation should prevent getting here
+        cout << e.what() << endl;
+        cout << "tried to convert \"" << string_value << " to a double" << endl;
+        throw;
+    }
 }

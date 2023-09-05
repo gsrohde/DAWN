@@ -39,6 +39,9 @@ enum {
     ERROR_EMPTY_DOCUMENT
 };
 
+bool non_empty(const XMLCh* str); // see below
+double string_to_double(string string_value); // see below
+
 class Simulation_definition
 {
 public:
