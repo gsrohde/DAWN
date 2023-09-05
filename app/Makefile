@@ -32,7 +32,7 @@ VARIABLE_SETTINGS := -DUSE_LOCAL_SCHEMA_FILE=$(use_local_schema_file)
 
 # If we *are* using a local schema file, we need to pass its path to the compiler
 ifeq ($(use_local_schema_file),true)
-    VARIABLE_SETTINGS += -DLOCAL_SCHEMA_FILEPATH=$(shell pwd)/xml_schema/simulation_input.xsd
+    VARIABLE_SETTINGS += -DLOCAL_SCHEMA_FILEPATH=$(shell pwd)/xml_schema/simulation-specification.xsd
 endif
 
 

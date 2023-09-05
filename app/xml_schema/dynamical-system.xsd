@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+<xsd:include schemaLocation="variable-settings.xsd"/>
+<xsd:include schemaLocation="drivers.xsd"/>
+<xsd:include schemaLocation="module-set.xsd"/>
+
+<xsd:element name="dynamical-system">
+  <xsd:complexType>
+    <xsd:all>
+      <xsd:element name="parameters" type="variable-settings"/>
+      <xsd:element name="initial-state" minOccurs="0" type="variable-settings"/>
+      <xsd:element ref="driver-info"/>
+      <xsd:element name="direct-modules" type="module-set" minOccurs="0"/>
+      <xsd:element name="differential-modules" type="module-set" minOccurs="0"/>
+    </xsd:all>
+  </xsd:complexType>
+</xsd:element>
+
+</xsd:schema>
