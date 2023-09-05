@@ -41,6 +41,7 @@ enum {
 
 bool non_empty(const XMLCh* str); // see below
 double string_to_double(string string_value); // see below
+void populate_mapping(DOMElement* current_element, state_map& mapping);
 
 class Simulation_definition
 {
@@ -68,8 +69,7 @@ private:
     void check_file_status(string filename);
     void configure_parser();
     void set_validation_scheme();
-    void populate_mapping(DOMElement* current_element, state_map& mapping);
-    void populate_mapping(DOMElement* current_element, state_vector_map& mapping);
+    void populate_drivers(DOMElement* current_element);
     set<string> process_row(DOMElement* row, state_vector_map& mapping);
     void set_module_list(DOMElement* current_element, mc_vector& vec);
     void check_driver_variable_set(set<string> variable_set);

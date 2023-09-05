@@ -25,6 +25,40 @@
 using namespace std; // invalid_argument, runtime_error, stod
 using xercesc::DOMElement;
 
+void populate_mapping(DOMElement* current_element, state_map& mapping) {
+    DOMNodeList*     children = current_element->getChildNodes();
+    const XMLSize_t node_count = children->getLength();
+
+    for ( XMLSize_t i = 0; i < node_count; ++i )
+    {
+        DOMNode* current_node = children->item(i);
+        if ( current_node->getNodeType() &&  // true is not NULL
+             current_node->getNodeType() == DOMNode::ELEMENT_NODE ) // is element
+        {
+            // Found node which is an Element. Re-cast node as element
+            DOMElement* current_element
+                = dynamic_cast< DOMElement* >( current_node );
+
+            if ( XMLString::equals(current_element->getTagName(), X("variable")))
+            {
+                // Read attributes of element "variable".
+                const XMLCh* name
+                    = current_element->getAttribute(X("name"));
+                string key = XMLString::transcode(name);
+
+                const XMLCh* value
+                    = current_element->getAttribute(X("value"));
+                string string_value = XMLString::transcode(value);
+                mapping[key] = string_to_double(string_value);
+
+            } // if element is a "variable" element
+            else {
+                // shouldn't get here
+            }
+        } // if child node is an element
+    } // for children of current_element
+}
+
 /**
  *  Constructor initializes Xerces-C++ libraries.
  *  The XML tags and attributes which we seek are defined.
@@ -214,7 +248,7 @@ void Simulation_definition::read_spec_file()
             else if ( XMLString::equals(current_element->getTagName(), X("drivers")))
             {
                 if (!use_external_drivers_file()) {
-                    populate_mapping(current_element, drivers);
+                    populate_drivers(current_element);
                 }
                 // else the user specified an external drivers file to
                 // override the drivers specified in this element
@@ -324,7 +358,7 @@ void Simulation_definition::read_drivers_file()
 
     DOMElement* drivers_element = dynamic_cast< DOMElement* >(drivers_list->item(0));
 
-    populate_mapping(drivers_element, drivers);
+    populate_drivers(drivers_element);
  }
 
 void Simulation_definition::update_solver_specification(DOMNode* solver_spec_node) {
@@ -354,41 +388,7 @@ void Simulation_definition::update_solver_specification(DOMNode* solver_spec_nod
     }
 }
 
-void Simulation_definition::populate_mapping(DOMElement* current_element, state_map& mapping) {
-    DOMNodeList*     children = current_element->getChildNodes();
-    const XMLSize_t node_count = children->getLength();
-
-    for ( XMLSize_t i = 0; i < node_count; ++i )
-    {
-        DOMNode* current_node = children->item(i);
-        if ( current_node->getNodeType() &&  // true is not NULL
-             current_node->getNodeType() == DOMNode::ELEMENT_NODE ) // is element
-        {
-            // Found node which is an Element. Re-cast node as element
-            DOMElement* current_element
-                = dynamic_cast< DOMElement* >( current_node );
-
-            if ( XMLString::equals(current_element->getTagName(), X("variable")))
-            {
-                // Read attributes of element "variable".
-                const XMLCh* name
-                    = current_element->getAttribute(X("name"));
-                string key = XMLString::transcode(name);
-
-                const XMLCh* value
-                    = current_element->getAttribute(X("value"));
-                string string_value = XMLString::transcode(value);
-                mapping[key] = string_to_double(string_value);
-
-            } // if element is a "variable" element
-            else {
-                // shouldn't get here
-            }
-        } // if child node is an element
-    } // for children of current_element
-}
-
-void Simulation_definition::populate_mapping(DOMElement* current_element, state_vector_map& mapping) {
+void Simulation_definition::populate_drivers(DOMElement* current_element) {
     DOMNodeList* children = current_element->getChildNodes();
     const XMLSize_t node_count = children->getLength();
 
