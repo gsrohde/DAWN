@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+<xsd:element name="solver-specification">
+  <xsd:complexType>
+    <xsd:attribute name="name" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="homemade_euler"/>
+          <xsd:enumeration value="boost_euler"/>
+          <xsd:enumeration value="boost_rk4"/>
+          <xsd:enumeration value="boost_rkck54"/>
+          <xsd:enumeration value="boost_rosenbrock"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="output-step-size">
+      <!-- should be a positive integer or equal to 1 over a positive
+           integer; defaults to 1 if not provided -->
+      <xsd:simpleType>
+        <xsd:union>
+          <xsd:simpleType>
+            <xsd:restriction base="xsd:positiveInteger"/>
+          </xsd:simpleType>
+          <xsd:simpleType>
+            <xsd:restriction base="positiveDouble">
+              <xsd:maxInclusive value="1"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+        </xsd:union>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="adaptive-relative-error-tolerance" type="positiveDouble"/>
+    <xsd:attribute name="adaptive-absolute-error-tolerance" type="positiveDouble"/>
+    <xsd:attribute name="adaptive-maximum-steps" type="xsd:positiveInteger"/>
+  </xsd:complexType>
+</xsd:element>
+
+<xsd:simpleType name="positiveDouble">
+  <xsd:restriction base="xsd:double">
+    <xsd:minExclusive value="0"/>
+  </xsd:restriction>
+</xsd:simpleType>
+
+</xsd:schema>

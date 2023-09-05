@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+<xsd:include schemaLocation="variable.xsd"/>
+
+<xsd:element name="driver-info" type="driver-info" abstract="true"/>
+
+
+<xsd:complexType name="driver-info">
+    <xsd:attribute name="drivers-defined-externally" type="xsd:boolean"/>
+</xsd:complexType>
+
+
+<xsd:element name="driver-placeholder" substitutionGroup="driver-info">
+  <xsd:complexType>
+    <xsd:complexContent>
+      <xsd:restriction base="driver-info">
+        <xsd:attribute name="drivers-defined-externally" type="xsd:boolean" fixed="true"/>
+      </xsd:restriction>
+    </xsd:complexContent>
+  </xsd:complexType>
+</xsd:element>
+
+
+<xsd:element name="drivers" substitutionGroup="driver-info">
+  <xsd:complexType>
+    <xsd:complexContent>
+      <xsd:restriction base="driver-info">
+        <xsd:sequence>
+          <xsd:element name="row" type="row" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="drivers-defined-externally" type="xsd:boolean" fixed="false"/>
+      </xsd:restriction>
+    </xsd:complexContent>
+  </xsd:complexType>
+</xsd:element>
+
+<xsd:complexType name="row">
+  <xsd:sequence>
+    <xsd:element name="variable" type="variable" minOccurs="1" maxOccurs="unbounded"/>
+  </xsd:sequence>
+</xsd:complexType>
+
+
+</xsd:schema>

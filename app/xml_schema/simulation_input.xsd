@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
+<xsd:include schemaLocation="dynamical-system.xsd"/>
+<xsd:include schemaLocation="solver.xsd"/>
+
 <xsd:element name="simulation-specification">
   <xsd:complexType>
     <xsd:all>
@@ -9,120 +12,5 @@
     </xsd:all>
   </xsd:complexType>
 </xsd:element>
-
-<xsd:element name="solver-specification">
-  <xsd:complexType>
-    <xsd:attribute name="name" use="required">
-      <xsd:simpleType>
-        <xsd:restriction base="xsd:string">
-          <xsd:enumeration value="homemade_euler"/>
-          <xsd:enumeration value="boost_euler"/>
-          <xsd:enumeration value="boost_rk4"/>
-          <xsd:enumeration value="boost_rkck54"/>
-          <xsd:enumeration value="boost_rosenbrock"/>
-        </xsd:restriction>
-      </xsd:simpleType>
-    </xsd:attribute>
-    <xsd:attribute name="output-step-size">
-      <!-- should be a positive integer or equal to 1 over a positive
-           integer; defaults to 1 if not provided -->
-      <xsd:simpleType>
-        <xsd:union>
-          <xsd:simpleType>
-            <xsd:restriction base="xsd:positiveInteger"/>
-          </xsd:simpleType>
-          <xsd:simpleType>
-            <xsd:restriction base="positiveDouble">
-              <xsd:maxInclusive value="1"/>
-            </xsd:restriction>
-          </xsd:simpleType>
-        </xsd:union>
-      </xsd:simpleType>
-    </xsd:attribute>
-    <xsd:attribute name="adaptive-relative-error-tolerance" type="positiveDouble"/>
-    <xsd:attribute name="adaptive-absolute-error-tolerance" type="positiveDouble"/>
-    <xsd:attribute name="adaptive-maximum-steps" type="xsd:positiveInteger"/>
-  </xsd:complexType>
-</xsd:element>
-
-<xsd:element name="dynamical-system">
-  <xsd:complexType>
-    <xsd:all>
-      <xsd:element name="parameters">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="variable" type="variable" minOccurs="0" maxOccurs="unbounded"/>
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-      <xsd:element name="initial-state" minOccurs="0">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="variable" type="variable" minOccurs="0" maxOccurs="unbounded"/>
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-      <xsd:element ref="driver-info"/>
-      <xsd:element name="direct-modules" type="module-set" minOccurs="0"/>
-      <xsd:element name="differential-modules" type="module-set" minOccurs="0"/>
-    </xsd:all>
-  </xsd:complexType>
-</xsd:element>
-
-<xsd:complexType name="variable">
-  <xsd:attribute name="name" type="xsd:string" use="required"/>
-  <xsd:attribute name="value" type="xsd:double" use="required"/>
-</xsd:complexType>
-
-<xsd:element name="driver-info" type="driver-info" abstract="true"/>
-
-<xsd:complexType name="driver-info">
-    <xsd:attribute name="drivers-defined-externally" type="xsd:boolean"/>
-</xsd:complexType>
-
-<xsd:element name="drivers" substitutionGroup="driver-info">
-  <xsd:complexType>
-    <xsd:complexContent>
-      <xsd:restriction base="driver-info">
-        <xsd:sequence>
-          <xsd:element name="row" type="row" maxOccurs="unbounded"/>
-        </xsd:sequence>
-        <xsd:attribute name="drivers-defined-externally" type="xsd:boolean" fixed="false"/>
-      </xsd:restriction>
-    </xsd:complexContent>
-  </xsd:complexType>
-</xsd:element>
-
-<xsd:element name="driver-placeholder" substitutionGroup="driver-info">
-  <xsd:complexType>
-    <xsd:complexContent>
-      <xsd:restriction base="driver-info">
-        <xsd:attribute name="drivers-defined-externally" type="xsd:boolean" fixed="true"/>
-      </xsd:restriction>
-    </xsd:complexContent>
-  </xsd:complexType>
-</xsd:element>
-
-<xsd:complexType name="row">
-  <xsd:sequence>
-    <xsd:element name="variable" type="variable" minOccurs="1" maxOccurs="unbounded"/>
-  </xsd:sequence>
-</xsd:complexType>
-
-<xsd:complexType name="module-set">
-  <xsd:sequence>
-    <xsd:element name="module" minOccurs="0" maxOccurs="unbounded">
-      <xsd:complexType>
-        <xsd:attribute name="name" type="xsd:string" use="required"/>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:sequence>
-</xsd:complexType>
-
-<xsd:simpleType name="positiveDouble">
-  <xsd:restriction base="xsd:double">
-    <xsd:minExclusive value="0"/>
-  </xsd:restriction>
-</xsd:simpleType>
 
 </xsd:schema>
