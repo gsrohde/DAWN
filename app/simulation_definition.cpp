@@ -25,7 +25,15 @@
 using namespace std; // invalid_argument, runtime_error, stod
 using xercesc::DOMElement;
 
-void populate_mapping(DOMElement* current_element, state_map& mapping) {
+void populate_parameter_mapping(DOMElement* parameters_element,
+                                state_map& parameters)
+{
+    populate_mapping(parameters_element, parameters, true);
+}
+
+void populate_mapping(DOMElement* current_element, state_map& mapping,
+                      bool is_parameters = false)
+{
     DOMNodeList*     children = current_element->getChildNodes();
     const XMLSize_t node_count = children->getLength();
 
@@ -49,7 +57,23 @@ void populate_mapping(DOMElement* current_element, state_map& mapping) {
                 const XMLCh* value
                     = current_element->getAttribute(X("value"));
                 string string_value = XMLString::transcode(value);
-                mapping[key] = string_to_double(string_value);
+
+                if (is_parameters && key == "timestep") {
+                    // timestep was specified in the parameters; issue
+                    // a warning that the value will be ignored; only
+                    // the value specified on the drivers element is
+                    // used
+
+                    cerr << "WARNING: "
+                         << "The timestep value " << string_value << ", "
+                         << "specified in the parameters, will be ignored.\n"
+                         << "The value specified in the timestep attribute "
+                         << "of the drivers element will be used instead."
+                         << endl;
+                }
+                else {
+                    mapping[key] = string_to_double(string_value);
+                }
 
             } // if element is a "variable" element
             else {
@@ -243,7 +267,7 @@ void Simulation_definition::read_spec_file()
             else if ( XMLString::equals(current_element->getTagName(), X("parameters")))
             {
                 // Already tested node as type element and of name "parameters".
-                populate_mapping(current_element, parameters);
+                populate_parameter_mapping(current_element, parameters);
             }
             else if ( XMLString::equals(current_element->getTagName(), X("drivers")))
             {
@@ -389,6 +413,14 @@ void Simulation_definition::update_solver_specification(DOMNode* solver_spec_nod
 }
 
 void Simulation_definition::populate_drivers(DOMElement* current_element) {
+
+    // timestep "belongs" to the drivers, but the BioCro C++ code
+    // requires it to be specified among the parameters:
+    const XMLCh* value
+        = current_element->getAttribute(X("timestep"));
+    string string_value = XMLString::transcode(value);
+    parameters["timestep"] = string_to_double(string_value);
+
     DOMNodeList* children = current_element->getChildNodes();
     const XMLSize_t node_count = children->getLength();
 

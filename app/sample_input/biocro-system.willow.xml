@@ -106,7 +106,6 @@
       <variable name="Tfrosthigh" value="5"/>
       <variable name="Tfrostlow" value="0"/>
       <variable name="theta" value="0.7"/>
-      <variable name="timestep" value="1"/>
       <variable name="tp1" value="250"/>
       <variable name="tp2" value="350"/>
       <variable name="tp3" value="900"/>

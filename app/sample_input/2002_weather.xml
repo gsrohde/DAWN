@@ -1,4 +1,4 @@
-<drivers>
+<drivers timestep="1">
   <row>
     <variable name="year" value="2002"/>
     <variable name="doy" value="96"/>

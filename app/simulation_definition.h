@@ -41,7 +41,8 @@ enum {
 
 bool non_empty(const XMLCh* str); // see below
 double string_to_double(string string_value); // see below
-void populate_mapping(DOMElement* current_element, state_map& mapping);
+void populate_mapping(DOMElement* current_element, state_map& mapping,
+                      bool is_parameters);
 
 class Simulation_definition
 {

@@ -16,13 +16,12 @@
     <parameters>
       <variable name="mass" value="1"/>
       <variable name="spring_constant" value="1"/>
-      <variable name="timestep" value="0.01"/>
     </parameters>
     <initial-state>
       <variable name="position" value="10"/>
       <variable name="velocity" value="0"/>
     </initial-state>
-    <drivers>
+    <drivers timestep="0.01">
       <row>
         <variable name="driver" value="0"/>
       </row>

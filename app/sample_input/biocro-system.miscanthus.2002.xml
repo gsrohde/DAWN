@@ -118,7 +118,6 @@
       <variable name="Sp_thermal_time_decay" value="0"/>
       <variable name="tbase" value="0"/>
       <variable name="theta" value="0.83"/>
-      <variable name="timestep" value="1"/>
       <variable name="tp1" value="562"/>
       <variable name="tp2" value="1312"/>
       <variable name="tp3" value="2063"/>
@@ -150,7 +149,7 @@
       <variable name="stem_senescence_index" value="0"/>
       <variable name="TTc" value="0"/>
     </initial-state>
-    <drivers>
+    <drivers timestep="1">
       <row>
         <variable name="year" value="2002"/>
         <variable name="doy" value="96"/>

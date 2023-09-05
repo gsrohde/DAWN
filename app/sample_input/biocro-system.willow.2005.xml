@@ -106,7 +106,6 @@
       <variable name="Tfrosthigh" value="5"/>
       <variable name="Tfrostlow" value="0"/>
       <variable name="theta" value="0.7"/>
-      <variable name="timestep" value="1"/>
       <variable name="tp1" value="250"/>
       <variable name="tp2" value="350"/>
       <variable name="tp3" value="900"/>
@@ -139,7 +138,7 @@
       <variable name="stem_senescence_index" value="0"/>
       <variable name="TTc" value="0"/>
     </initial-state>
-    <drivers>
+    <drivers timestep="1">
       <row>
         <variable name="year" value="2005"/>
         <variable name="doy" value="123"/>

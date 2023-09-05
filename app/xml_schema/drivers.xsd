@@ -7,16 +7,15 @@
 
 
 <xsd:complexType name="driver-info">
-    <xsd:attribute name="drivers-defined-externally" type="xsd:boolean"/>
 </xsd:complexType>
 
 
 <xsd:element name="driver-placeholder" substitutionGroup="driver-info">
   <xsd:complexType>
     <xsd:complexContent>
-      <xsd:restriction base="driver-info">
+      <xsd:extension base="driver-info">
         <xsd:attribute name="drivers-defined-externally" type="xsd:boolean" fixed="true"/>
-      </xsd:restriction>
+      </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
 </xsd:element>
@@ -25,12 +24,12 @@
 <xsd:element name="drivers" substitutionGroup="driver-info">
   <xsd:complexType>
     <xsd:complexContent>
-      <xsd:restriction base="driver-info">
+      <xsd:extension base="driver-info">
         <xsd:sequence>
           <xsd:element name="row" type="row" maxOccurs="unbounded"/>
         </xsd:sequence>
-        <xsd:attribute name="drivers-defined-externally" type="xsd:boolean" fixed="false"/>
-      </xsd:restriction>
+        <xsd:attribute name="timestep" type="xsd:double" use="required"/>
+      </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
 </xsd:element>
