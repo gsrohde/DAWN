@@ -15,7 +15,7 @@ inline string get_schema_uri() {
 #else
     return "https://raw.githubusercontent.com"
         "/gsrohde/DAWN/develop/"
-        "app/xml_schema/simulation_input.xsd";
+        "app/xml_schema/simulation-specification.xsd";
 #endif
 }
 
