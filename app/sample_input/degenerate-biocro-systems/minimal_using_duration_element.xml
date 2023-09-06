@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Unlike the R version of BioCro, in this app we needn't specify
+any driver variables if we use a "duration" element.  The "duration"
+element is a convenience mechanism for setting up an autonomous
+system, that is, a system having no driver input.  This way, we avoid
+the tedium of specifying a driver row for each instant of time.  (For
+a non-trivial use of the duration element, see the sample input file
+"harmonic_oscillator_system.xml", which used to use a cumbersome
+drivers element having 629 rather trivial rows.)  Since formally, the
+backend C++ library requires at least one driver variable, the app
+generates an "elapsed-time" driver variable behind the scenes, whose
+value starts at zero and increases by the value of timestep in each
+row of the output.
+
+This file is smallest (and most trivial) system-defining XML file we
+can write for the app.  Strictly speaking, we shouldn't even require a
+timestep attribute when the number of steps, and hence the duration of
+the simulation, is zero.  ("timestep" is really only needed if there
+is more than one row of output.)  As of this writing, however, the
+code is not designed to accomodate this scenario, and so here we give
+timestep an arbirary value of 1. -->
+
+<dynamical-system>
+  <duration timestep="1" number-of-steps="0"/>
+</dynamical-system>

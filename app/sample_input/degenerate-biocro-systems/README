@@ -1,0 +1,6 @@
+The sample input files in this directory correspond to the systems
+described in the appendix of the BioCro article "BioCro as a Dynamical
+System", which is available at
+https://ebimodeling.github.io/biocro-dev-documentation/master/pkgdown/articles/dynamical_systems.pdf.
+
+Note that all of the examples

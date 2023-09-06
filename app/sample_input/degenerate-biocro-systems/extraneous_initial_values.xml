@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynamical-system>
+  <initial-state>
+    <variable name="x" value="52"/>
+  </initial-state>
+  <duration timestep="1" number-of-steps="4"/>
+</dynamical-system>

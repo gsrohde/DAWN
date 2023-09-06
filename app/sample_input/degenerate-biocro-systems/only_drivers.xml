@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynamical-system>
+  <drivers timestep="1">
+    <row>
+      <variable name="year" value="2005"/>
+      <variable name="doy" value="142"/>
+      <variable name="hour" value="15"/>
+      <variable name="time_zone_offset" value="-6"/>
+      <variable name="precip" value="0"/>
+      <variable name="rh" value="0.32295"/>
+      <variable name="solar" value="1428.162"/>
+      <variable name="temp" value="27.5"/>
+      <variable name="windspeed" value="11.375"/>
+      <variable name="time" value="142.625"/>
+    </row>
+    <row>
+      <variable name="year" value="2005"/>
+      <variable name="doy" value="142"/>
+      <variable name="hour" value="16"/>
+      <variable name="time_zone_offset" value="-6"/>
+      <variable name="precip" value="0"/>
+      <variable name="rh" value="0.23975"/>
+      <variable name="solar" value="1010.022"/>
+      <variable name="temp" value="27.72"/>
+      <variable name="windspeed" value="10.11"/>
+      <variable name="time" value="142.666666666667"/>
+    </row>
+    <row>
+      <variable name="year" value="2005"/>
+      <variable name="doy" value="142"/>
+      <variable name="hour" value="17"/>
+      <variable name="time_zone_offset" value="-6"/>
+      <variable name="precip" value="0"/>
+      <variable name="rh" value="0.17685"/>
+      <variable name="solar" value="661.135"/>
+      <variable name="temp" value="27.49"/>
+      <variable name="windspeed" value="11.055"/>
+      <variable name="time" value="142.708333333333"/>
+    </row>
+    <row>
+      <variable name="year" value="2005"/>
+      <variable name="doy" value="142"/>
+      <variable name="hour" value="18"/>
+      <variable name="time_zone_offset" value="-6"/>
+      <variable name="precip" value="0"/>
+      <variable name="rh" value="0.1853"/>
+      <variable name="solar" value="215.993"/>
+      <variable name="temp" value="26.145"/>
+      <variable name="windspeed" value="8.76"/>
+      <variable name="time" value="142.75"/>
+    </row>
+    <row>
+      <variable name="year" value="2005"/>
+      <variable name="doy" value="142"/>
+      <variable name="hour" value="19"/>
+      <variable name="time_zone_offset" value="-6"/>
+      <variable name="precip" value="0"/>
+      <variable name="rh" value="0.2639"/>
+      <variable name="solar" value="38.847"/>
+      <variable name="temp" value="23.74"/>
+      <variable name="windspeed" value="5.21"/>
+      <variable name="time" value="142.791666666667"/>
+    </row>
+    <row>
+      <variable name="year" value="2005"/>
+      <variable name="doy" value="142"/>
+      <variable name="hour" value="20"/>
+      <variable name="time_zone_offset" value="-6"/>
+      <variable name="precip" value="0"/>
+      <variable name="rh" value="0.31365"/>
+      <variable name="solar" value="0.092"/>
+      <variable name="temp" value="21.54"/>
+      <variable name="windspeed" value="4.085"/>
+      <variable name="time" value="142.833333333333"/>
+    </row>
+    <row>
+      <variable name="year" value="2005"/>
+      <variable name="doy" value="142"/>
+      <variable name="hour" value="21"/>
+      <variable name="time_zone_offset" value="-6"/>
+      <variable name="precip" value="0"/>
+      <variable name="rh" value="0.37975"/>
+      <variable name="solar" value="0"/>
+      <variable name="temp" value="19.8"/>
+      <variable name="windspeed" value="4.485"/>
+      <variable name="time" value="142.875"/>
+    </row>
+    <row>
+      <variable name="year" value="2005"/>
+      <variable name="doy" value="142"/>
+      <variable name="hour" value="22"/>
+      <variable name="time_zone_offset" value="-6"/>
+      <variable name="precip" value="0"/>
+      <variable name="rh" value="0.4655"/>
+      <variable name="solar" value="0"/>
+      <variable name="temp" value="18.985"/>
+      <variable name="windspeed" value="3.41"/>
+      <variable name="time" value="142.916666666667"/>
+    </row>
+    <row>
+      <variable name="year" value="2005"/>
+      <variable name="doy" value="142"/>
+      <variable name="hour" value="23"/>
+      <variable name="time_zone_offset" value="-6"/>
+      <variable name="precip" value="0"/>
+      <variable name="rh" value="0.52795"/>
+      <variable name="solar" value="0"/>
+      <variable name="temp" value="17.84"/>
+      <variable name="windspeed" value="3.615"/>
+      <variable name="time" value="142.958333333333"/>
+    </row>
+    <row>
+      <variable name="year" value="2005"/>
+      <variable name="doy" value="143"/>
+      <variable name="hour" value="0"/>
+      <variable name="time_zone_offset" value="-6"/>
+      <variable name="precip" value="0"/>
+      <variable name="rh" value="0.60795"/>
+      <variable name="solar" value="0"/>
+      <variable name="temp" value="16.55"/>
+      <variable name="windspeed" value="3.535"/>
+      <variable name="time" value="143"/>
+    </row>
+    <row>
+      <variable name="year" value="2005"/>
+      <variable name="doy" value="143"/>
+      <variable name="hour" value="1"/>
+      <variable name="time_zone_offset" value="-6"/>
+      <variable name="precip" value="0"/>
+      <variable name="rh" value="0.6763"/>
+      <variable name="solar" value="0"/>
+      <variable name="temp" value="15.145"/>
+      <variable name="windspeed" value="3.875"/>
+      <variable name="time" value="143.041666666667"/>
+    </row>
+  </drivers>
+</dynamical-system>

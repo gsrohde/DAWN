@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynamical-system>
+  <parameters>
+    <variable name="time_zone_offset" value="-6"/>
+    <variable name="hour" value="12"/>
+    <variable name="year" value="2022"/>
+    <variable name="longitude" value="-88"/>
+  </parameters>
+   <drivers timestep="1">
+    <row>
+      <variable name="doy" value="355"/>
+      <variable name="time" value="355.5"/>
+      <variable name="lat" value="40"/>
+    </row>
+    <row>
+      <variable name="doy" value="172"/>
+      <variable name="time" value="172.5"/>
+      <variable name="lat" value="40"/>
+    </row>
+    <row>
+      <variable name="doy" value="80"/>
+      <variable name="time" value="80.5"/>
+      <variable name="lat" value="40"/>
+    </row>
+    <row>
+      <variable name="doy" value="80"/>
+      <variable name="time" value="80.5"/>
+      <variable name="lat" value="0"/>
+    </row>
+    <row>
+      <variable name="doy" value="80"/>
+      <variable name="time" value="80.5"/>
+      <variable name="lat" value="89"/>
+    </row>
+  </drivers>
+  <direct-modules>
+    <module name="solar_position_michalsky"/>
+  </direct-modules>
+</dynamical-system>
