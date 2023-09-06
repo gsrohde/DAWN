@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynamical-system>
+
+  <!-- Every XML document representing a BioCro system must have at
+       least a drivers element with a timestep attribute that directly
+       contains at least one row element having at least one variable
+       element. -->
+
+  <drivers timestep="1">
+    <row>
+      <variable name="time" value="45.625"/>
+    </row>
+  </drivers>
+</dynamical-system>
