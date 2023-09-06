@@ -225,7 +225,8 @@ void Simulation_definition::read_spec_file()
     }
 
     if (errors_occurred || parser->getErrorCount() > 0) {
-        throw runtime_error( "There were errors parsing the simulation specification file." );
+        throw runtime_error( "There were errors parsing the simulation "
+                             "specification file." );
     }
 
     // no need to free this pointer - owned by the parent parser object
@@ -236,7 +237,8 @@ void Simulation_definition::read_spec_file()
     DOMNodeList* dyn_sys_list = xml_doc->getElementsByTagName(X("dynamical-system"));
     if (dyn_sys_list->getLength() == 0) {
         // If schema validation is turned on, we shouldn't ever get here.
-        throw runtime_error( "The dynamical-system element is missing from simulation specification." );
+        throw runtime_error( "The dynamical-system element is missing from "
+                             "simulation specification." );
     }
     else if (dyn_sys_list->getLength() > 1) {
         // If schema validation is turned on, we shouldn't ever get here.
@@ -261,12 +263,14 @@ void Simulation_definition::read_spec_file()
                 = dynamic_cast< DOMElement* >( current_node );
             if ( XMLString::equals(current_element->getTagName(), X("initial-state")))
             {
-                // Already tested node as type element and of name "initial_state".
+                // Already tested node as type element and of name
+                // "initial_state".
                 populate_mapping(current_element, initial_state);
             }
             else if ( XMLString::equals(current_element->getTagName(), X("parameters")))
             {
-                // Already tested node as type element and of name "parameters".
+                // Already tested node as type element and of name
+                // "parameters".
                 populate_parameter_mapping(current_element, parameters);
             }
             else if ( XMLString::equals(current_element->getTagName(), X("drivers")))
@@ -280,8 +284,18 @@ void Simulation_definition::read_spec_file()
             else if ( XMLString::equals(current_element->getTagName(), X("driver-placeholder")))
             {
                 if (!use_external_drivers_file()) {
-                    throw runtime_error( "The spec file says drivers are defined externally but no drivers file was provided." );
+                    throw runtime_error( "The spec file says drivers are "
+                                         "defined externally but no drivers "
+                                         "file was provided." );
                 }
+            }
+            else if ( XMLString::equals(current_element->getTagName(), X("duration")))
+            {
+                if (!use_external_drivers_file()) {
+                    generate_drivers(current_element);
+                }
+                // else the user specified an external drivers file to
+                // override the drivers implicitly specified by this element
             }
             else if ( XMLString::equals(current_element->getTagName(), X("direct-modules")))
             {
@@ -373,7 +387,8 @@ void Simulation_definition::read_drivers_file()
     DOMNodeList* drivers_list = xml_doc->getElementsByTagName(X("drivers"));
     if (drivers_list->getLength() == 0) {
         // If schema validation is turned on, we shouldn't ever get here.
-        throw runtime_error( "The drivers element is missing from simulation specification." );
+        throw runtime_error( "The drivers element is missing from simulation "
+                             "specification." );
     }
     else if (drivers_list->getLength() > 1) {
         // If schema validation is turned on, we shouldn't ever get here.
@@ -393,23 +408,49 @@ void Simulation_definition::update_solver_specification(DOMNode* solver_spec_nod
 
     const XMLCh* step_size = solver_spec->getAttribute(X("output-step-size"));
     if (non_empty(step_size)) {
-        dynamical_system_solver.step_size = stod(XMLString::transcode(step_size));
+        dynamical_system_solver.step_size =
+            stod(XMLString::transcode(step_size));
     }
 
-    const XMLCh* relative_tolerance = solver_spec->getAttribute(X("adaptive-relative-error-tolerance"));
+    const XMLCh* relative_tolerance =
+        solver_spec->getAttribute(X("adaptive-relative-error-tolerance"));
     if (non_empty(relative_tolerance)) {
-        dynamical_system_solver.relative_tolerance = stod(XMLString::transcode(relative_tolerance));
+        dynamical_system_solver.relative_tolerance =
+            stod(XMLString::transcode(relative_tolerance));
     }
 
-    const XMLCh* absolute_tolerance = solver_spec->getAttribute(X("adaptive-absolute-error-tolerance"));
+    const XMLCh* absolute_tolerance =
+        solver_spec->getAttribute(X("adaptive-absolute-error-tolerance"));
     if (non_empty(absolute_tolerance)) {
-        dynamical_system_solver.absolute_tolerance = stod(XMLString::transcode(absolute_tolerance));
+        dynamical_system_solver.absolute_tolerance =
+            stod(XMLString::transcode(absolute_tolerance));
     }
 
-    const XMLCh* max_steps = solver_spec->getAttribute(X("adaptive-maximum-steps"));
+    const XMLCh* max_steps =
+        solver_spec->getAttribute(X("adaptive-maximum-steps"));
     if (non_empty(max_steps)) {
-        dynamical_system_solver.max_steps = stoi(XMLString::transcode(max_steps));
+        dynamical_system_solver.max_steps =
+            stoi(XMLString::transcode(max_steps));
     }
+}
+
+void Simulation_definition::generate_drivers(DOMElement* current_element) {
+    const XMLCh* timestep_value
+        = current_element->getAttribute(X("timestep"));
+    string string_value = XMLString::transcode(timestep_value);
+    const double timestep = string_to_double(string_value);
+    parameters["timestep"] = timestep;
+
+    const XMLCh* number_of_steps_value =
+        current_element->getAttribute(X("number-of-steps"));
+    string_value = XMLString::transcode(number_of_steps_value);
+    const int number_of_steps = string_to_int(string_value);
+
+    vector<double> elapsed_times {};
+    for (int i = 0; i <= number_of_steps; ++i) {
+        elapsed_times.push_back(i * timestep);
+    }
+    drivers["elapsed-time"] = elapsed_times;
 }
 
 void Simulation_definition::populate_drivers(DOMElement* current_element) {
@@ -449,7 +490,9 @@ void Simulation_definition::populate_drivers(DOMElement* current_element) {
                         check_driver_variable_set(variable_set);
                     }
                     catch (runtime_error& e) {
-                        throw runtime_error("Error in row " + to_string(row_number) + ": " + e.what());
+                        throw runtime_error("Error in row " +
+                                            to_string(row_number) +
+                                            ": " + e.what());
                     }
                 }
             } else {
@@ -519,7 +562,9 @@ void Simulation_definition::set_module_list(DOMElement* current_element, mc_vect
                 const XMLCh* name
                     = current_element->getAttribute(X("name"));
                 string module_name = XMLString::transcode(name);
-                vec.push_back(module_factory<standardBML::module_library>::retrieve(module_name));
+                vec.push_back(
+                    module_factory<standardBML::module_library>::retrieve(module_name)
+                );
             }
         }
     }
@@ -538,7 +583,8 @@ void Simulation_definition::check_file_status(string filename) {
         else if ( errno == ENOTDIR )
             throw runtime_error("A component of the path is not a directory.");
         else if ( errno == ELOOP )
-            throw runtime_error("Too many symbolic links encountered while traversing the path.");
+            throw runtime_error("Too many symbolic links encountered while "
+                                "traversing the path.");
         else if ( errno == EACCES )
             throw runtime_error("Permission denied.");
         else if ( errno == ENAMETOOLONG )
@@ -562,16 +608,20 @@ void Simulation_definition::configure_parser() {
 
 void Simulation_definition::set_validation_scheme() {
     auto setting = parser_options.at("validation_scheme");
-    XercesDOMParser::ValSchemes scheme = setting == "always" ? XercesDOMParser::Val_Always
-                                       : setting == "auto"   ? XercesDOMParser::Val_Auto
-                                       : setting == "never"  ? XercesDOMParser::Val_Never
-                                       :                       XercesDOMParser::Val_Always; // should never get here
+
+    XercesDOMParser::ValSchemes
+        scheme = (setting == "always") ? XercesDOMParser::Val_Always
+               : (setting == "auto")   ? XercesDOMParser::Val_Auto
+               : (setting == "never")  ? XercesDOMParser::Val_Never
+               :                         XercesDOMParser::Val_Always; // should never get here
+
     parser->setValidationScheme(scheme);
 }
 
 void Simulation_definition::check_driver_variable_set(set<string> variable_set) {
     if (variable_set != driver_variable_set) {
-        throw runtime_error("The set of variables in the current row doesn't match that of the first row");
+        throw runtime_error("The set of variables in the current row doesn't "
+                            "match that of the first row");
     }
 }
 
@@ -587,6 +637,18 @@ double string_to_double(string string_value) {
         // schema validation should prevent getting here
         cout << e.what() << endl;
         cout << "tried to convert \"" << string_value << " to a double" << endl;
+        throw;
+    }
+}
+
+int string_to_int(string string_value) {
+    try {
+        return stoi(string_value);
+    }
+    catch( invalid_argument& e ) {
+        // schema validation should prevent getting here
+        cout << e.what() << endl;
+        cout << "tried to convert \"" << string_value << " to an int" << endl;
         throw;
     }
 }

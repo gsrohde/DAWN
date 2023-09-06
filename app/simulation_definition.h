@@ -39,8 +39,9 @@ enum {
     ERROR_EMPTY_DOCUMENT
 };
 
-bool non_empty(const XMLCh* str); // see below
-double string_to_double(string string_value); // see below
+bool non_empty(const XMLCh* str);
+double string_to_double(string string_value);
+int string_to_int(string string_value);
 void populate_mapping(DOMElement* current_element, state_map& mapping,
                       bool is_parameters);
 
@@ -71,6 +72,7 @@ private:
     void configure_parser();
     void set_validation_scheme();
     void populate_drivers(DOMElement* current_element);
+    void generate_drivers(DOMElement* current_element);
     set<string> process_row(DOMElement* row, state_vector_map& mapping);
     void set_module_list(DOMElement* current_element, mc_vector& vec);
     void check_driver_variable_set(set<string> variable_set);
