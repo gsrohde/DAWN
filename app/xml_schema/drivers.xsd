@@ -10,6 +10,17 @@
 </xsd:complexType>
 
 
+<xsd:element name="duration" substitutionGroup="driver-info">
+  <xsd:complexType>
+    <xsd:complexContent>
+      <xsd:extension base="driver-info">
+        <xsd:attribute name="timestep" type="xsd:double" use="required"/>
+        <xsd:attribute name="number-of-steps" type="xsd:nonNegativeInteger" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+</xsd:element>
+
 <xsd:element name="driver-placeholder" substitutionGroup="driver-info">
   <xsd:complexType>
     <xsd:complexContent>
