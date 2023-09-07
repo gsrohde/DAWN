@@ -4,7 +4,7 @@
 
   <!--
   These are the defaults, so no need to specify here.
-  <solver-specification
+  <solver
       name="boost_rkck54"
       output-step-size="1"
       adaptive-relative-error-tolerance="1e-4"

@@ -16,7 +16,7 @@
   <xsd:complexType>
     <xsd:all>
       <xsd:element ref="dynamical-system"/>
-      <xsd:element ref="solver-specification" minOccurs="0"/>
+      <xsd:element ref="solver" minOccurs="0"/>
     </xsd:all>
   </xsd:complexType>
 </xsd:element>
