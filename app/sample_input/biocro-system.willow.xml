@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <simulation-specification xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                           xsi:noNamespaceSchemaLocation="../xml_schema/simulation-specification.xsd">
-  <solver-specification name="boost_euler"/>
+  <solver name="boost_euler"/>
   <dynamical-system>
     <parameters>
       <variable name="absorptivity_par" value="0.8"/>

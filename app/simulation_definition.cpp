@@ -312,7 +312,7 @@ void Simulation_definition::read_spec_file()
         }
     }
 
-    DOMNodeList* solver_spec_list = xml_doc->getElementsByTagName(X("solver-specification"));
+    DOMNodeList* solver_spec_list = xml_doc->getElementsByTagName(X("solver"));
     if (solver_spec_list->getLength() > 1) {
         // If schema validation is turned on, we shouldn't ever get here.
         throw runtime_error( "The dynamical-system element must be unique." );
