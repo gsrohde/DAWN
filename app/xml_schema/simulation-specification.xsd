@@ -11,6 +11,9 @@
       element of the primary input document read by the app.  If the
       default solver is being used, however, "dynamical-system" may be
       used as the top-level element.
+
+      Specifying a solver is optional.  If unspecified, a default
+      solver is used.
     </xsd:documentation>
   </xsd:annotation>
   <xsd:complexType>
