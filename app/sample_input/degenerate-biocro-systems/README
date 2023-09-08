@@ -1,6 +1,13 @@
-The sample input files in this directory correspond to the systems
-described in the appendix of the BioCro article "BioCro as a Dynamical
-System", which is available at
+The sample input files in this directory demonstrate edge-case uses of
+the BioCro system solver.  Most examples here correspond to one of the
+systems described in the appendix of the BioCro article "BioCro as a
+Dynamical System", which is available at
 https://ebimodeling.github.io/biocro-dev-documentation/master/pkgdown/articles/dynamical_systems.pdf.
 
-Note that all of the examples
+Note that none of the examples here uses any differential modules.
+Thus, in these examples, the choice of solver is immaterial, and we
+may as well simply use the default one.  This allows us to use
+dynamical-system rather than simulation-specification as the top level
+element in each XML input document: we need only use
+simulation-specification as the document element when we want to
+specify a solver other than the default one.

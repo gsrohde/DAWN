@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an alternative, more succinct, specification of the input
+given in off-label.xml.  Here, we have moved all of the driver
+variables that are fixed and do not change from one row to the next to
+the parameters element.  (In a previous version of BioCro, the drivers
+were called "varying parameters" since they change over time, as
+opposed to the "parameters", which are fixed.)  The output from
+inputting this file is identical to that for off-label.xml except that
+when using this file, the output does not include the values of the
+parameters.  (Driver variable values are, by default, repeated in the
+output whereas parameter values are not.) -->
+
 <dynamical-system>
   <parameters>
     <variable name="time_zone_offset" value="-6"/>

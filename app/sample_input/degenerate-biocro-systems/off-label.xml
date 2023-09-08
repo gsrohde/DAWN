@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The document in this file specifies what might be called an
+"off-label" use of the BioCro system-solving mechanism.  Here we use
+the solar_position_michalsky module to compute such things as the
+solar zenith angle, the solar azimuth angle, and the Julian date,
+given a time and location.
+
+This use is "off-label" because we are not really describing a
+dynamical system here: There is no temporal relationship between the
+rows (we are lying when we claim the time-step is 1).  In fact, there
+is no interdependence whatsoever between the rows; we would get the
+same result (in a different order) if we shuffled the order of the
+input driver rows. -->
+
 <dynamical-system>
   <drivers timestep="1">
     <row>

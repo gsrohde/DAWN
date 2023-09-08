@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This XML document represents a system having no parameters, no
+state variables (a.k.a. differential variables, or variables in the
+initial state set), and using no modules.  The output resulting from
+this input contains much the same information, though in slightly
+different form: the variables are alphabetized by name in each row, an
+attribute "step-number" is added to each output row element, and the
+row elements in the output are direct descendants of the document
+element ("simulation-result"), with no intervening "drivers" element.
+
+This example corresponds to the appendix example labelled "A system
+having only drivers" (see the README file in this directory). -->
+
 <dynamical-system>
   <drivers timestep="1">
     <row>
