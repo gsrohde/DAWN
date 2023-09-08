@@ -31,10 +31,10 @@ void populate_parameter_mapping(DOMElement* parameters_element,
     populate_mapping(parameters_element, parameters, true);
 }
 
-void populate_mapping(DOMElement* current_element, state_map& mapping,
+void populate_mapping(DOMElement* variable_containing_element, state_map& mapping,
                       bool is_parameters = false)
 {
-    DOMNodeList*     children = current_element->getChildNodes();
+    DOMNodeList* children = variable_containing_element->getChildNodes();
     const XMLSize_t node_count = children->getLength();
 
     for ( XMLSize_t i = 0; i < node_count; ++i )
@@ -71,6 +71,17 @@ void populate_mapping(DOMElement* current_element, state_map& mapping,
                          << "of the drivers element will be used instead."
                          << endl;
                 }
+                else if (mapping.count(key) > 0) {
+                    string message {"Duplicate key (\""};
+                    message += key;
+                    message += "\") in element \"";
+                    const XMLCh* vname = variable_containing_element->getTagName();
+                    string variable_name
+                        = XMLString::transcode(vname);
+                    message += variable_name;
+                    message += "\".";
+                    throw runtime_error(message);
+                }
                 else {
                     mapping[key] = string_to_double(string_value);
                 }
@@ -80,7 +91,7 @@ void populate_mapping(DOMElement* current_element, state_map& mapping,
                 // shouldn't get here
             }
         } // if child node is an element
-    } // for children of current_element
+    } // for children of variable_containing_element
 }
 
 /**
@@ -524,7 +535,19 @@ set<string> Simulation_definition::process_row(DOMElement* row, state_vector_map
                 const XMLCh* name
                     = current_element->getAttribute(X("name"));
                 string key = XMLString::transcode(name);
-                variable_set.insert(key);
+
+                if (variable_set.count(key) == 0) {
+                    variable_set.insert(key);
+                }
+                else {
+                    string message {"Duplicate key (\""};
+                    message += key;
+                    message += "\") in row ";
+                    message += to_string((mapping.at(key)).size());
+                    message += " of the drivers element.";
+
+                    throw runtime_error(message);
+                }
 
                 const XMLCh* value
                     = current_element->getAttribute(X("value"));
