@@ -15,6 +15,10 @@
       <xsd:element name="differential-modules" type="module-set" minOccurs="0"/>
     </xsd:all>
   </xsd:complexType>
+  <xsd:unique name="variable-names">
+    <xsd:selector xpath="*/variable"/>
+    <xsd:field xpath="@name"/>
+  </xsd:unique>
 </xsd:element>
 
 </xsd:schema>
