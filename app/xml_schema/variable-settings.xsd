@@ -4,6 +4,13 @@
 <xsd:include schemaLocation="variable.xsd"/>
 
 <xsd:complexType name="variable-settings">
+  <xsd:annotation>
+    <xsd:documentation>
+      An element of type variable-settings simply contains a sequence
+      of zero or more variable elements.  In this app, the ordering of
+      these variables is immaterial.
+    </xsd:documentation>
+  </xsd:annotation>
   <xsd:sequence>
     <xsd:element name="variable" type="variable" minOccurs="0" maxOccurs="unbounded"/>
   </xsd:sequence>

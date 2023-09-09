@@ -37,8 +37,26 @@
     <xsd:complexContent>
       <xsd:extension base="driver-info">
         <xsd:sequence>
+          <xsd:annotation>
+            <xsd:documentation>
+              A drivers element must contain at least one row.
+            </xsd:documentation>
+          </xsd:annotation>
           <xsd:element name="row" type="row" maxOccurs="unbounded">
             <xsd:unique name="driver-variable-names">
+              <xsd:annotation>
+                <xsd:documentation>
+                  Within each driver row, no variable should appear
+                  more than once.
+
+                  If schema validation is turned off, this is enforced
+                  at the program level, but at a later stage.  The
+                  program also ensures that variables in the
+                  parameters or initial state are distinct from those
+                  in the driver rows, something that can't easily be
+                  enforced by XML schema.
+                </xsd:documentation>
+              </xsd:annotation>
               <xsd:selector xpath="variable"/>
               <xsd:field xpath="@name"/>
             </xsd:unique>
