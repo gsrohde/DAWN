@@ -16,4 +16,14 @@
   </xsd:sequence>
 </xsd:complexType>
 
+<xsd:complexType name="non-empty-variable-settings">
+  <xsd:complexContent>
+    <xsd:restriction base="variable-settings">
+      <xsd:sequence>
+        <xsd:element name="variable" type="variable" minOccurs="1" maxOccurs="unbounded"/>
+      </xsd:sequence>
+    </xsd:restriction>
+  </xsd:complexContent>
+</xsd:complexType>
+
 </xsd:schema>

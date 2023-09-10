@@ -27,19 +27,22 @@
           but must contain at least one.
         </xsd:documentation>
       </xsd:annotation>
-      <xsd:element name="row" type="row" maxOccurs="unbounded">
+      <xsd:element name="row" type="non-empty-variable-settings" maxOccurs="unbounded">
         <xsd:unique name="driver-variable-names">
           <xsd:annotation>
             <xsd:documentation>
-              Within each driver row, no variable should appear
-              more than once.
+              Within each driver row, no variable should appear more
+              than once.
 
-              If schema validation is turned off, this is enforced
-              at the program level, but at a later stage.  The
-              program also ensures that variables in the
-              parameters or initial state are distinct from those
-              in the driver rows, something that can't easily be
-              enforced by XML schema.
+              If schema validation is turned off, this is enforced at
+              the program level, but at a later stage.  The program
+              also ensures that variables in the parameters or initial
+              state are distinct from those in the driver rows,
+              something that can't easily be enforced by XML schema.
+
+              Each row in a drivers element should contain the same
+              set of variables, but again, this is enforced at the
+              program level and not by this schema.
             </xsd:documentation>
           </xsd:annotation>
           <xsd:selector xpath="variable"/>
@@ -50,22 +53,5 @@
     <xsd:attribute name="timestep" type="xsd:double" use="required"/>
   </xsd:complexType>
 </xsd:element>
-
-<xsd:complexType name="row">
-  <xsd:sequence>
-    <xsd:annotation>
-      <xsd:documentation>
-        A row element may contain an unlimited number of variables but
-        must contain at least one.
-
-        Each row in a drivers element should contain the same set of
-        variables, but this is enforced at the program level and not
-        by this schema.
-      </xsd:documentation>
-    </xsd:annotation>
-    <xsd:element name="variable" type="variable" minOccurs="1" maxOccurs="unbounded"/>
-  </xsd:sequence>
-</xsd:complexType>
-
 
 </xsd:schema>
