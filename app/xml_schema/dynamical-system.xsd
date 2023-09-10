@@ -38,7 +38,7 @@
         appears in both groups or more than once in one group.
 
         If schema validation is turned off, uniqueness of variable
-        names is enforce at the program level, but at a later stage.
+        names is enforced at the program level, but at a later stage.
         The program also ensures that variables in the parameters or
         initial state are distinct from those in the driver rows,
         something that can't easily be enforced by XML schema.
@@ -54,11 +54,22 @@
         direct-modules and differential-modules elements to ensure no
         module appears in both groups or more than once in one group.
 
-        If schema validation is turned off, uniqueness of variable
-        names is enforce at the program level, but at a later stage.
-        The program also ensures that variables in the parameters or
-        initial state are distinct from those in the driver rows,
-        something that can't easily be enforced by XML schema.
+        If schema validation is turned off, uniqueness of module names
+        within either the set of direct modules or the set of
+        differential modules is enforced at the program level, but at
+        a later stage.  Disjointness of the two sets is also
+        (indirectly) enforced at the program level, but only at the
+        stage where the biocro_simulation object is constructed from
+        the Simulation_definition object.  (Construction fails because
+        output variables of a differential module must all be
+        contained in the set of initial state variables, whereas
+        output variables of a direct module must be disjoint from the
+        set of initial state variables.)
+
+        One thing that isn't enforced, either by the schema or at the
+        program level is that the modules included in the sets of
+        direct and differential modules are of the correct type (i.e.,
+        direct or differential, respectively).
       </xsd:documentation>
     </xsd:annotation>
     <xsd:selector xpath="differential-modules/module|direct-modules/module"/>
