@@ -47,6 +47,23 @@
     <xsd:selector xpath="parameters/variable|initial-state/variable"/>
     <xsd:field xpath="@name"/>
   </xsd:unique>
+  <xsd:unique name="module-names">
+    <xsd:annotation>
+      <xsd:documentation>
+        The selector selects the module elements within the
+        direct-modules and differential-modules elements to ensure no
+        module appears in both groups or more than once in one group.
+
+        If schema validation is turned off, uniqueness of variable
+        names is enforce at the program level, but at a later stage.
+        The program also ensures that variables in the parameters or
+        initial state are distinct from those in the driver rows,
+        something that can't easily be enforced by XML schema.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:selector xpath="differential-modules/module|direct-modules/module"/>
+    <xsd:field xpath="@name"/>
+  </xsd:unique>
 </xsd:element>
 
 </xsd:schema>
