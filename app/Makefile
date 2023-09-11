@@ -119,3 +119,6 @@ debug: main-debug
 	/Applications/Xcode.app/Contents/Developer/usr/bin/lldb main-debug
 
 endif
+
+include run_samples.mk
+include run_degenerate_system_samples.mk
