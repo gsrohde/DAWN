@@ -7,8 +7,42 @@
 
 <xsd:element name="duration" substitutionGroup="driver-info">
   <xsd:complexType>
-    <xsd:attribute name="timestep" type="xsd:double" use="required"/>
-    <xsd:attribute name="number-of-steps" type="xsd:nonNegativeInteger" use="required"/>
+    <xsd:attribute name="timestep" type="xsd:double" use="required">
+      <xsd:annotation>
+        <xsd:documentation>
+          The timestep should represent the amount of time that
+          elapses between successive steps of a simulation.  As stated
+          in the documentation of the drivers element's timestep
+          attribute, for nearly all differential BioCro modules, the
+          timestep is presumed to be in units of hours.  An important
+          exception is the harmonic_oscillator module, which assumes
+          that the timestep is given in units of seconds.
+
+          In fact, this exception is especially relevant here, since
+          the primary use of the duration element will be to easily
+          set up the sort of autonomous dynamical system represented
+          by a harmonic oscillator; all "real" BioCro systems (that
+          is, those related to biology) will likely use modules
+          requiring the use of drivers (in particular, weather-related
+          input variables).
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="number-of-steps" type="xsd:nonNegativeInteger" use="required">
+      <xsd:annotation>
+        <xsd:documentation>
+          The duration of a simulation using a "duration" element will
+          be the timestep (the duration of a single time-step)
+          multiplied by number of steps (number-of-steps).
+
+          Using a "duration" element in place of a drivers element
+          will generate an elapsed-time variable whose value in the
+          last row of the simulation result will equal this duration.
+          The elapsed-time variable will, of course, have the same
+          units as timestep.
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
   </xsd:complexType>
 </xsd:element>
 
@@ -38,7 +72,7 @@
               the program level, but at a later stage.  The program
               also ensures that variables in the parameters or initial
               state are distinct from those in the driver rows,
-              something that can't easily be enforced by XML schema.
+              something that can't easily be enforced by XML Schema.
 
               Each row in a drivers element should contain the same
               set of variables, but again, this is enforced at the
@@ -50,7 +84,21 @@
         </xsd:unique>
       </xsd:element>
     </xsd:sequence>
-    <xsd:attribute name="timestep" type="xsd:double" use="required"/>
+    <xsd:attribute name="timestep" type="xsd:double" use="required">
+      <xsd:annotation>
+        <xsd:documentation>
+          The timestep should represent the amount of time that
+          elapses between successive rows of the drivers.  In nearly
+          all cases, for the variable units to work out to those
+          described in the Quantity List for the BioCro Module Library
+          (see
+          https://ebimodeling.github.io/biocro-dev-documentation/quantity_docs/quantities.html),
+          the timestep should be in units of hours.  (But see the
+          documentation of the duration element's timestep attribute
+          for an exception.)
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
   </xsd:complexType>
 </xsd:element>
 
