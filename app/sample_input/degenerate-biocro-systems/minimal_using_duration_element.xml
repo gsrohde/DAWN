@@ -9,7 +9,7 @@ a non-trivial use of the duration element, see the sample input file
 "harmonic_oscillator_system.xml", which used to use a cumbersome
 drivers element having 629 rather trivial rows.)  Since formally, the
 backend C++ library requires at least one driver variable, the app
-generates an "elapsed-time" driver variable behind the scenes, whose
+generates an "elapsed_time" driver variable behind the scenes, whose
 value starts at zero and increases by the value of timestep in each
 row of the output.
 

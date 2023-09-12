@@ -461,7 +461,7 @@ void Simulation_definition::generate_drivers(DOMElement* current_element) {
     for (int i = 0; i <= number_of_steps; ++i) {
         elapsed_times.push_back(i * timestep);
     }
-    drivers["elapsed-time"] = elapsed_times;
+    drivers["elapsed_time"] = elapsed_times;
 }
 
 void Simulation_definition::populate_drivers(DOMElement* current_element) {
