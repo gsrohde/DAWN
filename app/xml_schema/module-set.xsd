@@ -5,8 +5,8 @@
   <xsd:sequence>
     <xsd:annotation>
       <xsd:documentation>
-        Although a model group for a module-set is a "sequence" (of
-        module elements) as the name "module-set" suggests, the order
+        Although the model group for a module-set is a "sequence" (of
+        module elements), as the name "module-set" suggests, the order
         of these module elements is immaterial.
 
         (In running a simulation, the software does impose an ordering

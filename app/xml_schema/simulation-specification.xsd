@@ -13,7 +13,8 @@
       used as the top-level element.
 
       Specifying a solver as part of a simulation-specification is
-      optional.  If unspecified, a default solver is used.
+      optional.  If unspecified, a default solver is used (see
+      documentation of the solver element for more information).
     </xsd:documentation>
   </xsd:annotation>
   <xsd:complexType>

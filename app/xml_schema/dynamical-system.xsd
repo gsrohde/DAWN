@@ -13,14 +13,17 @@
           A "real" dynamical system requires at least one differential
           module together with an initial state that sets the initial
           values of all the variables that the differential module
-          computes derivatives for.  Formally, however, only some
-          variety of "driver-info" element is required--either a
-          "drivers" element to set the drivers explicitely within the
-          dynamical system element; a "driver-placeholder" element to
-          indicate that the drivers will be provided by a separate
-          document; or a "duration" element, to indicate that the
-          system is autonmous and to specify how many simulation steps
-          should be run, and the time interval between steps.
+          computes derivatives for.
+
+          Formally, however, the only child element of
+          dynamical-system that is required is some variety of the
+          (abstract) "driver-info" element--either a "drivers" element
+          to set the drivers explicitly within the dynamical system
+          element; a "driver-placeholder" element to indicate that the
+          drivers will be provided in a separate document; or a
+          "duration" element, to indicate that the system is
+          autonomous and to specify how many simulation steps should
+          be run, and the time interval between steps.
         </xsd:documentation>
       </xsd:annotation>
       <xsd:element name="parameters" minOccurs="0" type="variable-settings"/>
@@ -39,9 +42,9 @@
 
         If schema validation is turned off, uniqueness of variable
         names is enforced at the program level, but at a later stage.
-        The program also ensures that variables in the parameters or
+        The program also ensures that variables in the parameters and
         initial state are distinct from those in the driver rows,
-        something that can't easily be enforced by XML schema.
+        something that can't easily be enforced by XML Schema.
       </xsd:documentation>
     </xsd:annotation>
     <xsd:selector xpath="parameters/variable|initial-state/variable"/>
