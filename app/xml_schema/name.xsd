@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+<xsd:simpleType name='module-or-variable-name'>
+  <xsd:restriction base='xsd:string'>
+    <xsd:pattern value='[a-zA-Z][a-zA-Z0-9_]*'/>
+  </xsd:restriction>
+</xsd:simpleType>
+
+</xsd:schema>

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
+<xsd:include schemaLocation="name.xsd"/>
+
 <xsd:complexType name="module-set">
   <xsd:sequence>
     <xsd:annotation>
@@ -19,7 +21,7 @@
     </xsd:annotation>
     <xsd:element name="module" minOccurs="0" maxOccurs="unbounded">
       <xsd:complexType>
-        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="name" type="module-or-variable-name" use="required"/>
       </xsd:complexType>
     </xsd:element>
   </xsd:sequence>
