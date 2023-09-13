@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
+<xsd:include schemaLocation="name.xsd"/>
+
 <xsd:complexType name="module-set">
   <xsd:sequence>
+    <xsd:annotation>
+      <xsd:documentation>
+        Although the model group for a module-set is a "sequence" (of
+        module elements), as the name "module-set" suggests, the order
+        of these module elements is immaterial.
+
+        (In running a simulation, the software does impose an ordering
+        on direct modules so that modules providing outputs needed as
+        inputs to other modules occur earlier in the order than those
+        other modules.  But this ordering is unrelated to the ordering
+        the user happens to use in specifying the set of direct
+        modules.)
+      </xsd:documentation>
+    </xsd:annotation>
     <xsd:element name="module" minOccurs="0" maxOccurs="unbounded">
       <xsd:complexType>
-        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="name" type="module-or-variable-name" use="required"/>
       </xsd:complexType>
     </xsd:element>
   </xsd:sequence>

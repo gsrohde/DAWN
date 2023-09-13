@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This simulation specification corresponds to the appendix example
+labelled "A minimal system" (see the README file in this directory).
+
+Note that in this app, "timestep" is not considered a parameter, but
+rather, a property of the drivers.  Thus, there is no "parameters"
+element; rather, we use an attribute of "drivers" to specify the
+timestep value.
+
+Every XML document representing a BioCro system must have at
+least a drivers element with a timestep attribute that directly
+contains at least one row element having at least one variable
+element.  Alternatively, it can use a duration element in place
+of a drivers element (see
+minimal_using_duration_element.xml). -->
+
+<dynamical-system>
+  <drivers timestep="1">
+    <row>
+      <variable name="time" value="45.625"/>
+    </row>
+  </drivers>
+</dynamical-system>

@@ -461,7 +461,7 @@ void Simulation_definition::generate_drivers(DOMElement* current_element) {
     for (int i = 0; i <= number_of_steps; ++i) {
         elapsed_times.push_back(i * timestep);
     }
-    drivers["elapsed-time"] = elapsed_times;
+    drivers["elapsed_time"] = elapsed_times;
 }
 
 void Simulation_definition::populate_drivers(DOMElement* current_element) {
@@ -565,9 +565,11 @@ set<string> Simulation_definition::process_row(DOMElement* row, state_vector_map
     return variable_set;
 }
 
-void Simulation_definition::set_module_list(DOMElement* current_element, mc_vector& vec) {
-    DOMNodeList*     children = current_element->getChildNodes();
+void Simulation_definition::set_module_list(DOMElement* module_element, mc_vector& vec) {
+    DOMNodeList* children = module_element->getChildNodes();
     const XMLSize_t node_count = children->getLength();
+
+    set<string> module_name_set {}; // for detecting duplicates
 
     for ( XMLSize_t i = 0; i < node_count; ++i )
     {
@@ -585,9 +587,25 @@ void Simulation_definition::set_module_list(DOMElement* current_element, mc_vect
                 const XMLCh* name
                     = current_element->getAttribute(X("name"));
                 string module_name = XMLString::transcode(name);
-                vec.push_back(
-                    module_factory<standardBML::module_library>::retrieve(module_name)
-                );
+
+                if (module_name_set.count(module_name) == 0) {
+                    module_name_set.insert(module_name);
+                    vec.push_back(
+                        module_factory<standardBML::module_library>::retrieve(module_name)
+                    );
+                }
+                else {
+                    string message {"Module \""};
+                    message += module_name;
+                    message += "\" appears more than once in the specified set of ";
+                    const XMLCh* mod_type = module_element->getTagName();
+                    string module_type
+                        = XMLString::transcode(mod_type);
+                    message += (module_type == "direct-modules") ? "direct" : "differential";
+                    message += " modules.";
+
+                    throw std::runtime_error(message);
+                }
             }
         }
     }

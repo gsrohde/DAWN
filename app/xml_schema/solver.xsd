@@ -4,6 +4,15 @@
 <xsd:element name="solver">
   <xsd:complexType>
     <xsd:attribute name="name" use="required">
+      <xsd:annotation>
+        <xsd:documentation>
+          If a solver element is used, one of the five solver names
+          below must be specified using the "name" attribute.  If no
+          solver element is used, the default solver chosen will be
+          "boost_rkck54", which uses the Runge Kutta Cash Karp 5(4)
+          method.
+        </xsd:documentation>
+      </xsd:annotation>
       <xsd:simpleType>
         <xsd:restriction base="xsd:string">
           <xsd:enumeration value="homemade_euler"/>
@@ -14,9 +23,51 @@
         </xsd:restriction>
       </xsd:simpleType>
     </xsd:attribute>
-    <xsd:attribute name="output-step-size">
-      <!-- should be a positive integer or equal to 1 over a positive
-           integer; defaults to 1 if not provided -->
+    <xsd:attribute name="output-step-size" default="1">
+      <xsd:annotation>
+        <xsd:documentation>
+          The output step size is the number of Boost integration
+          steps that take place between each row of output.  Thus, if
+          a value of 1 is used, the result of every integration step
+          is shown, but if a value of 2 is used, only the values from
+          every other integration step are shown.  On the other hand,
+          a value less than one may be used, in which case
+          interpolation is used to estimate what the variable values
+          will be between integration steps.
+
+          Generally, if a duration element is used in place of
+          drivers, the number of rows of output will be
+
+            floor(number-of-steps / output-step-size) + 1
+
+          where number-of-steps is the value given in the like-named
+          duration element attribute.
+
+          On the other hand, if a drivers element is used, the number
+          of output rows will be
+
+            floor((number_of_driver_rows - 1) / output-step-size) + 1
+
+          where number_of_driver_rows is the number of "row" children
+          contained in the drivers element.  Note that if
+          output-step-size = 1, the number of output rows matches the
+          number of driver rows.
+
+          The output step size should either be a positive integer, or
+          it should equal 1 over a positive integer.  (This schema
+          enforces only a slightly laxer requirement: that the value
+          be a positive integer or a positive double less than or
+          equal to 1.)
+
+          The default value is 1.  This default is supplied even in
+          the absence of a schema-aware parser.
+
+          If the "homemade_euler" solver is used, this value is
+          ignored, and the number of output rows will equal the number
+          of driver rows (or number-of-steps + 1 if a duration element
+          is used).
+        </xsd:documentation>
+      </xsd:annotation>
       <xsd:simpleType>
         <xsd:union>
           <xsd:simpleType>
@@ -30,9 +81,39 @@
         </xsd:union>
       </xsd:simpleType>
     </xsd:attribute>
-    <xsd:attribute name="adaptive-relative-error-tolerance" type="positiveDouble"/>
-    <xsd:attribute name="adaptive-absolute-error-tolerance" type="positiveDouble"/>
-    <xsd:attribute name="adaptive-maximum-steps" type="xsd:positiveInteger"/>
+    <xsd:attribute name="adaptive-relative-error-tolerance" type="positiveDouble" default="0.0001">
+      <xsd:annotation>
+        <xsd:documentation>
+          The adaptive relative error tolerance should be a positive
+          double.  The default value is 1e-4.  This default is
+          supplied even in the absence of a schema-aware parser.
+
+          If an Euler solver is used, this value is ignored.
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="adaptive-absolute-error-tolerance" type="positiveDouble" default="0.0001">
+      <xsd:annotation>
+        <xsd:documentation>
+          The adaptive absolute error tolerance should be a positive
+          double.  The default value is 1e-4.  This default is
+          supplied even in the absence of a schema-aware parser.
+
+          If an Euler solver is used, this value is ignored.
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="adaptive-maximum-steps" type="xsd:positiveInteger" default="200">
+      <xsd:annotation>
+        <xsd:documentation>
+          The maximum number of adaptive steps should be a positive
+          integer.  The default value is 200.  This default is
+          supplied even in the absence of a schema-aware parser.
+
+          If an Euler solver is used, this value is ignored.
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
   </xsd:complexType>
 </xsd:element>
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This simulation specification corresponds to the appendix exmaple
+labelled "A system having a differential variable but no differential
+module" (see the README file in this directory).
+
+That example used a set of drivers having a duration four timesteps
+and only a single driver variable called "time".  Here, we instead use
+the convenience element "duration" in place of a driver specification.
+This will, behind the scenes, generate a driver set having a single
+variable "elapsed_time", and again, a duration of four timesteps.
+This is a formality only: although we have one driver variable,
+elapsed_time, no other variable in the system depends upon its value.
+
+(The case in R is slightly different: in R, either "time" or both of
+"doy" and "hour" must be among the driver variables, and the output
+will contain all three, with the contraint that time = doy + hour/24
+in each row of the output.) -->
+
+<dynamical-system>
+  <initial-state>
+    <variable name="x" value="52"/>
+  </initial-state>
+  <duration timestep="1" number-of-steps="4"/>
+</dynamical-system>

@@ -5,6 +5,18 @@
 <xsd:include schemaLocation="solver.xsd"/>
 
 <xsd:element name="simulation-specification">
+  <xsd:annotation>
+    <xsd:documentation>
+      "simulation-specification" should normally be the top-level
+      element of the primary input document read by the app.  If the
+      default solver is being used, however, "dynamical-system" may be
+      used as the top-level element.
+
+      Specifying a solver as part of a simulation-specification is
+      optional.  If unspecified, a default solver is used (see
+      documentation of the solver element for more information).
+    </xsd:documentation>
+  </xsd:annotation>
   <xsd:complexType>
     <xsd:all>
       <xsd:element ref="dynamical-system"/>
