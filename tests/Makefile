@@ -23,13 +23,18 @@ BIOCRO_INCLUDES = ../biocro-lib/src
 
 APP_DIRECTORY = ../app
 
+VPATH = $(APP_DIRECTORY)
 
-test_simulation_definition: test_simulation_definition.cpp $(BIOCRO_LIB)
+
+test_simulation_definition: test_simulation_definition.cpp $(BIOCRO_LIB) simulation_definition.o DOMTreeErrorReporter.o
 	clang++ -std=c++14 -I $(BIOCRO_INCLUDES) -I $(APP_DIRECTORY) $(BIOCRO_LIB) \
-            $(APP_DIRECTORY)/simulation_definition.cpp \
-            $(APP_DIRECTORY)/DOMTreeErrorReporter.cpp \
+            $(APP_DIRECTORY)/simulation_definition.o \
+            $(APP_DIRECTORY)/DOMTreeErrorReporter.o \
             test_simulation_definition.cpp \
             -o test_simulation_definition -lgtest -lgtest_main -lxerces-c
+
+simulation_definition.o DOMTreeErrorReporter.o:
+	$(MAKE) -C ../app $@
 
 run_test_biocro: test_biocro
 	DYLD_LIBRARY_PATH=$(BIOCRO_DYLD_ADDITION) ./test_biocro --gtest_also_run_disabled_tests ‑‑gtest_repeat=1
