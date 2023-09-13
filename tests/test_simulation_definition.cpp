@@ -4,6 +4,8 @@
 using testing::HasSubstr;
 
 #include <framework/biocro_simulation.h>
+#include <BioCro.h>
+
 #include <simulation_definition.h>
 
 // As a baseline, parsing minimal_system.xml shouldn't throw any

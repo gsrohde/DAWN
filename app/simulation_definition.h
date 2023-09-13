@@ -14,9 +14,7 @@
 #include <set>
 
 /* BioCro */
-#include <framework/module_factory.h>
-#include <framework/state_map.h>
-#include <module_library/module_library.h>
+#include "BioCro.h"
 
 /* DAWN app */
 #include "solver.h"

@@ -62,7 +62,7 @@ help: # Show make targets and options.
 	@echo
 
 main:  $(OBJECTS)
-	$(LINK) -o $@ $(OBJECTS) $(ALL_LIBS);
+	$(LINK) -o $@ $(OBJECTS) $(ALL_LIBS) -rpath @executable_path/../biocro-lib/src
 
 # To switch between building the production and debug versions of
 # main, do "make clean" first.
