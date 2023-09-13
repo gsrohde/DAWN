@@ -19,21 +19,21 @@ TEST(SimulationDefinitionTest, MinimalSimulationDefinitionFile) {
 // Test that some poorly-formed input files trigger exceptions, even
 // when schema validation is turned off.
 
-TEST(SimulationDefinitionTest, DISABLED_DuplicateInitialStateDefinitions) {
+TEST(SimulationDefinitionTest, DuplicateInitialStateDefinitions) {
     ASSERT_ANY_THROW({
             Simulation_definition sim_def("test_input/duplicate_initial_state_variable_definition.xml",
                                           { {"validation_scheme", "never"} });
         });
 }
 
-TEST(SimulationDefinitionTest, DISABLED_DuplicateParameterDefinitions) {
+TEST(SimulationDefinitionTest, DuplicateParameterDefinitions) {
     ASSERT_ANY_THROW({
             Simulation_definition sim_def("test_input/duplicate_parameter_definition.xml",
                                           { {"validation_scheme", "never"} });
         });
 }
 
-TEST(SimulationDefinitionTest, DISABLED_DuplicateDriverVariables) {
+TEST(SimulationDefinitionTest, DuplicateDriverVariables) {
     ASSERT_ANY_THROW({
             Simulation_definition sim_def("test_input/duplicate_driver_variables.xml",
                                           { {"validation_scheme", "never"} });
@@ -94,7 +94,7 @@ TEST(SimulationDefinitionTest, NoDriverVariablesWithValidation) {
 
 // Ensure a bad driver definition won't cause a segfault, even with validation
 // turned off:
-TEST(SimulationDefinitionTest, DISABLED_NoDriverVariablesWithoutValidation) {
+TEST(SimulationDefinitionTest, NoDriverVariablesWithoutValidation) {
 
     ASSERT_EXIT(({
         try {
