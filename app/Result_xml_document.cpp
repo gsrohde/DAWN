@@ -4,6 +4,7 @@
 #include <string>
 
 /* Xerces Library */
+#include <xercesc/util/IOException.hpp>
 #include <xercesc/util/OutOfMemoryException.hpp>
 #include <xercesc/framework/StdOutFormatTarget.hpp>
 #include <xercesc/framework/LocalFileFormatTarget.hpp>
@@ -135,7 +136,15 @@ void Result_xml_document::print(string output_file) {
         myFormTarget=new StdOutFormatTarget();
     }
     else {
-        myFormTarget=new LocalFileFormatTarget(output_file.c_str());
+        try {
+            myFormTarget=new LocalFileFormatTarget(output_file.c_str());
+        }
+        catch (IOException& e) {
+            // e.getMessage() doesn't persist after we close
+            // XMLPlatformUtils, so we copy it first, converting it
+            // into a C string first:
+            throw std::runtime_error(StrX(e.getMessage()).localForm());
+        }
     }
 
     theOutputDesc->setByteStream(myFormTarget);
