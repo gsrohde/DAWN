@@ -41,13 +41,13 @@ Several sample XML input files are provided in the directory
 
 will run a simulation of a harmonic oscillator system and write the
 results to standard output.  To write to a file instead, use the
-`-wfile` option:
+`--out` option:
 
-    ./main -wfile=harmonic_oscillator_result.xml sample_input/harmonic_oscillator_system.xml
+    ./main --out=harmonic_oscillator_result.xml sample_input/harmonic_oscillator_system.xml
 
 To try this on a crop model, try using the input file `sample_input/biocro-system.miscanthus.2002.xml`:
 
-    ./main -wfile=miscanthus_simulation_result.xml sample_input/biocro-system.miscanthus.2002.xml
+    ./main --out=miscanthus_simulation_result.xml sample_input/biocro-system.miscanthus.2002.xml
 
 ### Using external drivers files
 
@@ -56,7 +56,7 @@ data, and since it may sometimes be desirable to run a simulation
 using different driver sets with everything else kept the same, an
 option has been added to specify the drivers in a file separate from
 the other simulation specifications.  The command-line option to use
-is called `-driversfile`.
+is called `--drivers`.
 
 For example, the file `sample_input/biocro-system.miscanthus.xml` is
 just like `biocro-system.miscanthus.2002.xml` except that the
@@ -65,7 +65,7 @@ The driver data removed has been placed in a file called
 `sample_input/2002_weather.xml`.  Using these two files, we can get
 the same result as in the last example above by calling
 
-    ./main -wfile=miscanthus_simulation_result.xml -driversfile=sample_input/2002_weather.xml \
+    ./main --out=miscanthus_simulation_result.xml --drivers=sample_input/2002_weather.xml \
                sample_input/biocro-system.miscanthus.xml
 
 With the ability to specify drivers independently of the main
@@ -73,18 +73,18 @@ specification file, it is now easy to switch out one weather data set
 for another.  For example, if we want to use weather data from 2005,
 we merely have to specify a different drivers file:
 
-    ./main -wfile=miscanthus_simulation_result.xml -driversfile=sample_input/2005_weather.xml \
+    ./main --out=miscanthus_simulation_result.xml --drivers=sample_input/2005_weather.xml \
                sample_input/biocro-system.miscanthus.xml
 
 (Note that if the simultation specification file *does* specify a set
-of drivers, using the `-driversfile` option will override whatever
-driver information is in the specification file so that it is
-effectively ignored.  For example, using
+of drivers, using the `--drivers` option will override whatever driver
+information is in the specification file so that it is effectively
+ignored.  For example, using
 `sample_input/biocro-system.miscanthus.2002.xml` in place of
 `sample_input/biocro-system.miscanthus.xml` in the previous command so
 that we have
 
-    ./main -wfile=miscanthus_simulation_result.xml -driversfile=sample_input/2005_weather.xml \
+    ./main --out=miscanthus_simulation_result.xml --drivers=sample_input/2005_weather.xml \
                sample_input/biocro-system.miscanthus.2002.xml
 
 will yield the same result as before.)
