@@ -235,7 +235,16 @@ void Simulation_definition::read_spec_file()
         errors_occurred = true;
     }
 
-    if (errors_occurred || parser->getErrorCount() > 0) {
+    auto errs { parser->getErrorCount() };
+    if (errs > 0) {
+        string message { string("There ") +
+                         (errs == 1 ? "was " : "were ") +
+                         to_string(errs) +
+                         (errs == 1 ? " error " : " errors ") +
+                         "parsing the simulation specification file." };
+        throw runtime_error(message);
+    }
+    else if (errors_occurred) {
         throw runtime_error( "There were errors parsing the simulation "
                              "specification file." );
     }
