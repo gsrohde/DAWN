@@ -36,28 +36,28 @@
 void DOMTreeErrorReporter::warning(const SAXParseException& toCatch)
 {
     fSawErrors = true;
-    XERCES_STD_QUALIFIER cerr << "Warning at file \"" << StrX(toCatch.getSystemId())
-		 << "\", line " << toCatch.getLineNumber()
+    XERCES_STD_QUALIFIER cerr << "WARNING at file\n\"" << StrX(toCatch.getSystemId())
+		 << "\",\nline " << toCatch.getLineNumber()
 		 << ", column " << toCatch.getColumnNumber()
-         << "\n   Message: " << StrX(toCatch.getMessage()) << XERCES_STD_QUALIFIER endl;
+         << ".\nMessage: " << StrX(toCatch.getMessage()) << "\n" << XERCES_STD_QUALIFIER endl;
 }
 
 void DOMTreeErrorReporter::error(const SAXParseException& toCatch)
 {
     fSawErrors = true;
-    XERCES_STD_QUALIFIER cerr << "Error at file \"" << StrX(toCatch.getSystemId())
-		 << "\", line " << toCatch.getLineNumber()
+    XERCES_STD_QUALIFIER cerr << "ERROR at file\n\"" << StrX(toCatch.getSystemId())
+		 << "\",\nline " << toCatch.getLineNumber()
 		 << ", column " << toCatch.getColumnNumber()
-         << "\n   Message: " << StrX(toCatch.getMessage()) << XERCES_STD_QUALIFIER endl;
+         << ".\nMessage: " << StrX(toCatch.getMessage()) << "\n" << XERCES_STD_QUALIFIER endl;
 }
 
 void DOMTreeErrorReporter::fatalError(const SAXParseException& toCatch)
 {
     fSawErrors = true;
-    XERCES_STD_QUALIFIER cerr << "Fatal Error at file \"" << StrX(toCatch.getSystemId())
-		 << "\", line " << toCatch.getLineNumber()
+    XERCES_STD_QUALIFIER cerr << "FATAL ERROR at file\n\"" << StrX(toCatch.getSystemId())
+		 << "\",\nline " << toCatch.getLineNumber()
 		 << ", column " << toCatch.getColumnNumber()
-         << "\n   Message: " << StrX(toCatch.getMessage()) << XERCES_STD_QUALIFIER endl;
+         << ".\nMessage: " << StrX(toCatch.getMessage()) << "\n" << XERCES_STD_QUALIFIER endl;
 }
 
 void DOMTreeErrorReporter::resetErrors()
