@@ -638,7 +638,8 @@ void Simulation_definition::configure_parser() {
     parser->setDoNamespaces( true );
     parser->setDoSchema( true );
     parser->setLoadExternalDTD( false );
-    parser->setValidationConstraintFatal(true);
+    parser->setValidationConstraintFatal(parser_options.fast_fail());
+    parser->setExitOnFirstFatalError(!parser_options.keep_going());
     DOMTreeErrorReporter* error_reporter = new DOMTreeErrorReporter();
     parser->setErrorHandler(error_reporter);
 
