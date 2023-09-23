@@ -110,7 +110,7 @@ Simulation_definition::Simulation_definition(Option_parser op)
 }
 
 Simulation_definition::Simulation_definition(string specification_file,
-                                             Option_map parser_options)
+                                             Parser_options parser_options)
     : Simulation_definition{specification_file,
                             "",
                             parser_options}
@@ -119,7 +119,7 @@ Simulation_definition::Simulation_definition(string specification_file,
 
 Simulation_definition::Simulation_definition(string specification_file,
                                              string drivers_file,
-                                             Option_map parser_options)
+                                             Parser_options parser_options)
     : specification_file{specification_file},
       drivers_file{drivers_file},
       parser_options{parser_options}
@@ -634,7 +634,7 @@ void Simulation_definition::check_file_status(string filename) {
 }
 
 void Simulation_definition::configure_parser() {
-    set_validation_scheme();
+    parser->setValidationScheme(parser_options.get_validation_scheme());
     parser->setDoNamespaces( true );
     parser->setDoSchema( true );
     parser->setLoadExternalDTD( false );
@@ -645,18 +645,6 @@ void Simulation_definition::configure_parser() {
     // Possible errors show up when the parser is actually used, not
     // here, so don't test for exceptions.
     parser->setExternalNoNamespaceSchemaLocation(get_schema_uri().c_str());
-}
-
-void Simulation_definition::set_validation_scheme() {
-    auto setting = parser_options.at("validation_scheme");
-
-    XercesDOMParser::ValSchemes
-        scheme = (setting == "always") ? XercesDOMParser::Val_Always
-               : (setting == "auto")   ? XercesDOMParser::Val_Auto
-               : (setting == "never")  ? XercesDOMParser::Val_Never
-               :                         XercesDOMParser::Val_Always; // should never get here
-
-    parser->setValidationScheme(scheme);
 }
 
 void Simulation_definition::check_driver_variable_set(set<string> variable_set) {

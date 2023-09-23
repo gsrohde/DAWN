@@ -36,8 +36,17 @@ Option_parser::Option_parser(int argC, char* argV[]) {
                  cout << endl;
                  exit(0);
              case 'v':
-                 if (!strcmp(optarg, "never") || !strcmp(optarg, "auto") || !strcmp(optarg, "always")) {
-                     parser_options["validation_scheme"] = string(optarg);
+                 if (!strcmp(optarg, "never")) {
+                     cout << "setting validation scheme to never" << endl;
+                     parser_options.validation_scheme = XercesDOMParser::Val_Never;
+                 }
+                 else if (!strcmp(optarg, "auto")) {
+                     cout << "setting validation scheme to auto" << endl;
+                     parser_options.validation_scheme = XercesDOMParser::Val_Auto;
+                 }
+                 else if (!strcmp(optarg, "always")) {
+                     cout << "setting validation scheme to always" << endl;
+                     parser_options.validation_scheme = XercesDOMParser::Val_Always;
                  }
                  else {
                      cerr << "Unknown validation schema (-v) value: " << optarg << endl;

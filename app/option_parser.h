@@ -5,6 +5,8 @@
 #include <string>
 #include <unordered_map>
 
+#include "parser_options.h"
+
 using std::cerr;
 using std::cout;
 using std::endl;
@@ -18,7 +20,7 @@ class Option_parser {
  public:
     Option_parser(int argC, char* argV[]);
 
-    Option_map get_parser_options() {
+    Parser_options get_parser_options() {
         return parser_options;
     }
 
@@ -58,12 +60,11 @@ class Option_parser {
 
 
  private:
-    // These defaults can be altered by command-line arguments:
-    Option_map parser_options { {"validation_scheme", "always"} };
+    Parser_options parser_options {};
 
-    string specification_file;
-    string output_file{};
-    string drivers_file{};
+    string specification_file {};
+    string output_file {};
+    string drivers_file {};
 };
 
 #endif
