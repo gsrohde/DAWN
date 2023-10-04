@@ -1,3 +1,6 @@
+#ifndef STR_X_H
+#define STR_X_H
+
 /*
  * The code in this file is a modification of code found in the file
  * xerces-c-3.2.4/samples/src/DOMPrint/DOMTreeErrorReporter.hpp in the
@@ -77,3 +80,5 @@ inline ostream& operator<<(ostream& target, const StrX& toDump)
     return target;
 }
 
+
+#endif

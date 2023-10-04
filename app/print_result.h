@@ -1,3 +1,6 @@
+#ifndef PRINT_RESULT_H
+#define PRINT_RESULT_H
+
 #include <iostream>
 #include <iomanip>
 #include <framework/state_map.h>
@@ -39,3 +42,6 @@ void print_result(const state_vector_map &result) {
         }
     }
 }
+
+
+#endif

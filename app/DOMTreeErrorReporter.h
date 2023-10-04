@@ -1,3 +1,6 @@
+#ifndef DOM_TREE_ERROR_REPORTER_H
+#define DOM_TREE_ERROR_REPORTER_H
+
 /*
  * The code in this file is a modification of code found in the file
  * xerces-c-3.2.4/samples/src/DOMPrint/DOMTreeErrorReporter.hpp in the
@@ -78,3 +81,6 @@ inline bool DOMTreeErrorReporter::getSawErrors() const
 {
     return fSawErrors;
 }
+
+
+#endif

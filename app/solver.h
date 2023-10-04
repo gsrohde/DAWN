@@ -1,3 +1,6 @@
+#ifndef SOLVER_H
+#define SOLVER_H
+
 #include <string>
 
 struct Solver {
@@ -7,3 +10,6 @@ struct Solver {
     double absolute_tolerance {1e-4};
     int max_steps {200};
 };
+
+
+#endif
