@@ -3,12 +3,11 @@
 
 #include <string>
 
-using std::string;
 
 #define QUOTE(name) #name
 #define STR(macro) QUOTE(macro)
 
-inline string get_schema_uri() {
+inline std::string get_schema_uri() {
 
 #if defined(USE_LOCAL_SCHEMA_FILE) && (USE_LOCAL_SCHEMA_FILE == true) && defined(LOCAL_SCHEMA_FILEPATH)
     return STR(LOCAL_SCHEMA_FILEPATH);

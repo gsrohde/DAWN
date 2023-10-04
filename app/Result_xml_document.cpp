@@ -66,7 +66,7 @@ Result_xml_document::Result_xml_document(const state_vector_map& result) {
             cerr << "An error occurred creating the document" << endl;
             throw;
         }
-    } // (inpl != NULL)
+    } // (impl != NULL)
     else {
         throw std::runtime_error("Requested DOM implementation is not supported");
     }

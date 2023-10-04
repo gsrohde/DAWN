@@ -1,4 +1,11 @@
 /*
+ * The code in this file is a modification of code found in the file
+ * xerces-c-3.2.4/samples/src/DOMPrint/DOMTreeErrorReporter.hpp in the
+ * archive file xerces-c-3.2.4.tar.gz downloaded from
+ * https://downloads.apache.org/xerces/c/3/sources/.  The following
+ * license notice appeared in that file.
+ *
+ *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -15,19 +22,17 @@
  * limitations under the License.
  */
 
-/*
- * $Id$
- */
 
+/* Standard Library */
+#include <iostream>
+
+/* Xerces Library */
 #include <xercesc/util/XercesDefs.hpp>
 #include <xercesc/sax/ErrorHandler.hpp>
-#if defined(XERCES_NEW_IOSTREAMS)
-#include <iostream>
-#else
-#include <iostream.h>
-#endif
 
-XERCES_CPP_NAMESPACE_USE
+
+using xercesc::ErrorHandler;
+using xercesc::SAXParseException;
 
 
 class DOMTreeErrorReporter : public ErrorHandler

@@ -1,4 +1,11 @@
 /*
+ * The code in this file is a modification of code found in the file
+ * xerces-c-3.2.4/samples/src/DOMPrint/DOMTreeErrorReporter.cpp in the
+ * archive file xerces-c-3.2.4.tar.gz downloaded from
+ * https://downloads.apache.org/xerces/c/3/sources/.  The following
+ * license notice appeared in that file.
+ *
+ *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -15,23 +22,17 @@
  * limitations under the License.
  */
 
-/*
- * $Id$
- */
 
-// ---------------------------------------------------------------------------
-//  Includes
-// ---------------------------------------------------------------------------
-#include <xercesc/sax/SAXParseException.hpp>
-#include "DOMTreeErrorReporter.h"
-#if defined(XERCES_NEW_IOSTREAMS)
+/* Standard Library */
 #include <iostream>
-#else
-#include <iostream.h>
-#endif
-#include <stdlib.h>
-#include <string.h>
+
+/* Xerces Library */
+#include <xercesc/sax/SAXParseException.hpp>
+
+/* DAWN app */
+#include "DOMTreeErrorReporter.h"
 #include "StrX.h"
+
 
 void DOMTreeErrorReporter::warning(const SAXParseException& toCatch)
 {
