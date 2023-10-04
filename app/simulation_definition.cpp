@@ -13,6 +13,8 @@
 #include <errno.h>
 
 /* Xerces Library */
+#include <xercesc/dom/DOM.hpp>
+#include <xercesc/parsers/XercesDOMParser.hpp>
 #include <xercesc/util/OutOfMemoryException.hpp>
 
 /* DAWN app */
@@ -23,7 +25,12 @@
 #include "xstr.h" // includes X() macro
 
 using namespace std; // invalid_argument, runtime_error, stod
-using xercesc::DOMElement;
+
+using namespace xercesc; // DOMElement, DOMNodeList, XMLPlatformUtils,
+                         // XMLException, OutOfMemoryException,
+                         // DOMException, DOMImplementation,
+                         // DOMDocument
+
 
 void populate_parameter_mapping(DOMElement* parameters_element,
                                 state_map& parameters)

@@ -27,7 +27,6 @@
 #include <iostream>
 
 /* Xerces Library */
-#include <xercesc/util/XercesDefs.hpp>
 #include <xercesc/sax/ErrorHandler.hpp>
 
 

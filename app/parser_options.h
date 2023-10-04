@@ -2,9 +2,9 @@
 #define PARSER_OPTIONS_H
 
 #include <xercesc/parsers/XercesDOMParser.hpp>
-#include <xercesc/util/XercesDefs.hpp>
 
-XERCES_CPP_NAMESPACE_USE
+using xercesc::XercesDOMParser;
+
 
 class Parser_options {
     friend class Option_parser;

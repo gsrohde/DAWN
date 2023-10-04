@@ -4,6 +4,7 @@
 #include <string>
 
 /* Xerces Library */
+#include <xercesc/dom/DOM.hpp>
 #include <xercesc/util/IOException.hpp>
 #include <xercesc/util/OutOfMemoryException.hpp>
 #include <xercesc/framework/StdOutFormatTarget.hpp>

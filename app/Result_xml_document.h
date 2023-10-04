@@ -5,7 +5,7 @@
 #include <string>
 
 /* Xerces Library */
-#include <xercesc/dom/DOM.hpp>
+#include <xercesc/dom/DOMDocument.hpp>
 
 /* BioCro Library */
 #include <framework/state_map.h> // for state_vector_map

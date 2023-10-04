@@ -1,17 +1,12 @@
 #ifndef SIMULATION_DEFINITION_H
 #define SIMULATION_DEFINITION_H
-/**
- *  @file
- *  Class "Simulation_definition" provides the functions to read the XML data.
- *  @version 1.0
- */
-#include <xercesc/dom/DOM.hpp>
-
-#include <xercesc/parsers/XercesDOMParser.hpp>
 
 /* Standard Library */
 #include <string>
 #include <set>
+
+/* Xerces Library */
+#include <xercesc/dom/DOM.hpp>
 
 /* BioCro */
 #include <framework/module_factory.h>
