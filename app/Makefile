@@ -77,10 +77,13 @@ $(OBJECTS) : %.o : %.cpp
 # simple enough that using automatically-generated dependency files is
 # probably not warranted.
 DOMTreeErrorReporter.o: DOMTreeErrorReporter.h StrX.h
-Result_xml_document.o: Result_xml_document.h xstr.h
-main.o: option_parser.h parser_options.h simulation_definition.h solver.h print_result.h Result_XML_document.h
-option_parser.o: option_parser.h parser_options.h
-simulation_definition.o: simulation_definition.h solver.h compilation_options.h DOMTreeErrorReporter.h StrX.h xstr.h
+Result_xml_document.o: Result_xml_document.h xstr.h StrX.h
+main.o: option_parser.h parser_options.h simulation_definition.h solver.h \
+        print_result.h Result_XML_document.h
+option_parser.o: option_parser.h parser_options.h compilation_options.h
+simulation_definition.o: simulation_definition.h solver.h \
+                         compilation_options.h DOMTreeErrorReporter.h StrX.h \
+                         xstr.h option_parser.h parser_options.h
 
 
 
