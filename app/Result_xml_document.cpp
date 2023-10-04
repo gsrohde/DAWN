@@ -14,6 +14,8 @@
 #include "StrX.h"
 #include "xstr.h" // includes X() macro
 
+using namespace xercesc;
+
 using std::cerr;
 using std::endl;
 using std::string;

@@ -4,8 +4,6 @@
 #include <xercesc/parsers/XercesDOMParser.hpp>
 #include <xercesc/util/XercesDefs.hpp>
 
-#include "option_parser.h"
-
 XERCES_CPP_NAMESPACE_USE
 
 class Parser_options {

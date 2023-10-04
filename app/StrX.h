@@ -1,4 +1,11 @@
 /*
+ * The code in this file is a modification of code found in the file
+ * xerces-c-3.2.4/samples/src/DOMPrint/DOMTreeErrorReporter.hpp in the
+ * archive file xerces-c-3.2.4.tar.gz downloaded from
+ * https://downloads.apache.org/xerces/c/3/sources/.  The following
+ * license notice appeared in that file.
+ *
+ *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -15,21 +22,14 @@
  * limitations under the License.
  */
 
-/*
- * $Id$
- */
-
-#include <xercesc/util/XercesDefs.hpp>
-#include <xercesc/sax/ErrorHandler.hpp>
-#if defined(XERCES_NEW_IOSTREAMS)
+/* Standard Library */
 #include <iostream>
-#else
-#include <iostream.h>
-#endif
 
+/* Xerces Library */
+#include <xercesc/util/XMLString.hpp>
 
-XERCES_CPP_NAMESPACE_USE
-
+using std::ostream;
+using xercesc::XMLString;
 
 // ---------------------------------------------------------------------------
 //  This is a simple class that lets us do easy (though not terribly efficient)
@@ -71,7 +71,7 @@ private :
     char*   fLocalForm;
 };
 
-inline XERCES_STD_QUALIFIER ostream& operator<<(XERCES_STD_QUALIFIER ostream& target, const StrX& toDump)
+inline ostream& operator<<(ostream& target, const StrX& toDump)
 {
     target << toDump.localForm();
     return target;

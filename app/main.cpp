@@ -6,7 +6,6 @@
 /* DAWN app */
 #include "option_parser.h"
 #include "simulation_definition.h"
-#include "print_result.h" // for now
 #include "Result_xml_document.h"
 
 int main(int argC, char* argV[]) {
