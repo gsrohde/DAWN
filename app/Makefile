@@ -76,11 +76,11 @@ $(OBJECTS) : %.o : %.cpp
 # Additional object file dependencies (on header files).  This is
 # simple enough that using automatically-generated dependency files is
 # probably not warranted.
-DOMTreeErrorReporter.o: DOMTreeErrorReporter.hpp StrX.h
+DOMTreeErrorReporter.o: DOMTreeErrorReporter.h StrX.h
 Result_xml_document.o: Result_xml_document.h xstr.h
 main.o: option_parser.h parser_options.h simulation_definition.h solver.h print_result.h Result_XML_document.h
 option_parser.o: option_parser.h parser_options.h
-simulation_definition.o: simulation_definition.h solver.h compilation_options.h DOMTreeErrorReporter.hpp StrX.h xstr.h
+simulation_definition.o: simulation_definition.h solver.h compilation_options.h DOMTreeErrorReporter.h StrX.h xstr.h
 
 
 

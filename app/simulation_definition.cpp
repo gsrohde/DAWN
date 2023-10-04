@@ -18,7 +18,7 @@
 /* DAWN app */
 #include "simulation_definition.h"
 #include "compilation_options.h"
-#include "DOMTreeErrorReporter.hpp"
+#include "DOMTreeErrorReporter.h"
 #include "StrX.h"
 #include "xstr.h" // includes X() macro
 

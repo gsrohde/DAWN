@@ -23,7 +23,7 @@
 //  Includes
 // ---------------------------------------------------------------------------
 #include <xercesc/sax/SAXParseException.hpp>
-#include "DOMTreeErrorReporter.hpp"
+#include "DOMTreeErrorReporter.h"
 #if defined(XERCES_NEW_IOSTREAMS)
 #include <iostream>
 #else
