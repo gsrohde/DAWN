@@ -67,7 +67,9 @@ private :
     XMLCh* fUnicodeForm;
 };
 
-#define X(str) XStr(str).unicodeForm()
+// We use XX instead of X here so as not to conflict with the X()
+// macro defined in the Boost library.
+#define XX(str) XStr(str).unicodeForm()
 
 
 #endif

@@ -18,7 +18,7 @@ public:
     ~Result_xml_document();
     void print();
     void print(std::string);
-
+    xercesc::DOMNodeList* get_elements_by_tag_name(std::string);
     
 private:
     void add_row(state_vector_map result, int row_number);

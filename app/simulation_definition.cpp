@@ -22,7 +22,7 @@
 #include "compilation_options.h"
 #include "DOMTreeErrorReporter.h"
 #include "StrX.h"
-#include "xstr.h" // includes X() macro
+#include "xstr.h" // includes XX() macro
 
 using namespace std; // invalid_argument, runtime_error, stod
 
@@ -54,15 +54,15 @@ void populate_mapping(DOMElement* variable_containing_element, state_map& mappin
             DOMElement* current_element
                 = dynamic_cast< DOMElement* >( current_node );
 
-            if ( XMLString::equals(current_element->getTagName(), X("variable")))
+            if ( XMLString::equals(current_element->getTagName(), XX("variable")))
             {
                 // Read attributes of element "variable".
                 const XMLCh* name
-                    = current_element->getAttribute(X("name"));
+                    = current_element->getAttribute(XX("name"));
                 string key = XMLString::transcode(name);
 
                 const XMLCh* value
-                    = current_element->getAttribute(X("value"));
+                    = current_element->getAttribute(XX("value"));
                 string string_value = XMLString::transcode(value);
 
                 if (is_parameters && key == "timestep") {
@@ -261,7 +261,7 @@ void Simulation_definition::read_spec_file()
 
     // Get the dynamical-system element
 
-    DOMNodeList* dyn_sys_list = xml_doc->getElementsByTagName(X("dynamical-system"));
+    DOMNodeList* dyn_sys_list = xml_doc->getElementsByTagName(XX("dynamical-system"));
     if (dyn_sys_list->getLength() == 0) {
         // If schema validation is turned on, we shouldn't ever get here.
         throw runtime_error( "The dynamical-system element is missing from "
@@ -288,19 +288,19 @@ void Simulation_definition::read_spec_file()
             // Found node which is an Element. Re-cast node as element
             DOMElement* current_element
                 = dynamic_cast< DOMElement* >( current_node );
-            if ( XMLString::equals(current_element->getTagName(), X("initial-state")))
+            if ( XMLString::equals(current_element->getTagName(), XX("initial-state")))
             {
                 // Already tested node as type element and of name
                 // "initial_state".
                 populate_mapping(current_element, initial_state);
             }
-            else if ( XMLString::equals(current_element->getTagName(), X("parameters")))
+            else if ( XMLString::equals(current_element->getTagName(), XX("parameters")))
             {
                 // Already tested node as type element and of name
                 // "parameters".
                 populate_parameter_mapping(current_element, parameters);
             }
-            else if ( XMLString::equals(current_element->getTagName(), X("drivers")))
+            else if ( XMLString::equals(current_element->getTagName(), XX("drivers")))
             {
                 if (!use_external_drivers_file()) {
                     populate_drivers(current_element);
@@ -308,7 +308,7 @@ void Simulation_definition::read_spec_file()
                 // else the user specified an external drivers file to
                 // override the drivers specified in this element
             }
-            else if ( XMLString::equals(current_element->getTagName(), X("driver-placeholder")))
+            else if ( XMLString::equals(current_element->getTagName(), XX("driver-placeholder")))
             {
                 if (!use_external_drivers_file()) {
                     throw runtime_error( "The spec file says drivers are "
@@ -316,7 +316,7 @@ void Simulation_definition::read_spec_file()
                                          "file was provided." );
                 }
             }
-            else if ( XMLString::equals(current_element->getTagName(), X("duration")))
+            else if ( XMLString::equals(current_element->getTagName(), XX("duration")))
             {
                 if (!use_external_drivers_file()) {
                     generate_drivers(current_element);
@@ -324,11 +324,11 @@ void Simulation_definition::read_spec_file()
                 // else the user specified an external drivers file to
                 // override the drivers implicitly specified by this element
             }
-            else if ( XMLString::equals(current_element->getTagName(), X("direct-modules")))
+            else if ( XMLString::equals(current_element->getTagName(), XX("direct-modules")))
             {
                 set_module_list(current_element, direct_modules);
             }
-            else if ( XMLString::equals(current_element->getTagName(), X("differential-modules")))
+            else if ( XMLString::equals(current_element->getTagName(), XX("differential-modules")))
             {
                 set_module_list(current_element, differential_modules);
             }
@@ -339,7 +339,7 @@ void Simulation_definition::read_spec_file()
         }
     }
 
-    DOMNodeList* solver_spec_list = xml_doc->getElementsByTagName(X("solver"));
+    DOMNodeList* solver_spec_list = xml_doc->getElementsByTagName(XX("solver"));
     if (solver_spec_list->getLength() > 1) {
         // If schema validation is turned on, we shouldn't ever get here.
         throw runtime_error( "The dynamical-system element must be unique." );
@@ -411,7 +411,7 @@ void Simulation_definition::read_drivers_file()
 
     // Get the drivers element
 
-    DOMNodeList* drivers_list = xml_doc->getElementsByTagName(X("drivers"));
+    DOMNodeList* drivers_list = xml_doc->getElementsByTagName(XX("drivers"));
     if (drivers_list->getLength() == 0) {
         // If schema validation is turned on, we shouldn't ever get here.
         throw runtime_error( "The drivers element is missing from simulation "
@@ -430,31 +430,31 @@ void Simulation_definition::read_drivers_file()
 void Simulation_definition::update_solver_specification(DOMNode* solver_spec_node) {
     DOMElement* solver_spec = dynamic_cast<DOMElement*>( solver_spec_node );
 
-    const XMLCh* name = solver_spec->getAttribute(X("name"));
+    const XMLCh* name = solver_spec->getAttribute(XX("name"));
     dynamical_system_solver.name = XMLString::transcode(name);
 
-    const XMLCh* step_size = solver_spec->getAttribute(X("output-step-size"));
+    const XMLCh* step_size = solver_spec->getAttribute(XX("output-step-size"));
     if (non_empty(step_size)) {
         dynamical_system_solver.step_size =
             stod(XMLString::transcode(step_size));
     }
 
     const XMLCh* relative_tolerance =
-        solver_spec->getAttribute(X("adaptive-relative-error-tolerance"));
+        solver_spec->getAttribute(XX("adaptive-relative-error-tolerance"));
     if (non_empty(relative_tolerance)) {
         dynamical_system_solver.relative_tolerance =
             stod(XMLString::transcode(relative_tolerance));
     }
 
     const XMLCh* absolute_tolerance =
-        solver_spec->getAttribute(X("adaptive-absolute-error-tolerance"));
+        solver_spec->getAttribute(XX("adaptive-absolute-error-tolerance"));
     if (non_empty(absolute_tolerance)) {
         dynamical_system_solver.absolute_tolerance =
             stod(XMLString::transcode(absolute_tolerance));
     }
 
     const XMLCh* max_steps =
-        solver_spec->getAttribute(X("adaptive-maximum-steps"));
+        solver_spec->getAttribute(XX("adaptive-maximum-steps"));
     if (non_empty(max_steps)) {
         dynamical_system_solver.max_steps =
             stoi(XMLString::transcode(max_steps));
@@ -463,13 +463,13 @@ void Simulation_definition::update_solver_specification(DOMNode* solver_spec_nod
 
 void Simulation_definition::generate_drivers(DOMElement* current_element) {
     const XMLCh* timestep_value
-        = current_element->getAttribute(X("timestep"));
+        = current_element->getAttribute(XX("timestep"));
     string string_value = XMLString::transcode(timestep_value);
     const double timestep = string_to_double(string_value);
     parameters["timestep"] = timestep;
 
     const XMLCh* number_of_steps_value =
-        current_element->getAttribute(X("number-of-steps"));
+        current_element->getAttribute(XX("number-of-steps"));
     string_value = XMLString::transcode(number_of_steps_value);
     const int number_of_steps = string_to_int(string_value);
 
@@ -485,7 +485,7 @@ void Simulation_definition::populate_drivers(DOMElement* current_element) {
     // timestep "belongs" to the drivers, but the BioCro C++ code
     // requires it to be specified among the parameters:
     const XMLCh* value
-        = current_element->getAttribute(X("timestep"));
+        = current_element->getAttribute(XX("timestep"));
     string string_value = XMLString::transcode(value);
     parameters["timestep"] = string_to_double(string_value);
 
@@ -504,7 +504,7 @@ void Simulation_definition::populate_drivers(DOMElement* current_element) {
             DOMElement* current_element
                 = dynamic_cast< DOMElement* >( current_node );
 
-            if ( XMLString::equals(current_element->getTagName(), X("row"))) {
+            if ( XMLString::equals(current_element->getTagName(), XX("row"))) {
                 ++row_number;
 
                 auto variable_set = process_row(current_element, drivers);
@@ -545,11 +545,11 @@ set<string> Simulation_definition::process_row(DOMElement* row, state_vector_map
             DOMElement* current_element
                 = dynamic_cast< DOMElement* >( current_node );
 
-            if ( XMLString::equals(current_element->getTagName(), X("variable")))
+            if ( XMLString::equals(current_element->getTagName(), XX("variable")))
             {
                 // Read attributes of element "variable".
                 const XMLCh* name
-                    = current_element->getAttribute(X("name"));
+                    = current_element->getAttribute(XX("name"));
                 string key = XMLString::transcode(name);
 
                 if (variable_set.count(key) == 0) {
@@ -566,7 +566,7 @@ set<string> Simulation_definition::process_row(DOMElement* row, state_vector_map
                 }
 
                 const XMLCh* value
-                    = current_element->getAttribute(X("value"));
+                    = current_element->getAttribute(XX("value"));
                 string string_value = XMLString::transcode(value);
                 mapping[key].push_back(string_to_double(string_value));
 
@@ -597,11 +597,11 @@ void Simulation_definition::set_module_list(DOMElement* module_element, mc_vecto
             DOMElement* current_element
                 = dynamic_cast< DOMElement* >( current_node );
 
-            if ( XMLString::equals(current_element->getTagName(), X("module")))
+            if ( XMLString::equals(current_element->getTagName(), XX("module")))
             {
                 // Read name attribute of module.
                 const XMLCh* name
-                    = current_element->getAttribute(X("name"));
+                    = current_element->getAttribute(XX("name"));
                 string module_name = XMLString::transcode(name);
 
                 if (module_name_set.count(module_name) == 0) {

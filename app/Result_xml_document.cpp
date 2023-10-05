@@ -13,7 +13,7 @@
 /* DAWN app */
 #include "Result_xml_document.h"
 #include "StrX.h"
-#include "xstr.h" // includes X() macro
+#include "xstr.h" // includes XX() macro
 
 using namespace xercesc;
 
@@ -40,13 +40,13 @@ Result_xml_document::Result_xml_document(const state_vector_map& result) {
         // throw exception here
     }
 
-    DOMImplementation* impl = DOMImplementationRegistry::getDOMImplementation(X("Core"));
+    DOMImplementation* impl = DOMImplementationRegistry::getDOMImplementation(XX("Core"));
 
     if (impl != NULL) {
         try {
             doc = impl->createDocument(
                             nullptr,                    // root element namespace URI.
-                            X("simulation-result"),     // root element name
+                            XX("simulation-result"),    // root element name
                             nullptr);                   // document type object (DTD).
            
             auto some_column = result.begin();
@@ -88,7 +88,7 @@ Result_xml_document::~Result_xml_document() {
 
 void Result_xml_document::add_row(state_vector_map result, int i) {
 
-    DOMElement* row = doc->createElement(X("row"));
+    DOMElement* row = doc->createElement(XX("row"));
 
     DOMElement* root_element = doc->getDocumentElement();
     root_element->appendChild(row);
@@ -109,16 +109,16 @@ void Result_xml_document::add_row(state_vector_map result, int i) {
         // document element.
         if (key == "ncalls") {
             if (i == 0) {
-                root_element->setAttribute(X("ncalls"), X(to_string(value).c_str()));
+                root_element->setAttribute(XX("ncalls"), XX(to_string(value).c_str()));
             }
             continue;
         }
 
-        auto variable = doc->createElement(X("variable"));
+        auto variable = doc->createElement(XX("variable"));
         row->appendChild(variable);
-        row->setAttribute(X("output-step-number"), X(to_string(i).c_str()));
-        variable->setAttribute(X("name"), X(key.c_str()));
-        variable->setAttribute(X("value"), X(to_string(value).c_str()));
+        row->setAttribute(XX("output-step-number"), XX(to_string(i).c_str()));
+        variable->setAttribute(XX("name"), XX(key.c_str()));
+        variable->setAttribute(XX("value"), XX(to_string(value).c_str()));
     }
 }
 
@@ -127,7 +127,7 @@ void Result_xml_document::print() {
 }
 
 void Result_xml_document::print(string output_file) {
-    DOMImplementation *impl = DOMImplementationRegistry::getDOMImplementation(X("LS"));
+    DOMImplementation *impl = DOMImplementationRegistry::getDOMImplementation(XX("LS"));
     DOMLSSerializer *theSerializer = ((DOMImplementationLS*)impl)->createLSSerializer();
     theSerializer->getDomConfig()->setParameter(XMLUni::fgDOMWRTFormatPrettyPrint, true);
     theSerializer->getDomConfig()->setParameter(XMLUni::fgDOMWRTXercesPrettyPrint, false);
@@ -155,4 +155,8 @@ void Result_xml_document::print(string output_file) {
 
     theOutputDesc->release();
     theSerializer->release();
+}
+
+DOMNodeList* Result_xml_document::get_elements_by_tag_name(string element_name) {
+    return doc->getElementsByTagName(XX(element_name.c_str()));
 }
