@@ -5,6 +5,10 @@ using testing::HasSubstr;
 
 #include <framework/biocro_simulation.h>
 #include <simulation_definition.h>
+#include <parser_options.h>
+
+Parser_options default_options {}; // validating parser
+Parser_options nonvalidating_parser {"never"};
 
 // As a baseline, parsing minimal_system.xml shouldn't throw any
 // exceptions, even with validation turned on.
@@ -12,7 +16,7 @@ using testing::HasSubstr;
 TEST(SimulationDefinitionTest, MinimalSimulationDefinitionFile) {
     ASSERT_NO_THROW({
             Simulation_definition sim_def("test_input/minimal_system.xml",
-                                          { {"validation_scheme", "always"} });
+                                          default_options);
         });
 }
 
@@ -22,21 +26,21 @@ TEST(SimulationDefinitionTest, MinimalSimulationDefinitionFile) {
 TEST(SimulationDefinitionTest, DuplicateInitialStateDefinitions) {
     ASSERT_ANY_THROW({
             Simulation_definition sim_def("test_input/duplicate_initial_state_variable_definition.xml",
-                                          { {"validation_scheme", "never"} });
+                                          nonvalidating_parser);
         });
 }
 
 TEST(SimulationDefinitionTest, DuplicateParameterDefinitions) {
     ASSERT_ANY_THROW({
             Simulation_definition sim_def("test_input/duplicate_parameter_definition.xml",
-                                          { {"validation_scheme", "never"} });
+                                          nonvalidating_parser);
         });
 }
 
 TEST(SimulationDefinitionTest, DuplicateDriverVariables) {
     ASSERT_ANY_THROW({
             Simulation_definition sim_def("test_input/duplicate_driver_variables.xml",
-                                          { {"validation_scheme", "never"} });
+                                          nonvalidating_parser);
         });
 }
 
@@ -44,7 +48,7 @@ TEST(SimulationDefinitionTest, InconsistentDriverVariables) {
     EXPECT_THROW({
         try {
              Simulation_definition sim_def("test_input/inconsistent_driver_variables.xml",
-                                          { {"validation_scheme", "always"} });
+                                           default_options);
         }
         catch( const std::runtime_error& e )
         {
@@ -64,7 +68,7 @@ TEST(SimulationDefinitionTest, NoDriverVariablesWithValidation) {
     ASSERT_EXIT(({
         try {
             Simulation_definition sim_def("test_input/no_driver_variables.xml",
-                                          { {"validation_scheme", "always"} });
+                                          default_options);
 
             biocro_simulation sim {
                 sim_def.get_initial_state(),
@@ -99,7 +103,7 @@ TEST(SimulationDefinitionTest, NoDriverVariablesWithoutValidation) {
     ASSERT_EXIT(({
         try {
             Simulation_definition sim_def("test_input/no_driver_variables.xml",
-                                          { {"validation_scheme", "never"} });
+                                          nonvalidating_parser);
 
             biocro_simulation sim {
                 sim_def.get_initial_state(),

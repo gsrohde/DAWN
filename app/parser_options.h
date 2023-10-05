@@ -10,6 +10,20 @@ class Parser_options {
     friend class Option_parser;
 
  public:
+    Parser_options() {};
+
+    Parser_options(std::string validation_scheme) {
+        if (validation_scheme == "never") {
+            this->validation_scheme = XercesDOMParser::Val_Never;
+        }
+        else if (validation_scheme == "auto") {
+            this->validation_scheme = XercesDOMParser::Val_Auto;
+        }
+        else if (validation_scheme != "always") {
+            throw std::runtime_error(validation_scheme + " is not a recognized validation scheme.");
+        }
+    }
+
     inline XercesDOMParser::ValSchemes get_validation_scheme() {
         return validation_scheme;
     }
