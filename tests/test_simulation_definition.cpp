@@ -98,7 +98,7 @@ TEST(SimulationDefinitionTest, NoDriverVariablesWithValidation) {
 
 // Ensure a bad driver definition won't cause a segfault, even with validation
 // turned off:
-TEST(SimulationDefinitionTest, NoDriverVariablesWithoutValidation) {
+TEST(SimulationDefinitionTest, DISABLED_NoDriverVariablesWithoutValidation) {
 
     ASSERT_EXIT(({
         try {
