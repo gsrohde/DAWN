@@ -1,43 +1,49 @@
-# Building and running these programs rely on these things being true:
-#
-# 1. The cgbml library is installed, with the added line in Makevars
-# that copies the header files and makes them available in the
-# package's "include" directory.
-#
-# 2. The doctest.h file has been downloaded and placed in this
-# directory.
-#
-# 3. The Boost library is present in a system include directory
-#
-
 # This extension works for macOS
-LIBRARY_FILE_EXTENSION = so
+LIBRARY_FILE_EXTENSION = .so
 
-BIOCRO_LIB = ../biocro-lib/src/BioCro.$(LIBRARY_FILE_EXTENSION)
+BIOCRO_SOURCE_PATH = ../biocro-lib/src
 
-# directory containing BioCro library file
-BIOCRO_DYLD_ADDITION = ../biocro-lib/src
+BOOST_PATH = ../biocro-lib/inc
+
+BIOCRO_LIB_NAME = BioCro
+
+BIOCRO_LIB_FILE = $(BIOCRO_SOURCE_PATH)/$(BIOCRO_LIB_NAME)$(LIBRARY_FILE_EXTENSION)
 
 # root directory for BioCro header files
-BIOCRO_INCLUDES = ../biocro-lib/src
+BIOCRO_INCLUDES = -I $(BIOCRO_SOURCE_PATH) -I $(BOOST_PATH) -I $(APP_DIRECTORY)
 
 APP_DIRECTORY = ../app
 
 VPATH = $(APP_DIRECTORY)
 
+SOURCES = $(wildcard *.cpp)
+OBJECTS = $(SOURCES:.cpp=.o)
+EXE = $(OBJECTS:.o=)
 
-test_simulation_definition: test_simulation_definition.cpp $(BIOCRO_LIB) simulation_definition.o DOMTreeErrorReporter.o
-	clang++ -std=c++14 -I $(BIOCRO_INCLUDES) -I $(APP_DIRECTORY) $(BIOCRO_LIB) \
-            $(APP_DIRECTORY)/simulation_definition.o \
-            $(APP_DIRECTORY)/DOMTreeErrorReporter.o \
-            test_simulation_definition.cpp \
-            -o test_simulation_definition -lgtest -lgtest_main -lxerces-c
 
-simulation_definition.o DOMTreeErrorReporter.o:
+test_all : $(OBJECTS) $(BIOCRO_LIB_FILE) simulation_definition.o DOMTreeErrorReporter.o option_parser.o Result_xml_document.o
+	clang++ -std=c++14 -o $@ $(BIOCRO_LIB_FILE) $(OBJECTS) \
+             $(APP_DIRECTORY)/simulation_definition.o \
+             $(APP_DIRECTORY)/DOMTreeErrorReporter.o \
+             $(APP_DIRECTORY)/option_parser.o \
+             $(APP_DIRECTORY)/Result_xml_document.o \
+             -lgtest_main -lgtest -lxerces-c
+
+$(EXE) : % : %.o $(BIOCRO_LIB) simulation_definition.o DOMTreeErrorReporter.o option_parser.o Result_xml_document.o
+	clang++ -std=c++14 -o $@ $(BIOCRO_LIB_FILE) $< \
+             $(APP_DIRECTORY)/simulation_definition.o \
+             $(APP_DIRECTORY)/DOMTreeErrorReporter.o \
+             $(APP_DIRECTORY)/option_parser.o \
+             $(APP_DIRECTORY)/Result_xml_document.o \
+             -lgtest_main -lgtest -lxerces-c
+
+
+$(OBJECTS) : %.o : %.cpp
+	clang++ -std=c++14 $(BIOCRO_INCLUDES) $< -o $@ -c -DVERBOSE=$(VERBOSE)
+
+clean:
+	rm -f $(EXE) $(OBJECTS) test_all
+
+
+simulation_definition.o DOMTreeErrorReporter.o option_parser.o Result_xml_document.o:
 	$(MAKE) -C ../app $@
-
-run_test_biocro: test_biocro
-	DYLD_LIBRARY_PATH=$(BIOCRO_DYLD_ADDITION) ./test_biocro --gtest_also_run_disabled_tests ‑‑gtest_repeat=1
-
-test_biocro: test_biocro.cpp $(BIOCRO_LIB)
-	clang++ -std=c++14 -I $(BIOCRO_INCLUDES) $(BIOCRO_LIB) test_biocro.cpp -o test_biocro -lgtest -lgtest_main
