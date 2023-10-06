@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynamical-system>
-  <parameters>
-    <variable name="timestep" value="1"/>
-  </parameters>
-  <drivers>
+  <drivers timestep="1">
     <row>
       <variable name="some_driver_variable" value="0"/>
       <variable name="some_driver_variable" value="-9"/>

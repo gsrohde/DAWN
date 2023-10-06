@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynamical-system>
   <parameters>
-    <variable name="timestep" value="1"/>
-    <variable name="timestep" value="2"/>
+    <variable name="dummy_variable" value="1"/>
+    <variable name="dummy_variable" value="2"/>
   </parameters>
-  <drivers>
+  <drivers timestep="1">
     <row>
       <variable name="some_driver_variable" value="0"/>
     </row>

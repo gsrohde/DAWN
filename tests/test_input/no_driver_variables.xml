@@ -6,7 +6,7 @@
 
   <drivers timestep="1">
     <row>
-      <variable name="some_driver_variable" value="0"/>
+      <!-- But the row in this system's drivers has no variables. -->
     </row>
   </drivers>
 </dynamical-system>
