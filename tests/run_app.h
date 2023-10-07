@@ -8,9 +8,13 @@
 #include "simulation_definition.h"
 #include "Result_xml_document.h"
 
-inline Result_xml_document run_app(int argC, char** argV) {
+inline Result_xml_document run_app(vector<string> command_line) {
+    std::vector<const char*> cstrings{};
 
-    Option_parser op(argC, argV);
+    for(const auto& string : command_line)
+        cstrings.push_back(string.c_str());
+
+    Option_parser op(cstrings.size(), const_cast<char**>(cstrings.data()));
 
     try {
         Simulation_definition sim_def(op);

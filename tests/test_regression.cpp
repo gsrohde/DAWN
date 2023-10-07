@@ -12,7 +12,11 @@ using namespace std;
 using namespace xercesc;
 
 
-void compare_last_row_with_expected(Result_xml_document& result, const vector<double>& expected_value) {
+void compare_last_row_with_expected(const vector<string>& command_line,
+                                    const vector<double>& expected_value)
+{
+    auto result = run_app(command_line);
+
     DOMNodeList* row_list = result.get_elements_by_tag_name("row");
     DOMElement* last_item = dynamic_cast< DOMElement* >(row_list->item(row_list->getLength() - 1));
     DOMNodeList* variable_list = last_item->getElementsByTagName(XX("variable"));
@@ -29,15 +33,10 @@ void compare_last_row_with_expected(Result_xml_document& result, const vector<do
 
 
 TEST(RegressionTests, TestHarmonicOscillator) {
-    const int argC {2};
-    char* argV[argC + 1] {
-         const_cast<char*>(""),
-         const_cast<char*>("../app/sample_input/harmonic_oscillator_system.xml"),
-         nullptr };
+    vector<string> command_line {"", "../app/sample_input/harmonic_oscillator_system.xml"};
 
-    auto result = run_app(2, argV);
-
-    // The EXPECT test below makes use of the fact that
+    // The EXPECT tests called in the compare_last_row_with_expected
+    // function called below make use of the fact that
     // getElementsByTagName returns matching elements in document
     // order, which happens to be alphabetical order.
     vector<double> expected_value {
@@ -49,5 +48,5 @@ TEST(RegressionTests, TestHarmonicOscillator) {
         0.031853 // velocity
     };
 
-    compare_last_row_with_expected(result, expected_value);
+    compare_last_row_with_expected(command_line, expected_value);
 }
