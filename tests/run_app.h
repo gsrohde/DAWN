@@ -11,9 +11,14 @@
 inline Result_xml_document run_app(vector<string> command_line) {
     std::vector<const char*> cstrings{};
 
+    // Convert command_line to a C-style array so that it may be
+    // passed to the Option_parser constructor.
     for(const auto& string : command_line)
         cstrings.push_back(string.c_str());
 
+    // optind is a global variable used by getopt and getopt_long that
+    // must be reset between test invocations:
+    optind = 1;
     Option_parser op(cstrings.size(), const_cast<char**>(cstrings.data()));
 
     try {

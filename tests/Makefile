@@ -41,6 +41,8 @@ $(EXE) : % : %.o $(BIOCRO_LIB) simulation_definition.o DOMTreeErrorReporter.o op
 $(OBJECTS) : %.o : %.cpp
 	clang++ -std=c++14 $(BIOCRO_INCLUDES) $< -o $@ -c -DVERBOSE=$(VERBOSE)
 
+test_regression.o: run_app.h
+
 clean:
 	rm -f $(EXE) $(OBJECTS) test_all
 
