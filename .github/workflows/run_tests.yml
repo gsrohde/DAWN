@@ -1,0 +1,28 @@
+name: Run Tests
+
+on:
+  push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install gtest manually
+      run: sudo apt-get install libgtest-dev && cd /usr/src/gtest && sudo cmake CMakeLists.txt && sudo make && sudo cp *.a /usr/lib && sudo ln -s /usr/lib/libgtest.a /usr/local/lib/libgtest.a && sudo ln -s /usr/lib/libgtest_main.a /usr/local/lib/libgtest_main.a
+    - uses: actions/checkout@v1
+    - name: Build BioCro
+      run: |
+        cd biocro-lib/src
+        make
+    - name: Build DAWN app
+      run: |
+        cd app
+        make use_local_schema_file=true main
+    - name: Build Tests
+      run: |
+        cd tests
+        make
+    - name: Run Tests
+      run: |
+        cd tests
+        ./test_all
