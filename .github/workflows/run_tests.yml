@@ -17,6 +17,8 @@ jobs:
             sudo make install
     - name: Check out repository
       uses: actions/checkout@v3
+      with:
+        submodules: true
     - name: Build BioCro
       run: |
         cd biocro-lib/src
