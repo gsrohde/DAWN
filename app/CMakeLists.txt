@@ -1,3 +1,6 @@
+cmake_minimum_required(VERSION 3.20.0)
+project(DAWN_app)
+
 set(CMAKE_CXX_STANDARD 11)
 find_package(XercesC REQUIRED)
 
@@ -15,8 +18,6 @@ target_sources(dawn_lib PRIVATE simulation_definition.cpp)
 
 target_link_libraries(dawn_lib PRIVATE BioCro XercesC::XercesC)
 message(${CMAKE_CURRENT_BINARY_DIR})
-cmake_minimum_required(VERSION 3.20.0)
-project(DAWN_app)
 
 target_include_directories(dawn_lib SYSTEM PUBLIC ../biocro-lib/src XercesC::XercesC_INCLUDE_DIRS)
 
