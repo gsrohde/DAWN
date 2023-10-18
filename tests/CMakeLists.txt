@@ -28,11 +28,9 @@ add_executable(test_all
 
 target_include_directories(test_all PRIVATE ../app ../biocro-lib/inc)
 
-if (NOT GTest_FOUND)
-    target_link_libraries(test_all PRIVATE dawn_lib gtest_main)
-else()
-    target_link_libraries(test_all PRIVATE dawn_lib GTest::gtest_main)
-endif()
+target_link_libraries(test_all PRIVATE dawn_lib
+                                       $<$<BOOL:${GTest_FOUND}>:GTest::>gtest_main
+                                       $<$<BOOL:${GTest_FOUND}>:GTest::>gmock)
 
 add_custom_command(
         TARGET test_all POST_BUILD
