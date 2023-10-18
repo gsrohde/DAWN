@@ -27,5 +27,6 @@ add_custom_command(
         TARGET dawn POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
                 ${CMAKE_SOURCE_DIR}/app/sample_input/
-                ${CMAKE_CURRENT_BINARY_DIR}/sample_input)
+                ${CMAKE_CURRENT_BINARY_DIR}/sample_input
+        BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/sample_input)
 

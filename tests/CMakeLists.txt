@@ -38,7 +38,8 @@ add_custom_command(
         TARGET test_all POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
                 ${CMAKE_SOURCE_DIR}/tests/test_input/
-                ${CMAKE_CURRENT_BINARY_DIR}/test_input)
+                ${CMAKE_CURRENT_BINARY_DIR}/test_input
+        BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/test_input)
 
 include(GoogleTest)
 gtest_discover_tests(test_all)
