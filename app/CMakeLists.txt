@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD 11)
 find_package(XercesC REQUIRED)
 
 if (XercesC_FOUND)
-    message(${XercesC_INCLUDE_DIRS})
-    message("XercesC was found.")
+    message(DEBUG "XercesC was found.")
+    message(DEBUG "It's headers are in ${XercesC_INCLUDE_DIRS}.")
 endif()
 
 add_library(dawn_lib STATIC)
@@ -15,11 +15,8 @@ target_sources(dawn_lib PRIVATE Result_xml_document.cpp)
 target_sources(dawn_lib PRIVATE option_parser.cpp)
 target_sources(dawn_lib PRIVATE run.cpp)
 target_sources(dawn_lib PRIVATE simulation_definition.cpp)
-
-target_link_libraries(dawn_lib PRIVATE BioCro XercesC::XercesC)
-message(${CMAKE_CURRENT_BINARY_DIR})
-
-target_include_directories(dawn_lib SYSTEM PUBLIC ../biocro-lib/src XercesC::XercesC_INCLUDE_DIRS)
+target_link_libraries(dawn_lib PUBLIC BioCro XercesC::XercesC) # public so tests can use Xerces as well
+target_include_directories(dawn_lib PUBLIC ../biocro-lib/src) # public so tests can use BioCro headers as well
 
 add_executable(dawn main.cpp)
 target_link_libraries(dawn PRIVATE dawn_lib)

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20.0)
 project(DAWN)
 
-message("Top level CMakeLists.txt")
+message(DEBUG "Top level CMakeLists.txt")
 
 enable_testing()
 

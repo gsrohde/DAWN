@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.20.0)
 project(DAWN_tests)
 
+set(CMAKE_CXX_STANDARD 14) # probably not needed if GTest is found
+
 find_package(GTest)
 
 if (NOT GTest_FOUND)
@@ -18,7 +20,7 @@ if (NOT GTest_FOUND)
 
 else()
 
-    message("GTest was found!")
+    message("GTest was found.  Using installed copy.")
 
 endif()
 
@@ -32,6 +34,7 @@ target_link_libraries(test_all PRIVATE dawn_lib
                                        $<$<BOOL:${GTest_FOUND}>:GTest::>gtest_main
                                        $<$<BOOL:${GTest_FOUND}>:GTest::>gmock)
 
+# Copy test input files.
 add_custom_command(
         TARGET test_all POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
