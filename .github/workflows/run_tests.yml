@@ -20,7 +20,7 @@ jobs:
     - name: Install xerces-c
       run: |
         sudo apt-get install -y libxerces-c-dev
-  - name: Build all targets
+    - name: Build all targets
       run: |
         cmake -B build -S .
         cmake --build build
