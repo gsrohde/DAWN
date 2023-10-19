@@ -13,8 +13,9 @@ jobs:
         submodules: true
     - name: List BioCro files
       run: |
+        cd biocro-lib
         git branch
-        ls -lR biocro-lib/src
+        ls -lR src
     - name: Build all targets
       run: |
         cmake -B build -S .
