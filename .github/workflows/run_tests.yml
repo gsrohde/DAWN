@@ -10,11 +10,7 @@ jobs:
     - name: Check out repository
       uses: actions/checkout@v4
       with:
-        ref: add_github_workflow
         submodules: true
-    - name: Try submodule update
-      run: |
-        git submodule update --remote
     - name: List BioCro files
       run: |
         cd biocro-lib

@@ -1,4 +1,4 @@
 [submodule "biocro-lib"]
 	path = biocro-lib
 	url = ../biocro-lib.git
-	branch = use_cmake
+	branch = master
