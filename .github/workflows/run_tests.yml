@@ -8,12 +8,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Check out repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         submodules: true
     - name: List BioCro files
       run: |
-        ls -lR biocro-lib
+        git branch
+        ls -lR biocro-lib/src
     - name: Build all targets
       run: |
         cmake -B build -S .
