@@ -7,31 +7,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Clone GTest
-      run:  git clone https://github.com/google/googletest.git -b v1.14.0
-    - name: Install gtest manually
-      working-directory: ./googletest
-      run:  sudo apt install python3-pip &&
-            cmake . &&
-            make &&
-            sudo make install
     - name: Check out repository
       uses: actions/checkout@v3
       with:
         submodules: true
-    - name: Build BioCro
+    - name: Build all targets
       run: |
-        cd biocro-lib/src
-        make
-    - name: Build DAWN app
-      run: |
-        cd app
-        make use_local_schema_file=true main
-    - name: Build Tests
-      run: |
-        cd tests
-        make
+        cmake -B build -S .
+        cmake --build build
     - name: Run Tests
       run: |
-        cd tests
-        ./test_all
+        cd build
+        ctest
