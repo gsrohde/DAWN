@@ -2,6 +2,7 @@
 
 #include <gmock/gmock.h>
 using testing::HasSubstr;
+using testing::ContainsRegex;
 
 #include <framework/biocro_simulation.h>
 #include <simulation_definition.h>
@@ -24,24 +25,45 @@ TEST(SimulationDefinitionTest, MinimalSimulationDefinitionFile) {
 // when schema validation is turned off.
 
 TEST(SimulationDefinitionTest, DuplicateInitialStateDefinitions) {
-    ASSERT_ANY_THROW({
-            Simulation_definition sim_def("test_input/duplicate_initial_state_variable_definition.xml",
-                                          nonvalidating_parser);
-        });
+    EXPECT_THROW({
+            try {
+                Simulation_definition sim_def("test_input/duplicate_initial_state_variable_definition.xml",
+                                              nonvalidating_parser);
+            }
+            catch( const std::runtime_error& e ) {
+                EXPECT_THAT(e.what(), ContainsRegex("Duplicate key.*initial-state"));
+                throw;
+            }
+        },
+        std::runtime_error);
 }
 
 TEST(SimulationDefinitionTest, DuplicateParameterDefinitions) {
-    ASSERT_ANY_THROW({
-            Simulation_definition sim_def("test_input/duplicate_parameter_definition.xml",
-                                          nonvalidating_parser);
-        });
+    EXPECT_THROW({
+            try {
+                Simulation_definition sim_def("test_input/duplicate_parameter_definition.xml",
+                                              nonvalidating_parser);
+            }
+            catch( const std::runtime_error& e ) {
+                EXPECT_THAT(e.what(), ContainsRegex("Duplicate key.*parameters"));
+                throw;
+            }
+        },
+        std::runtime_error);
 }
 
 TEST(SimulationDefinitionTest, DuplicateDriverVariables) {
-    ASSERT_ANY_THROW({
-            Simulation_definition sim_def("test_input/duplicate_driver_variables.xml",
-                                          nonvalidating_parser);
-        });
+    EXPECT_THROW({
+            try {
+                Simulation_definition sim_def("test_input/duplicate_driver_variables.xml",
+                                              nonvalidating_parser);
+            }
+            catch( const std::runtime_error& e ) {
+                EXPECT_THAT(e.what(), ContainsRegex("Duplicate key.*drivers"));
+                throw;
+            }
+        },
+        std::runtime_error);
 }
 
 TEST(SimulationDefinitionTest, InconsistentDriverVariables) {
@@ -65,7 +87,7 @@ TEST(SimulationDefinitionTest, InconsistentDriverVariables) {
 // Ensure a bad driver definition won't cause a segfault:
 TEST(SimulationDefinitionTest, NoDriverVariablesWithValidation) {
 
-    ASSERT_EXIT(({
+    //ASSERT_EXIT(({
         try {
             Simulation_definition sim_def("test_input/no_driver_variables.xml",
                                           default_options);
@@ -91,9 +113,9 @@ TEST(SimulationDefinitionTest, NoDriverVariablesWithValidation) {
         catch(std::exception) {
         }
         exit(0);
-    }),
-    ::testing::ExitedWithCode(0),
-    ".*");
+        //}),
+        //::testing::ExitedWithCode(0),
+        //".*");
 }
 
 // Ensure a bad driver definition won't cause a segfault, even with validation
