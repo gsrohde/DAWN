@@ -10,7 +10,6 @@ jobs:
     - name: Check out repository
       uses: actions/checkout@v4
       with:
-        ref: add_github_workflow
         submodules: true
     - name: List BioCro files
       run: |
@@ -28,3 +27,9 @@ jobs:
       run: |
         cd build
         ctest
+    - name: Upload Artifact
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: error_log
+        path: build/Testing/Temporary/*

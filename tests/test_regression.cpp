@@ -17,7 +17,7 @@ void compare_last_row_with_expected(const vector<string>& command_line,
 {
     auto result = run_app(command_line);
 
-    DOMNodeList* row_list = result.get_elements_by_tag_name("row");
+    DOMNodeList* row_list = result->get_elements_by_tag_name("row");
     DOMElement* last_item = dynamic_cast< DOMElement* >(row_list->item(row_list->getLength() - 1));
     DOMNodeList* variable_list = last_item->getElementsByTagName(XX("variable"));
 

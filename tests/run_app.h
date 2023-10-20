@@ -8,7 +8,7 @@
 #include "simulation_definition.h"
 #include "Result_xml_document.h"
 
-inline Result_xml_document run_app(vector<string> command_line) {
+inline std::unique_ptr<Result_xml_document> run_app(vector<string> command_line) {
     std::vector<const char*> cstrings{};
 
     // Convert command_line to a C-style array so that it may be
@@ -42,8 +42,7 @@ inline Result_xml_document run_app(vector<string> command_line) {
 
         auto result = sim.run_simulation();
 
-        Result_xml_document doc(result);
-        return doc;
+        return std::unique_ptr<Result_xml_document>(new Result_xml_document{result});
     }
     catch(std::runtime_error& e) {
         cerr << "RUNTIME ERROR: " << e.what() << endl;
