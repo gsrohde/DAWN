@@ -87,7 +87,7 @@ TEST(SimulationDefinitionTest, InconsistentDriverVariables) {
 // Ensure a bad driver definition won't cause a segfault:
 TEST(SimulationDefinitionTest, NoDriverVariablesWithValidation) {
 
-    //ASSERT_EXIT(({
+    ASSERT_EXIT(({
         try {
             Simulation_definition sim_def("test_input/no_driver_variables.xml",
                                           default_options);
@@ -113,9 +113,9 @@ TEST(SimulationDefinitionTest, NoDriverVariablesWithValidation) {
         catch(std::exception) {
         }
         exit(0);
-        //}),
-        //::testing::ExitedWithCode(0),
-        //".*");
+    }),
+    ::testing::ExitedWithCode(0),
+    ".*");
 }
 
 // Ensure a bad driver definition won't cause a segfault, even with validation
