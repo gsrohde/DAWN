@@ -110,12 +110,21 @@ TEST(SimulationDefinitionTest, NoDriverVariablesWithValidation) {
             // and segfault.
             auto result = sim.run_simulation();
         }
-        catch(std::exception) {
+        catch( const std::runtime_error& e )
+        {
+            ASSERT_THAT(e.what(),
+                        HasSubstr("There was 1 error parsing the simulation specification file."));
         }
         exit(0);
     }),
     ::testing::ExitedWithCode(0),
     ".*");
+}
+
+
+// The next test relies on this assertion being in a subroutine.
+void exception_is_not_about_missing_file(string message) {
+    ASSERT_THAT(message, testing::StrNe("Path file_name \"test_input/no_driver_variables.xml\" does not exist, or path is an empty string."));
 }
 
 // Ensure a bad driver definition won't cause a segfault, even with validation
@@ -145,9 +154,19 @@ TEST(SimulationDefinitionTest, DISABLED_NoDriverVariablesWithoutValidation) {
             // and segfault.
             auto result = sim.run_simulation();
         }
-        catch(std::exception) {
+        catch( const std::runtime_error& e ) {
+            // Make sure test doesn't pass simply because we can't find the file:
+            exception_is_not_about_missing_file(e.what());
+
+            if (HasFatalFailure()) {
+                // error WAS caused by missing file; make test fail
+                exit(1);
+            }
+            else {
+                // error was not caused by missing file; test will pass if it didn't segfault first
+                exit(0);
+            }
         }
-        exit(0);
     }),
     ::testing::ExitedWithCode(0),
     ".*") << "Without schema validation, the parsing code fails to ward off a segmentation fault";
