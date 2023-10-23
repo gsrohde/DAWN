@@ -17,6 +17,10 @@ target_sources(dawn_lib PRIVATE run.cpp)
 target_sources(dawn_lib PRIVATE simulation_definition.cpp)
 target_link_libraries(dawn_lib PUBLIC BioCro XercesC::XercesC) # public so tests can use Xerces as well
 target_include_directories(dawn_lib PUBLIC ../biocro-lib/src) # public so tests can use BioCro headers as well
+#target_compile_options(dawn_lib PUBLIC -O0 -g)
+target_compile_definitions(dawn_lib PRIVATE
+                           LOCAL_SCHEMA_FILEPATH=${CMAKE_SOURCE_DIR}/app/xml_schema/simulation-specification.xsd
+                           USE_LOCAL_SCHEMA_FILE)
 
 add_executable(dawn main.cpp)
 target_link_libraries(dawn PRIVATE dawn_lib)
