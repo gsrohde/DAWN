@@ -1,24 +1,46 @@
 name: Run Tests
 
 on:
-  push
+- push
+- workflow_dispatch
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build_and_test:
+    name: Test DAWN on ${{ matrix.os }}
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+        - ubuntu-latest
+        # - windows-latest # disable for now
+        - macos-latest
+
     steps:
     - name: Check out repository
       uses: actions/checkout@v4
       with:
         submodules: true
     - name: List BioCro files
+      if: ${{ matrix.os != 'windows-latest' }}
       run: |
         cd biocro-lib
         git branch
         ls -lR src
-    - name: Install xerces-c
+    - name: Install xerces-c (ubuntu)
+      if: ${{ matrix.os == 'ubuntu-latest' }}
       run: |
         sudo apt-get install -y libxerces-c-dev
+    - name: Install xerces-c (macos)
+      if: ${{ matrix.os == 'macos-latest' }}
+      run: |
+        brew install xerces-c
+    - name: Install xerces-c (windows)
+      if: ${{ matrix.os == 'windows-latest' }}
+      run: |
+        choco install xqilla
     - name: Build all targets
       run: |
         cmake -B build -S .
