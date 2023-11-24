@@ -1,2 +1,6 @@
+# C++ build products:
 test_simulation_definition
 test_simulation_definition.dSYM
+test_regression
+test_all
+*.o

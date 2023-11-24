@@ -1,2 +1,17 @@
+# C++ build products:
 main
 *.o
+
+# C++ TAGS file:
+TAGS
+
+# directories for storing app results (for now):
+output
+output-extra
+
+# Doxygen generated:
+html
+latex
+
+# for now:
+Doxyfile
