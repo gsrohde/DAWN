@@ -40,7 +40,18 @@ add_custom_command(
         COMMAND ${CMAKE_COMMAND} -E copy_directory
                 ${CMAKE_SOURCE_DIR}/tests/test_input/
                 ${CMAKE_CURRENT_BINARY_DIR}/test_input
-        BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/test_input)
+        DEPENDS ${CMAKE_SOURCE_DIR}/test_input)
+
+## add_custom_command(
+##     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/test_input/duplicate_driver_variables.xml
+##     COMMAND ${CMAKE_COMMAND} -E copy
+##         ${CMAKE_SOURCE_DIR}/tests/test_input/duplicate_driver_variables.xml
+##         ${CMAKE_CURRENT_BINARY_DIR}/test_input/duplicate_driver_variables.xml
+##     DEPENDS ${CMAKE_SOURCE_DIR}/tests/test_input/duplicate_driver_variables.xml
+##         )
+
+## add_custom_target(tests DEPENDS test_all
+## ${CMAKE_CURRENT_BINARY_DIR}/test_input/duplicate_driver_variables.xml)
 
 include(GoogleTest)
 gtest_discover_tests(test_all)
