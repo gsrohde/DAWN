@@ -37,16 +37,18 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(EXECUTABLE_PATH "$ORIGIN")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     set(EXECUTABLE_PATH "@loader_path")
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+else() # e.g. Windows
     message("To set a non-standard installation prefix, use\n"
-            "'cmake -B <build tree> -S <source tree> -DCMAKE_INSTALL_PREFIX=<non-standard installation prefix>'\n"
+            "'cmake -B <build tree> -S <source tree> --install-prefix <non-standard installation prefix>'\n"
             "when running the configuration stage.")
 endif()
 list(APPEND CMAKE_INSTALL_RPATH
-    # should work with cmake --install <build_dir> --install-prefix <install_dir> on macOS and UNIX:
+    # should work on macOS or UNIX if user overrides the default installation prefix at install time with
+    #   cmake --install <build tree> --prefix <install prefix>
     ${EXECUTABLE_PATH}/${relativeRpath}
 
-    # works if CMAKE_INSTALL_PREFIX is set during CMake config stage:
+    # works if CMAKE_INSTALL_PREFIX is set during CMake config stage using
+    #   cmake -B <build tree> -S <source tree> --install-prefix <non-standard installation prefix>
     ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}
 )
 
