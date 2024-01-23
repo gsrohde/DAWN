@@ -23,8 +23,8 @@ target_sources(dawn_lib PRIVATE Result_xml_document.cpp)
 target_sources(dawn_lib PRIVATE option_parser.cpp)
 target_sources(dawn_lib PRIVATE run.cpp)
 target_sources(dawn_lib PRIVATE simulation_definition.cpp)
-target_link_libraries(dawn_lib PUBLIC BioCro XercesC::XercesC) # public so tests can use Xerces as well
-target_include_directories(dawn_lib PUBLIC ../biocro-lib/src) # public so tests can use BioCro headers as well
+target_link_libraries(dawn_lib PUBLIC BioCro XercesC::XercesC) # PUBLIC so tests can use Xerces as well
+target_include_directories(dawn_lib PUBLIC ../biocro-lib/src) # PUBLIC so tests can use BioCro headers as well
 target_include_directories(dawn_lib INTERFACE .)
 
 # Set RPATH for installation prior to adding the executable:
@@ -63,13 +63,4 @@ add_custom_command(
         BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/sample_input)
 
 set_target_properties(dawn_lib PROPERTIES
-                      PUBLIC_HEADER app/include/option_parser.h)# app/Result_xml_document.h)
-set_target_properties(dawn_lib PROPERTIES
-                      PUBLIC_HEADER simulation_definition.h)
-
-install(TARGETS dawn_lib
-         ARCHIVE
-         PUBLIC_HEADER
-         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/dawn
-        )
-install(TARGETS dawn)
+                      PUBLIC_HEADER "app/simulation_definition.h;app/option_parser.h;app/Result_xml_document.h")
