@@ -6,6 +6,7 @@ if(MESSAGE_LOG_LEVEL IN_LIST LOG_LEVELS_FOR_INDENTATION)
   list(APPEND CMAKE_MESSAGE_INDENT "  ")
 endif()
 
+
 set(CMAKE_CXX_STANDARD 14) # probably not needed if GTest is found
 
 include(FetchContent)
@@ -19,11 +20,10 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+
 add_executable(test_all
                test_regression.cpp
                test_simulation_definition.cpp)
-
-target_include_directories(test_all PRIVATE ../app ../biocro-lib/inc)
 
 target_link_libraries(test_all PRIVATE dawn_lib
                                        GTest::gtest_main
