@@ -659,8 +659,10 @@ void Simulation_definition::configure_parser() {
     DOMTreeErrorReporter* error_reporter = new DOMTreeErrorReporter();
     parser->setErrorHandler(error_reporter);
 
-    parser->loadGrammar("/Users/srohde/Documents/GitHub/gsrohde/public/DAWN_build/share/dawn/simulation-specification.xsd", Grammar::SchemaGrammarType, true);
-    parser->loadGrammar(get_schema_uri().c_str(), Grammar::SchemaGrammarType, true);
+    for (auto uri : get_schema_uris()) {
+        parser->loadGrammar(uri.c_str(), Grammar::SchemaGrammarType, true);
+    }
+
     parser->useCachedGrammarInParse(true);
 }
 

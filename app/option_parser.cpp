@@ -27,16 +27,24 @@ Option_parser::Option_parser(int argC, char* argV[]) {
              case 'h':
                  usage();
                  exit(0);
-             case 's':
-                 cout << "Default schema URI: ";
-                 if (get_schema_uri() == "") {
-                     cout << "(none)";
+             case 's': {
+                 auto uri_list = get_schema_uris();
+                 auto list_size = uri_list.size();
+                 cout << "Default schema URI" << (list_size != 1 ? "s:" : ": ");
+                 if (list_size == 0) {
+                     cout << " (none)" << endl;
+                 }
+                 else if (list_size == 1) {
+                     cout << uri_list.at(0) << endl;
                  }
                  else {
-                     cout << get_schema_uri();
+                     cout << endl;
+                     for (auto uri : get_schema_uris()) {
+                         cout << "    " << uri << endl;
+                     }
                  }
-                 cout << endl;
                  exit(0);
+             }
              case 'f':
                  parser_options.fast_fail_option = true;
                  break;
