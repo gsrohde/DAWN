@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.20.0)
 project(DAWN)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 message(VERBOSE "Processing top level CMakeLists.txt")
 
@@ -19,7 +20,7 @@ include(GNUInstallDirs)
 add_subdirectory(biocro-lib/src)
 add_subdirectory(app)
 add_subdirectory(tests)
-
+add_subdirectory(doc)
 
 
 install(TARGETS BioCro)
