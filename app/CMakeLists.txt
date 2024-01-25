@@ -26,9 +26,20 @@ target_sources(dawn_lib PRIVATE simulation_definition.cpp)
 target_link_libraries(dawn_lib PUBLIC BioCro XercesC::XercesC) # PUBLIC so tests can use Xerces as well
 target_include_directories(dawn_lib PUBLIC ../biocro-lib/src) # PUBLIC so tests can use BioCro headers as well
 target_include_directories(dawn_lib INTERFACE .)
+target_compile_definitions(dawn_lib PRIVATE
+                           LOCAL_SCHEMA_FILEPATH=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/dawn/simulation-specification.xsd
+                           USE_LOCAL_SCHEMA_FILE)
+
+# Copy the schema files to the build tree
+add_custom_command(
+        TARGET dawn_lib POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+                ${CMAKE_SOURCE_DIR}/app/xml_schema
+                ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_DATADIR}/dawn
+        BYPRODUCTS ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_DATADIR}/dawn)
+
 
 # Set RPATH for installation prior to adding the executable:
-include(GNUInstallDirs)
 file(RELATIVE_PATH relativeRpath
     ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}
     ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}

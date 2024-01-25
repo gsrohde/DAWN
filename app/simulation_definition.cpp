@@ -659,9 +659,9 @@ void Simulation_definition::configure_parser() {
     DOMTreeErrorReporter* error_reporter = new DOMTreeErrorReporter();
     parser->setErrorHandler(error_reporter);
 
-    // Possible errors show up when the parser is actually used, not
-    // here, so don't test for exceptions.
-    parser->setExternalNoNamespaceSchemaLocation(get_schema_uri().c_str());
+    parser->loadGrammar("/Users/srohde/Documents/GitHub/gsrohde/public/DAWN_build/share/dawn/simulation-specification.xsd", Grammar::SchemaGrammarType, true);
+    parser->loadGrammar(get_schema_uri().c_str(), Grammar::SchemaGrammarType, true);
+    parser->useCachedGrammarInParse(true);
 }
 
 void Simulation_definition::check_driver_variable_set(set<string> variable_set) {

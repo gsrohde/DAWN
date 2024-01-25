@@ -14,6 +14,7 @@ set(CMAKE_WARN_DEPRECATED TRUE)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 enable_testing()
+include(GNUInstallDirs)
 
 add_subdirectory(biocro-lib/src)
 add_subdirectory(app)
@@ -28,4 +29,9 @@ install(TARGETS dawn_lib
           PUBLIC_HEADER
             DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/dawn
         )
+
+# Install the schema files
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_DATADIR}/dawn/
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/dawn)
+
 install(TARGETS dawn)
