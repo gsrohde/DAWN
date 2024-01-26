@@ -3,7 +3,7 @@ project(DAWN_tests)
 
 message(VERBOSE "Processing tests/CMakeLists.txt")
 if(MESSAGE_LOG_LEVEL IN_LIST LOG_LEVELS_FOR_INDENTATION)
-  list(APPEND CMAKE_MESSAGE_INDENT "  ")
+  list(APPEND CMAKE_MESSAGE_INDENT "  ")
 endif()
 
 

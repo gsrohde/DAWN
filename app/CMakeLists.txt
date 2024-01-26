@@ -3,7 +3,7 @@ project(DAWN_app)
 
 message(VERBOSE "Processcing app/CMakeLists.txt")
 if(MESSAGE_LOG_LEVEL IN_LIST LOG_LEVELS_FOR_INDENTATION)
-  list(APPEND CMAKE_MESSAGE_INDENT "  ")
+  list(APPEND CMAKE_MESSAGE_INDENT "  ")
 endif()
 
 set(CMAKE_CXX_STANDARD 11)
