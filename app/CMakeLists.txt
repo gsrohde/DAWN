@@ -71,7 +71,7 @@ add_executable(dawn main.cpp)
 target_link_libraries(dawn PRIVATE dawn_lib)
 
 add_custom_command(
-        TARGET dawn POST_BUILD
+        TARGET dawn_lib POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
                 ${CMAKE_SOURCE_DIR}/app/sample_input/
                 ${CMAKE_CURRENT_BINARY_DIR}/sample_input

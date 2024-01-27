@@ -1,12 +1,16 @@
 #include <gtest/gtest.h>
 
+/* Standard Library */
 #include <string>
 #include <vector>
 
+/* Xerces Library */
+#include <xercesc/dom/DOM.hpp>
+
+/* DAWN app */
 #include <StrX.h>
 #include <xstr.h> // includes XX() macro
-
-#include "run_app.h"
+#include <run.h>
 
 using namespace std;
 using namespace xercesc;
@@ -15,7 +19,7 @@ using namespace xercesc;
 void compare_last_row_with_expected(const vector<string>& command_line,
                                     const vector<double>& expected_value)
 {
-    auto result = run_app(command_line);
+    auto result = run(command_line);
 
     DOMNodeList* row_list = result->get_elements_by_tag_name("row");
     DOMElement* last_item = dynamic_cast< DOMElement* >(row_list->item(row_list->getLength() - 1));

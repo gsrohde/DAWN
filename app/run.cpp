@@ -7,11 +7,25 @@
 #include "option_parser.h"
 #include "simulation_definition.h"
 #include "Result_xml_document.h"
+#include "run.h"
 
-int run(int argC, char* argV[]) {
+std::unique_ptr<Result_xml_document> run(vector<string> command_line) {
+    std::vector<const char*> cstrings{};
 
-    Option_parser op(argC, argV);
+    // Convert command_line to a C-style array so that it may be
+    // passed to the Option_parser constructor.
+    for(const auto& string : command_line)
+        cstrings.push_back(string.c_str());
 
+    // optind is a global variable used by getopt and getopt_long that
+    // must be reset between test invocations:
+    optind = 1;
+    Option_parser op(cstrings.size(), const_cast<char**>(cstrings.data()));
+
+    return run(op);
+}
+
+std::unique_ptr<Result_xml_document> run(Option_parser op) {
     try {
         Simulation_definition sim_def(op);
 
@@ -33,8 +47,7 @@ int run(int argC, char* argV[]) {
 
         auto result = sim.run_simulation();
 
-        Result_xml_document doc(result);
-        doc.print(op.get_output_file());
+        return std::unique_ptr<Result_xml_document>(new Result_xml_document{result});
     }
     catch(std::runtime_error& e) {
         cerr << "RUNTIME ERROR: " << e.what() << endl;
@@ -48,4 +61,10 @@ int run(int argC, char* argV[]) {
         cerr << "UNKNOWN EXCEPTION" << endl;
         exit(1);
     }
+}
+
+int run(int argC, char* argV[]) {
+    Option_parser op(argC, argV);
+    auto doc = run(op);
+    doc->print(op.get_output_file());
 }

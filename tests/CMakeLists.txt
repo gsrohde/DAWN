@@ -9,6 +9,7 @@ endif()
 
 set(CMAKE_CXX_STANDARD 14) # probably not needed if GTest is found
 
+# Get GoogleTest if we don't have it:
 include(FetchContent)
 FetchContent_Declare(
   googletest
