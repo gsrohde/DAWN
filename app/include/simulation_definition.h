@@ -14,8 +14,8 @@
 #include <module_library/module_library.h>
 
 /* DAWN app */
-#include "solver.h"
-#include "option_parser.h"
+#include "../solver.h"
+#include "../option_parser.h"
 #include "parser_options.h"
 
 using std::string;

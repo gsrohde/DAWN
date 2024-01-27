@@ -67,4 +67,5 @@ int run(int argC, char* argV[]) {
     Option_parser op(argC, argV);
     auto doc = run(op);
     doc->print(op.get_output_file());
+    return 0;
 }

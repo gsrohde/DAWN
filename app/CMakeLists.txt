@@ -25,7 +25,7 @@ target_sources(dawn_lib PRIVATE run.cpp)
 target_sources(dawn_lib PRIVATE simulation_definition.cpp)
 target_link_libraries(dawn_lib PUBLIC BioCro XercesC::XercesC) # PUBLIC so tests can use Xerces as well
 target_include_directories(dawn_lib PUBLIC ../biocro-lib/src) # PUBLIC so tests can use BioCro headers as well
-target_include_directories(dawn_lib INTERFACE .)
+target_include_directories(dawn_lib PUBLIC include) # PUBLIC so tests can use headers in include subdirectory as well
 option(USE_REMOTE_SCHEMA_URI "Whether or not to fetch the schema from a public repository rather than using a local file" OFF)
 option(USE_LOCAL_SCHEMA_FILE "Whether to look for the schema file locally" ON)
 target_compile_definitions(dawn_lib PRIVATE
