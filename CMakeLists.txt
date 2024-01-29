@@ -25,10 +25,8 @@ add_subdirectory(doc)
 
 install(TARGETS BioCro)
 
-install(DIRECTORY "${CMAKE_SOURCE_DIR}/biocro-lib/src/" # source directory
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/BioCro
-        FILES_MATCHING # install only matched files
-        PATTERN "*.h" # select header files
+install(FILES "${CMAKE_SOURCE_DIR}/biocro-lib/src/framework/state_map.h"
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/BioCro/framework
 )
 
 install(TARGETS dawn_lib
