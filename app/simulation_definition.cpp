@@ -124,6 +124,12 @@ Simulation_definition::Simulation_definition(string specification_file,
 {
 }
 
+/**
+ *
+ *  @param [in] specification_file The path to the XML file giving the specifications for the simulation.
+ *  @param [in] drivers_file The path to the XML file specifying the drivers for the simulation.
+ *  @param [in] parser_options A Parser_options object.
+ */
 Simulation_definition::Simulation_definition(string specification_file,
                                              string drivers_file,
                                              Parser_options parser_options)

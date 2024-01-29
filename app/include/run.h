@@ -3,8 +3,8 @@
 #include <vector>
 
 /* DAWN app */
-#include "../option_parser.h"
-#include "../Result_xml_document.h"
+#include "option_parser.h"
+#include "Result_xml_document.h"
 
 
 int run(int argC, char* argV[]);
