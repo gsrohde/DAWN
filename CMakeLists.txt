@@ -22,12 +22,21 @@ add_subdirectory(app)
 add_subdirectory(tests)
 add_subdirectory(doc)
 
+option(INSTALL_ALL_BIOCRO_HEADERS NO)
 
 install(TARGETS BioCro)
 
-install(FILES "${CMAKE_SOURCE_DIR}/biocro-lib/src/framework/state_map.h"
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/BioCro/framework
-)
+if(INSTALL_ALL_BIOCRO_HEADERS)
+  install(DIRECTORY "${CMAKE_SOURCE_DIR}/biocro-lib/src/" # source directory
+          DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/BioCro
+          FILES_MATCHING # install only matched files
+          PATTERN "*.h" # select header files
+  )
+else()
+  install(FILES "${CMAKE_SOURCE_DIR}/biocro-lib/src/framework/state_map.h"
+          DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/BioCro/framework
+  )
+endif()
 
 install(TARGETS dawn_lib
           ARCHIVE
