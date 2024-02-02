@@ -17,7 +17,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(XercesC)
 
-add_library(dawn_lib SHARED)
+add_library(dawn_lib)
 target_sources(dawn_lib PRIVATE DOMTreeErrorReporter.cpp)
 target_sources(dawn_lib PRIVATE Result_xml_document.cpp)
 target_sources(dawn_lib PRIVATE option_parser.cpp)

@@ -13,6 +13,7 @@ endif()
 
 set(CMAKE_WARN_DEPRECATED TRUE)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
 
 enable_testing()
 include(GNUInstallDirs)
@@ -22,19 +23,13 @@ add_subdirectory(app)
 add_subdirectory(tests)
 add_subdirectory(doc)
 
-option(INSTALL_ALL_BIOCRO_HEADERS NO)
+option(INSTALL_BIOCRO_HEADERS NO)
+option(BUILD_SHARED_LIBS NO)
 
-install(TARGETS BioCro)
-
-if(INSTALL_ALL_BIOCRO_HEADERS)
-  install(DIRECTORY "${CMAKE_SOURCE_DIR}/biocro-lib/src/" # source directory
-          DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/BioCro
-          FILES_MATCHING # install only matched files
-          PATTERN "*.h" # select header files
-  )
-else()
-  install(FILES "${CMAKE_SOURCE_DIR}/biocro-lib/src/framework/state_map.h"
-          DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/BioCro/framework
+if(INSTALL_BIOCRO_HEADERS)
+  install(TARGETS BioCro
+            FILE_SET biocro_lib_headers
+              DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/BioCro
   )
 endif()
 

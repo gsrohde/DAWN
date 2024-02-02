@@ -3,12 +3,15 @@
 
 /* Standard Library */
 #include <string>
+#include <unordered_map>
+#include <vector>
 
 /* Xerces Library */
 #include <xercesc/dom/DOMDocument.hpp>
 
-/* BioCro Library */
-#include <framework/state_map.h> // for state_vector_map
+/* This is the only declaration we need from the BioCro library, and
+   we make it directly rather than including state_map.h: */
+using state_vector_map = std::unordered_map<std::string, std::vector<double>>;
 
 
 class Result_xml_document
