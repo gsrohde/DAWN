@@ -8,17 +8,22 @@ Clone _this_ repository using
 
 The `--recurse-submodules` option will initialize the `biocro-lib`
 submodule and pull down its files into the `DAWN/biocro-lib`
-subdirectory.
+subdirectory.  If you cloned the DAWN repository without using the
+`--recurse-submodules` option, run
 
-## Compile the BioCro library
+    git submodule update --init --recurse
 
-1. CD into the `DAWN/biocro-lib/src` directory.
+to ensure the biocro-lib subdirectory gets populated.
 
-2. Run `make` in this directory.
+## Build the BioCro library, the DAWN library and executable, and the
+   tests using CMake.
 
-## Compile the application
+1. Install CMake if you do not already have a copy.  See
+https://cmake.org/download/.  Binary distributions are avaibable for
+Windows, Linux, and macOS.  In addition, a macOS installation is
+available from [Homebrew](https://brew.sh/).
 
-1. If you haven't already installed it, install the Xerces-C++ XML
+2. If you haven't already installed it, consider installing the Xerces-C++ XML
 parser.  Installation instructions are at
 https://xerces.apache.org/xerces-c/install-3.html, but it may also be
 installed on many platforms using a package manager.
