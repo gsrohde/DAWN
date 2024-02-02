@@ -26,6 +26,8 @@ add_subdirectory(doc)
 option(INSTALL_BIOCRO_HEADERS NO)
 option(BUILD_SHARED_LIBS NO)
 
+install(TARGETS BioCro)
+
 if(INSTALL_BIOCRO_HEADERS)
   install(TARGETS BioCro
             FILE_SET biocro_lib_headers
