@@ -8,14 +8,16 @@ endif()
 
 set(CMAKE_CXX_STANDARD 11)
 
-include(FetchContent)
-FetchContent_Declare(
-  XercesC
-  GIT_REPOSITORY https://github.com/apache/xerces-c.git
-  GIT_TAG v3.2.5
-  FIND_PACKAGE_ARGS
-)
-FetchContent_MakeAvailable(XercesC)
+
+set(XercesC_ROOT CACHE FILEPATH "Set for non-standard XercesC installations")
+find_package(XercesC)
+if (XercesC_FOUND)
+    message("XercesC version " ${XercesC_VERSION} " was found.")
+    message("The library file is located at " ${XercesC_LIBRARY})
+else()
+    message(FATAL_ERROR "XercesC was not found.")
+endif()
+
 
 add_library(dawn_lib)
 target_sources(dawn_lib PRIVATE DOMTreeErrorReporter.cpp)
