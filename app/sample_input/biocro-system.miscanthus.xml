@@ -13,6 +13,8 @@
       <variable name="alpha1" value="0.04"/>
       <variable name="alphab1" value="0"/>
       <variable name="atmospheric_pressure" value="101325"/>
+      <variable name="atmospheric_scattering" value="0.3"/>
+      <variable name="atmospheric_transmittance" value="0.6"/>
       <variable name="b0" value="0.08"/>
       <variable name="b1" value="3"/>
       <variable name="beta" value="0.93"/>
@@ -126,7 +128,6 @@
       <variable name="upperT" value="37.5"/>
       <variable name="vmax1" value="39"/>
       <variable name="vmax_n_intercept" value="0"/>
-      <variable name="water_stress_approach" value="1"/>
       <variable name="wsFun" value="2"/>
     </parameters>
     <initial-state>
