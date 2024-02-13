@@ -15,6 +15,10 @@ set(CMAKE_WARN_DEPRECATED TRUE)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
 
+option(INSTALL_BIOCRO_HEADERS "Install interface headers for the BioCro library" OFF)
+option(BUILD_SHARED_LIBS "Build libraries as shared libraries by default rather than as static libraries" OFF)
+option(INSTALL_GTEST "Install Google Test" OFF)
+
 enable_testing()
 include(GNUInstallDirs)
 
@@ -22,9 +26,6 @@ add_subdirectory(biocro-lib/src)
 add_subdirectory(app)
 add_subdirectory(tests)
 add_subdirectory(doc)
-
-option(INSTALL_BIOCRO_HEADERS NO)
-option(BUILD_SHARED_LIBS NO)
 
 install(TARGETS BioCro)
 

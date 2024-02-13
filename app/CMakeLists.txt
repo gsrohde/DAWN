@@ -8,24 +8,30 @@ endif()
 
 set(CMAKE_CXX_STANDARD 11)
 
-include(FetchContent)
-FetchContent_Declare(
-  XercesC
-  GIT_REPOSITORY https://github.com/apache/xerces-c.git
-  GIT_TAG v3.2.5
-  FIND_PACKAGE_ARGS
-)
-FetchContent_MakeAvailable(XercesC)
+
+set(XercesC_ROOT CACHE FILEPATH "Set for non-standard XercesC installations")
+find_package(XercesC 3.2)
+if (XercesC_FOUND)
+    message("XercesC version " ${XercesC_VERSION} " was found.")
+    message("The library file is located at " ${XercesC_LIBRARY})
+else()
+    message(FATAL_ERROR "XercesC was not found.")
+endif()
+
 
 add_library(dawn_lib)
+
 target_sources(dawn_lib PRIVATE DOMTreeErrorReporter.cpp)
 target_sources(dawn_lib PRIVATE Result_xml_document.cpp)
 target_sources(dawn_lib PRIVATE option_parser.cpp)
 target_sources(dawn_lib PRIVATE run.cpp)
 target_sources(dawn_lib PRIVATE simulation_definition.cpp)
-target_link_libraries(dawn_lib PUBLIC BioCro XercesC::XercesC) # PUBLIC so tests can use Xerces as well
-target_include_directories(dawn_lib PUBLIC ../biocro-lib/src) # PUBLIC so tests can use BioCro headers as well
+
+target_link_libraries(dawn_lib PUBLIC XercesC::XercesC) # PUBLIC so dawn app and tests can use Xerces as well
+target_link_libraries(dawn_lib PUBLIC BioCro) # PUBLIC so tests (specifically, simulation_definitions_tests)
+                                              # can use BioCro headers as well
 target_include_directories(dawn_lib PUBLIC include) # PUBLIC so tests can use headers in include subdirectory as well
+
 option(USE_REMOTE_SCHEMA_URI "Whether or not to fetch the schema from a public repository rather than using a local file" OFF)
 option(USE_LOCAL_SCHEMA_FILE "Whether to look for the schema file locally" ON)
 target_compile_definitions(dawn_lib PRIVATE
@@ -34,6 +40,7 @@ target_compile_definitions(dawn_lib PRIVATE
     INSTALL_SCHEMA_FILEPATH=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/dawn/simulation-specification.xsd
     BUILD_SCHEMA_FILEPATH=${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_DATADIR}/dawn/simulation-specification.xsd
 )
+
 # Copy the schema files to the build tree
 add_custom_command(
         TARGET dawn_lib POST_BUILD
