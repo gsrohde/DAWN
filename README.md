@@ -147,6 +147,10 @@ that we have
 will still use the 2005 weather data, not the 2002 data contained in
 `biocro-system.miscanthus.2002.xml`.)
 
+## Generating the Doxygen documentation
+
+Coming soon!
+
 ## CMake configuration options for DAWN
 
 Coming soon!
