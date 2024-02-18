@@ -220,12 +220,12 @@ void Simulation_definition::read_spec_file()
     }
     catch (const OutOfMemoryException&)
     {
-        cerr << "OutOfMemoryException" << endl;
+        cerr << "An OutOfMemoryException occurred while parsing the simulation specification." << endl;
         errors_occurred = true;
     }
     catch (const XMLException& e)
     {
-        cerr << "An error occurred during parsing\n   Message: "
+        cerr << "An XMLException occurred while parsing the simulation specification.\n   Message: "
              << StrX(e.getMessage()) << endl;
         errors_occurred = true;
     }
@@ -234,7 +234,7 @@ void Simulation_definition::read_spec_file()
         const unsigned int max_chars = 2047;
         XMLCh err_text[max_chars + 1];
 
-        cerr << "\nDOM Error during parsing: '" << specification_file << "'\n"
+        cerr << "\nA DOMException occurred while parsing the simulation specification file ('" << specification_file << "')\n"
              << "DOMException code is:  " << e.code << endl;
 
         if (DOMImplementation::loadDOMExceptionMsg(e.code, err_text, max_chars))
@@ -244,7 +244,7 @@ void Simulation_definition::read_spec_file()
     }
     catch (...)
     {
-        cerr << "An error occurred during parsing\n " << endl;
+        cerr << "An error occurred while parsing the simulation specification.\n " << endl;
         errors_occurred = true;
     }
 
@@ -380,12 +380,12 @@ void Simulation_definition::read_drivers_file()
     }
     catch (const OutOfMemoryException&)
     {
-        cerr << "OutOfMemoryException" << endl;
+        cerr << "An OutOfMemoryException occurred while parsing the drivers file." << endl;
         errors_occurred = true;
     }
     catch (const XMLException& e)
     {
-        cerr << "An error occurred during parsing\n   Message: "
+        cerr << "An XMLException occurred while parsing the drivers file.\n   Message: "
              << StrX(e.getMessage()) << endl;
         errors_occurred = true;
     }
@@ -394,7 +394,7 @@ void Simulation_definition::read_drivers_file()
         const unsigned int max_chars = 2047;
         XMLCh err_text[max_chars + 1];
 
-        cerr << "\nDOM Error during parsing: '" << drivers_file << "'\n"
+        cerr << "\nA DOMException occurred while parsing the drivers file ('" << drivers_file << "')\n"
              << "DOMException code is:  " << e.code << endl;
 
         if (DOMImplementation::loadDOMExceptionMsg(e.code, err_text, max_chars))
@@ -404,7 +404,7 @@ void Simulation_definition::read_drivers_file()
     }
     catch (...)
     {
-        cerr << "An error occurred during parsing\n " << endl;
+        cerr << "An error occurred while parsing the drivers file.\n " << endl;
         errors_occurred = true;
     }
 
@@ -666,7 +666,14 @@ void Simulation_definition::configure_parser() {
     parser->setErrorHandler(error_reporter);
 
     for (auto uri : get_schema_uris()) {
-        parser->loadGrammar(uri.c_str(), Grammar::SchemaGrammarType, true);
+        try {
+            parser->loadGrammar(uri.c_str(), Grammar::SchemaGrammarType, true);
+            cerr << "Using schema at " << uri.c_str() << endl;
+            break; // Use the first schema document successfully found and successfully parsed.
+        }
+        catch (std::runtime_error e) {
+            std::cerr << "Error trying to load grammar: " << e.what() << endl;
+        }
     }
 
     parser->useCachedGrammarInParse(true);
