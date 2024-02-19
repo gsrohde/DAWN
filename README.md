@@ -48,7 +48,9 @@ build directory with -B:
 
         cmake -S ../DAWN -B . --install-prefix /Users/yourname/local
 
-    We will discuss other available configuration options below.
+    Note that the install prefix must be an absolute path to a
+    directory.  We will discuss other available configuration options
+    below.
 
 6. Build the software with CMake:
 
@@ -153,7 +155,72 @@ Coming soon!
 
 ## CMake configuration options for DAWN
 
-Coming soon!
+To see a list of the most useful user configuration options, run the
+CMake configuration/generation command with the -L option:
+
+        cmake -S ../DAWN -B . -L
+
+(This assumes the build directory is the current directory and that
+`../DAWN` is the relative path to the DAWN source directory.)
+
+To see the help strings associated with each option, add the -H
+option:
+
+        cmake -S ../DAWN -B . -LH
+
+(Adding the -A option will show advanced options, not documented
+here.)
+
+To set a configuration option from the command line, use the `-D`
+option.  For example,
+
+        cmake -S ../DAWN -B . -DCMAKE_BUILD_TYPE=Debug
+
+will set the build type to "Debug".  Configuration variables may also
+be set interactively if `ccmake` or `cmake-gui` are used.
+
+Here is more extensive information about the various options:
+
+* CMAKE_BUILD_TYPE default: Release
+
+    Set to "Debug" to build a debug version of the software.
+
+* BUILD_SHARED_LIBS default: OFF
+
+* CMAKE_INSTALL_PREFIX default: system determined; typically /usr/local on UNIX-like systems
+
+    Set to a custom value if you don't want to or don't have
+    permission to install to the default location.  As noted above,
+    this variable may be set using the `--install-prefix` option
+    rather than using `-DCMAKE_INSTALL_PREFIX=...`.  **Note that the
+    prefix must be an absolute path to a directory.!**
+
+* INSTALL_BIOCRO_LIBRARY default: OFF
+
+    If the BioCro library is built as a shared library, it must be
+    installed so that libraries and executables that use it have
+    access to it.  On the other hand, if it is built as a static
+    library, it may, but need not be, installed; the DAWN library will
+    include its code.
+
+* INSTALL_GTEST default: OFF
+
+    If GoogleTest was not installed on your system when you did a
+    CMake build, turning this option on will install it for you when
+    you do a CMake install.  Otherwise, this option has no effect.
+
+    Note that it is not necessary to install GoogleTest when running
+    `ctest` in the build directory; the tests will have been built
+    using the GoogleTest library built by CMake.
+
+* USE_LOCAL_SCHEMA_FILE default: ON
+
+    If this option is set to ON, both the _build_ location of the
+    simulation specification schema file
+    (`simulation-specification.xsd`) and the _install_ location will
+    be placed in the search path for finding the document schema.
+
+
 
 ## Using a separate XML validator
 
