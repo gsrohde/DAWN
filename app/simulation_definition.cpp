@@ -697,20 +697,36 @@ void Simulation_definition::configure_parser() {
 
     for (auto uri : get_schema_uris()) {
         try {
-            parser->loadGrammar(uri.c_str(), Grammar::SchemaGrammarType, true);
+            parser->loadGrammar(uri.c_str(), Grammar::SchemaGrammarType);
             if (error_reporter->getSawErrors()) {
                 error_reporter->resetErrors();
                 throw std::runtime_error(error_reporter->get_error_message());
             }
             cerr << "Using schema at " << uri.c_str() << endl;
+
+            // We use setExternalNoNamespaceSchemaLocation here
+            // instead of useCachedGrammarInParse(true) here because
+            // the latter gives somewhat quirky behavior when the
+            // validation scheme is "auto": the parser will only
+            // attempt validation if the schema is specified within
+            // the document to be validated (i.e.,
+            // noNamespaceSchemaLocation is set).
+            //
+            // Using setExternalNoNamespaceSchemaLocation here instead
+            // results in more expected (and useful) behavior for the
+            // "auto" validation scheme: validation is attempted if
+            // any of the URIs returned by get_schema_uri points to a
+            // valid schema document OR if a schema is specified
+            // within the document to be validated (even if invalid or
+            // not found).
+            parser->setExternalNoNamespaceSchemaLocation(uri.c_str());
+
             break; // Use the first schema document successfully found and successfully parsed.
         }
         catch (std::runtime_error e) {
             std::cerr << "\n* Error trying to load grammar:\n\n" << e.what() << endl;
         }
     }
-
-    parser->useCachedGrammarInParse(true);
 }
 
 void Simulation_definition::check_driver_variable_set(set<string> variable_set) {
