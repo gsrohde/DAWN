@@ -17,7 +17,7 @@
 #include "solver.h"
 #include "option_parser.h"
 #include "parser_options.h"
-#include "../DOMTreeErrorReporter.h"
+#include "DOMTreeErrorReporter.h"
 
 using std::string;
 using std::set;

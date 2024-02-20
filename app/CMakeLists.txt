@@ -85,4 +85,4 @@ add_custom_command(
         BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/sample_input)
 
 set_target_properties(dawn_lib PROPERTIES
-                      PUBLIC_HEADER "app/include/solver.h;app/include/simulation_definition.h;app/include/run.h;app/include/parser_options.h;app/include/xstr.h;app/include/StrX.h;app/include/option_parser.h;app/include/Result_xml_document.h")
+                      PUBLIC_HEADER "app/include/solver.h;app/include/simulation_definition.h;app/include/run.h;app/include/parser_options.h;app/include/xstr.h;app/include/StrX.h;app/include/option_parser.h;app/include/Result_xml_document.h;app/include/DOMTreeErrorReporter.h")
