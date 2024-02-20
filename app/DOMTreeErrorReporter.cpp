@@ -24,7 +24,7 @@
 
 
 /* Standard Library */
-#include <iostream>
+#include <string>
 
 /* Xerces Library */
 #include <xercesc/sax/SAXParseException.hpp>
@@ -37,28 +37,40 @@
 void DOMTreeErrorReporter::warning(const SAXParseException& toCatch)
 {
     fSawErrors = true;
-    std::cerr << "WARNING at file\n\"" << StrX(toCatch.getSystemId())
-		 << "\",\nline " << toCatch.getLineNumber()
-		 << ", column " << toCatch.getColumnNumber()
-         << ".\nMessage: " << StrX(toCatch.getMessage()) << "\n" << std::endl;
+
+    error_buffer << "WARNING";
+    if (toCatch.getSystemId()[0] != 0) {
+        error_buffer << " at file\n\"" << StrX { toCatch.getSystemId() }
+            << "\",\nline " << toCatch.getLineNumber()
+            << ", column " << toCatch.getColumnNumber() << ".";
+    }
+    error_buffer << "\n    " << StrX(toCatch.getMessage()) << std::endl;
 }
 
 void DOMTreeErrorReporter::error(const SAXParseException& toCatch)
 {
     fSawErrors = true;
-    std::cerr << "ERROR at file\n\"" << StrX(toCatch.getSystemId())
-		 << "\",\nline " << toCatch.getLineNumber()
-		 << ", column " << toCatch.getColumnNumber()
-         << ".\nMessage: " << StrX(toCatch.getMessage()) << "\n" << std::endl;
+
+    error_buffer << "ERROR";
+    if (toCatch.getSystemId()[0] != 0) {
+        error_buffer << " at file\n\"" << StrX { toCatch.getSystemId() }
+            << "\",\nline " << toCatch.getLineNumber()
+            << ", column " << toCatch.getColumnNumber() << ".";
+    }
+    error_buffer << "\n    " << StrX(toCatch.getMessage()) << std::endl;
 }
 
 void DOMTreeErrorReporter::fatalError(const SAXParseException& toCatch)
 {
     fSawErrors = true;
-    std::cerr << "FATAL ERROR at file\n\"" << StrX(toCatch.getSystemId())
-		 << "\",\nline " << toCatch.getLineNumber()
-		 << ", column " << toCatch.getColumnNumber()
-         << ".\nMessage: " << StrX(toCatch.getMessage()) << "\n" << std::endl;
+
+    error_buffer << "FATAL ERROR";
+    if (toCatch.getSystemId()[0] != 0) {
+        error_buffer << " at file\n\"" << StrX { toCatch.getSystemId() }
+            << "\",\nline " << toCatch.getLineNumber()
+            << ", column " << toCatch.getColumnNumber() << ".";
+    }
+    error_buffer << "\n    " << StrX(toCatch.getMessage()) << std::endl;
 }
 
 void DOMTreeErrorReporter::resetErrors()
@@ -66,4 +78,13 @@ void DOMTreeErrorReporter::resetErrors()
     fSawErrors = false;
 }
 
+std::string DOMTreeErrorReporter::get_error_message() {
+    std::string message { error_buffer.str() };
+
+    // Clear the error buffer:
+    error_buffer.str("");
+    error_buffer.clear();
+
+    return message;
+}
 

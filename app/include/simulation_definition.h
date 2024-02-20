@@ -17,6 +17,7 @@
 #include "solver.h"
 #include "option_parser.h"
 #include "parser_options.h"
+#include "../DOMTreeErrorReporter.h"
 
 using std::string;
 using std::set;
@@ -78,6 +79,7 @@ private:
     }
 
     xercesc::XercesDOMParser *parser;
+    std::unique_ptr<DOMTreeErrorReporter> error_reporter { new DOMTreeErrorReporter() };
 
     string specification_file;
     string drivers_file;

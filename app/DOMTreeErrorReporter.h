@@ -27,7 +27,7 @@
 
 
 /* Standard Library */
-#include <iostream>
+#include <sstream>
 
 /* Xerces Library */
 #include <xercesc/sax/ErrorHandler.hpp>
@@ -60,6 +60,7 @@ public:
     void error(const SAXParseException& toCatch);
     void fatalError(const SAXParseException& toCatch);
     void resetErrors();
+    std::string get_error_message();
 
     // -----------------------------------------------------------------------
     //  Getter methods
@@ -74,13 +75,13 @@ public:
     //      method. Its used by the main code to suppress output if there are
     //      errors.
     // -----------------------------------------------------------------------
-    bool    fSawErrors;
+    bool fSawErrors;
+    std::ostringstream error_buffer;
 };
 
 inline bool DOMTreeErrorReporter::getSawErrors() const
 {
     return fSawErrors;
 }
-
 
 #endif

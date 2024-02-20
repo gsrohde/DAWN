@@ -20,7 +20,6 @@
 /* DAWN app */
 #include "simulation_definition.h"
 #include "compilation_options.h"
-#include "DOMTreeErrorReporter.h"
 #include "StrX.h"
 #include "xstr.h" // includes XX() macro
 
@@ -217,6 +216,10 @@ void Simulation_definition::read_spec_file()
     try
     {
         parser->parse( specification_file.c_str() );
+        if (error_reporter->getSawErrors()) {
+            error_reporter->resetErrors();
+            throw std::runtime_error(error_reporter->get_error_message());
+        }
     }
     catch (const OutOfMemoryException&)
     {
@@ -241,6 +244,9 @@ void Simulation_definition::read_spec_file()
              cerr << "Message is: " << StrX(err_text) << endl;
 
         errors_occurred = true;
+    }
+    catch (std::runtime_error e) {
+        std::cerr << "\n* Errors occurred while parsing the simulation specification:\n\n" << e.what() << endl;
     }
     catch (...)
     {
@@ -377,6 +383,10 @@ void Simulation_definition::read_drivers_file()
     try
     {
         parser->parse( drivers_file.c_str() );
+        if (error_reporter->getSawErrors()) {
+            error_reporter->resetErrors();
+            throw std::runtime_error(error_reporter->get_error_message());
+        }
     }
     catch (const OutOfMemoryException&)
     {
@@ -402,14 +412,27 @@ void Simulation_definition::read_drivers_file()
 
         errors_occurred = true;
     }
+    catch (std::runtime_error e) {
+        std::cerr << "\n * Errors occurred while parsing the drivers file:\n\n" << e.what() << endl;
+    }
     catch (...)
     {
         cerr << "An error occurred while parsing the drivers file.\n " << endl;
         errors_occurred = true;
     }
 
-    if (errors_occurred || parser->getErrorCount() > 0) {
-        throw runtime_error( "There were errors parsing the drivers file." );
+    auto errs { parser->getErrorCount() };
+    if (errs > 0) {
+        string message { string("There ") +
+                         (errs == 1 ? "was " : "were ") +
+                         to_string(errs) +
+                         (errs == 1 ? " error " : " errors ") +
+                         "parsing the simulation specification file." };
+        throw runtime_error(message);
+    }
+    else if (errors_occurred) {
+        throw runtime_error( "There were errors parsing the simulation "
+                             "specification file." );
     }
 
     // no need to free this pointer - owned by the parent parser object
@@ -662,17 +685,28 @@ void Simulation_definition::configure_parser() {
     parser->setLoadExternalDTD( false );
     parser->setValidationConstraintFatal(parser_options.fast_fail());
     parser->setExitOnFirstFatalError(!parser_options.keep_going());
-    DOMTreeErrorReporter* error_reporter = new DOMTreeErrorReporter();
-    parser->setErrorHandler(error_reporter);
+    parser->setErrorHandler(error_reporter.get());
+
+    // The rest of this method has to do with loading the XML schema
+    // grammar.  If the validation scheme is "never", just return
+    // early:
+
+    if (parser->getValidationScheme() == XercesDOMParser::Val_Never) {
+        return;
+    }
 
     for (auto uri : get_schema_uris()) {
         try {
             parser->loadGrammar(uri.c_str(), Grammar::SchemaGrammarType, true);
+            if (error_reporter->getSawErrors()) {
+                error_reporter->resetErrors();
+                throw std::runtime_error(error_reporter->get_error_message());
+            }
             cerr << "Using schema at " << uri.c_str() << endl;
             break; // Use the first schema document successfully found and successfully parsed.
         }
         catch (std::runtime_error e) {
-            std::cerr << "Error trying to load grammar: " << e.what() << endl;
+            std::cerr << "\n* Error trying to load grammar:\n\n" << e.what() << endl;
         }
     }
 
