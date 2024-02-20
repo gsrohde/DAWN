@@ -152,6 +152,8 @@ Simulation_definition::Simulation_definition(string specification_file,
 
     parser = new XercesDOMParser;
 
+    configure_parser();
+
     read_spec_file();
     if (use_external_drivers_file()) {
         read_drivers_file();
@@ -210,7 +212,6 @@ Simulation_definition::~Simulation_definition()
 void Simulation_definition::read_spec_file()
 {
     check_file_status(specification_file);
-    configure_parser();
 
     bool errors_occurred = false;
     try
@@ -377,7 +378,6 @@ void Simulation_definition::read_spec_file()
 void Simulation_definition::read_drivers_file()
 {
     check_file_status(drivers_file);
-    configure_parser();
 
     bool errors_occurred = false;
     try
