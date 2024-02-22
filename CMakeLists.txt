@@ -16,7 +16,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
 
 option(INSTALL_BIOCRO_HEADERS "Install interface headers for the BioCro library" OFF)
-option(BUILD_SHARED_LIBS "Build libraries as shared libraries by default rather than as static libraries" OFF)
+option(BUILD_SHARED_LIBS "Build libraries as shared libraries by default rather than as static libraries" ON)
 option(INSTALL_GTEST "Install Google Test" OFF)
 
 # Set a default build type if none was specified
@@ -33,7 +33,7 @@ endif()
 enable_testing()
 include(GNUInstallDirs)
 
-add_subdirectory(biocro-lib/src)
+add_subdirectory(biocro-lib)
 add_subdirectory(app)
 add_subdirectory(tests)
 add_subdirectory(doc)

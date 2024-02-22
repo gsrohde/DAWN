@@ -19,7 +19,24 @@ else()
 endif()
 
 
-add_library(dawn_lib)
+include(CMakeDependentOption)
+cmake_dependent_option(
+  DAWNLIB_STATIC
+  "Build dawn_lib as a static library"
+  ON
+  "NOT BUILD_SHARED_LIBS"
+  OFF
+)
+
+# set build type based on dependent option
+if (DAWNLIB_STATIC)
+  set(DAWNLIB_BUILD_TYPE STATIC)
+else ()
+  set(DAWNLIB_BUILD_TYPE SHARED)
+endif ()
+
+# use build type in library definition
+add_library(dawn_lib ${DAWNLIB_BUILD_TYPE})
 
 target_sources(dawn_lib PRIVATE DOMTreeErrorReporter.cpp)
 target_sources(dawn_lib PRIVATE Result_xml_document.cpp)
