@@ -304,8 +304,30 @@ used.  In fact, if there is no solver specification,
 
 Coming soon!
 
-## Using the xml_utilities.R script to generate input files
+## Using the crop_models_to_xml.R script to generate input files
 
-Coming soon!
+The fastest way to create input files for various BioCro crop models
+is to use the crop_models_to_xml.R in conjunction with a working R
+installation and together with the BioCro R package.
+
+The BioCro R package comes with a pre-determined set of crop models
+for miscanthus (Miscanthus x giganteus) and willow (Salix spp.).  It
+also comes with several years worth of weather data that may be used
+as system drivers.
+
+To generate a simulation specification for one of these crops, run the
+script as follows:
+
+        Rscript crop_models_to_xml.R <crop name> <weather data year> <output file name>
+
+where "crop name" is "willow" or "miscanthus_x_giganteus", the weather
+data year is a year between 1995 and 2020 (inclusive), and output file
+name is some suitable name of your choosing.  For example,
+
+        Rscript crop_models_to_xml.R willow 2002 biocro-system.willow.2002.xml
+
+should generate an input file for the willow crop model using weather
+data from 2002.
+
 
 

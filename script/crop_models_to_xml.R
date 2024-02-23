@@ -56,32 +56,51 @@ dataframe_to_xml <- function(top, df) {
     
 library(xml2)
 
-doc <- xml_new_root("simulation-specification")
+document_element <- xml_new_root("simulation-specification")
 
-dyn_sys <- xml_add_child(doc, "dynamical-system")
+solver_element <- xml_add_child(document_element, "solver")
 
-parameters <- xml_add_child(dyn_sys, "parameters")
+solver <- CROP$ode_solver
+xml_set_attr(solver_element, "name", solver$type)
 
-named_list_to_xml(parameters, CROP$parameters)
+# The other solver attributes don't apply to Euler solvers.
+if (!(solver$type %in% c('boost_euler', 'homemade_euler'))) {
+    xml_set_attr(solver_element, "output-step-size", solver$output_step_size)
+    xml_set_attr(solver_element, "adaptive-relative-error-tolerance", solver$adaptive_rel_error_tol)
+    xml_set_attr(solver_element, "adaptive-absolute-error-tolerance", solver$adaptive_abs_error_tol)
+    xml_set_attr(solver_element, "adaptive-maximum-steps", solver$adaptive_max_steps)
+}
 
-initial_state <- xml_add_child(dyn_sys, "initial-state")
+dynamical_system_element <- xml_add_child(document_element, "dynamical-system")
 
-named_list_to_xml(initial_state, CROP$initial_values)
+parameters_element <- xml_add_child(dynamical_system_element, "parameters")
 
-drivers <- xml_add_child(dyn_sys, "drivers")
+## DAWN puts timestep as an attribute on the drivers rather than as a
+## parameter:
+timestep <- CROP$parameters$timestep
+CROP$parameters$timestep <- NULL
+
+named_list_to_xml(parameters_element, CROP$parameters)
+
+initial_state_element <- xml_add_child(dynamical_system_element, "initial-state")
+
+named_list_to_xml(initial_state_element, CROP$initial_values)
+
+drivers_element <- xml_add_child(dynamical_system_element, "drivers")
+xml_set_attr(drivers_element, "timestep", timestep)
 
 weather_data <- get_growing_season_climate(weather[[WEATHER_YEAR]])
-dataframe_to_xml(drivers, weather_data)
+dataframe_to_xml(drivers_element, weather_data)
 
-direct_modules <- xml_add_child(dyn_sys, "direct-modules")
+direct_modules_element <- xml_add_child(dynamical_system_element, "direct-modules")
 
-list_to_xml(direct_modules, CROP$direct_modules)
+list_to_xml(direct_modules_element, CROP$direct_modules)
 
-differential_modules <- xml_add_child(dyn_sys, "differential-modules")
+differential_modules_element <- xml_add_child(dynamical_system_element, "differential-modules")
 
-list_to_xml(differential_modules, CROP$differential_modules)
+list_to_xml(differential_modules_element, CROP$differential_modules)
 
-write_xml(doc, OUTPUT_FILE_NAME)
+write_xml(document_element, OUTPUT_FILE_NAME)
 
 end_time <- Sys.time()
 
