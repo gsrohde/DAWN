@@ -181,11 +181,32 @@ be set interactively if `ccmake` or `cmake-gui` are used.
 
 Here is more extensive information about the various options:
 
+* BUILD_SHARED_LIBS default: ON
+
+    By default, both the BioCro and the DAWN libraries will be built
+    as shared libraries.  Turn this option off to build them as static
+    libraries.
+
+    * BIOCROLIB_STATIC (dependent option; default: ON)
+
+        This option is only available if BUILD_SHARED_LIBS is turned
+        OFF.
+
+    * DAWNLIB_STATIC (dependent option; default: ON)
+
+        This option is only available if BUILD_SHARED_LIBS is turned
+        OFF.
+
+    These two sub-obtions are mainly useful if we want one library to
+    be shared and the other to be static.  For example, if we want to
+    build both `libBioCro.a` and `libdawn_lib.dylib`, we could use the
+    configuration command
+
+            cmake -S <DAWN source directory> -B <build directory> -DBUILD_SHARED_LIBS=OFF -DDAWNLIB_STATIC=OFF
+
 * CMAKE_BUILD_TYPE default: Release
 
     Set to "Debug" to build a debug version of the software.
-
-* BUILD_SHARED_LIBS default: OFF
 
 * CMAKE_INSTALL_PREFIX default: system determined; typically /usr/local on UNIX-like systems
 
@@ -193,15 +214,17 @@ Here is more extensive information about the various options:
     permission to install to the default location.  As noted above,
     this variable may be set using the `--install-prefix` option
     rather than using `-DCMAKE_INSTALL_PREFIX=...`.  **Note that the
-    prefix must be an absolute path to a directory.!**
+    prefix must be an absolute path to a directory!**
 
-* INSTALL_BIOCRO_LIBRARY default: OFF
+* INSTALL_BIOCRO_HEADERS default: OFF
 
-    If the BioCro library is built as a shared library, it must be
-    installed so that libraries and executables that use it have
-    access to it.  On the other hand, if it is built as a static
-    library, it may, but need not be, installed; the DAWN library will
-    include its code.
+    Generally, everything needed to run BioCro simulations is
+    available via the DAWN library functions.  But if, for some
+    reason, you are writing code that needs to access BioCro classes
+    and functions directly, turn this option on.
+
+    Note that even when this option is OFF, the BioCro library itself
+    is always installed.
 
 * INSTALL_GTEST default: OFF
 
@@ -218,9 +241,16 @@ Here is more extensive information about the various options:
     If this option is set to ON, both the _build_ location of the
     simulation specification schema file
     (`simulation-specification.xsd`) and the _install_ location will
-    be placed in the search path for finding the document schema.
+    be placed in the search path for finding the document schema (in
+    that order).  The first schema file found that parses correctly
+    will be used in validating the simulation input and drivers files.
 
+* USE_REMOTE_SCHEMA_URI default: OFF
 
+    If this option is set to ON, and if a suitable local schema file
+    is not found, an attempt to use a version of the schema stored in
+    the GitHub repository will be make.  (Currently, the version used
+    will be the latest version stored on the `development` branch.)
 
 ## Using a separate XML validator
 
@@ -233,9 +263,42 @@ schema file `xml_schema/simulation_input.xsd`, we can run
 
         xmllint --noout --schema xml_schema/simulation_input.xsd sample_input/biocro-system.miscanthus.2002.xml
 
-## The format of the XML specification files
+## The format of the simulation specification and drivers files
 
-Coming soon!
+The formal requirements of the XML specification and drivers files are
+determined by the XML Schema files located in the `app/xml_schema`
+directory.  See the many explanatory notes in those files for details.
+Here we give a brief practical summary of the essentials.
+
+### Informational requirements
+
+In general, the simulation specification must specify details about
+the dynamical system being solved and about the solver being used to
+solve it.
+
+Thus, the specification document will generally consist of a top-level
+element called `simulation-specification` with child elements `solver`
+and `dynamical-system` and so will have the following form:
+
+```
+<simulation-specification>
+
+  <solver ... />
+
+  <dynamical-system>
+    ...
+  </dynamical-system>
+
+</simulation-specification>
+```
+
+The solver element is optional.  If omitted, a default value will be
+used.  In fact, if there is no solver specification,
+`dynamical-system` may be used as the top-level element.
+
+#### Specifying a dynamical system
+
+
 
 ## The format of XML result files
 
