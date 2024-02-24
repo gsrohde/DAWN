@@ -2,14 +2,21 @@
 
 start_time <- Sys.time()
 
-argument_list <- commandArgs(TRUE)
+library(optparse)
 
-if (length(argument_list) != 3) {
-    stop("Usage: Rscript crop_models_to_xml.R <crop name> <weather year> <output file name>")
-}
-CROP_NAME <- argument_list[[1]]
-WEATHER_YEAR <- argument_list[[2]]
-OUTPUT_FILE_NAME <- argument_list[[3]]
+option_list <- list(
+    make_option(c("-d", "--drivers-file"), help="File to write drivers to", action = "store")
+)
+usage_text <- "\n\t%prog [-d drivers_filename] crop year specification_filename\n\t%prog (-h|--help)"
+opt_parser = OptionParser(usage = usage_text, option_list=option_list)
+arguments = parse_args(opt_parser, positional_arguments = 3)
+opt <- arguments$options
+args <- arguments$args
+
+CROP_NAME <- args[[1]]
+WEATHER_YEAR <- args[[2]]
+OUTPUT_FILE_NAME <- args[[3]]
+DRIVERS_FILE_NAME <- opt[["drivers-file"]]
 
 
 library(BioCro)
@@ -86,11 +93,25 @@ initial_state_element <- xml_add_child(dynamical_system_element, "initial-state"
 
 named_list_to_xml(initial_state_element, CROP$initial_values)
 
-drivers_element <- xml_add_child(dynamical_system_element, "drivers")
+
+if (is.null(DRIVERS_FILE_NAME)) {
+    drivers_element <- xml_add_child(dynamical_system_element, "drivers")
+} else {
+    drivers_element <- xml_new_root("drivers")
+
+    driver_placeholder_element <- xml_add_child(dynamical_system_element, "driver-placeholder")
+    xml_set_attr(driver_placeholder_element, "drivers-defined-externally", "true")
+}
+
 xml_set_attr(drivers_element, "timestep", timestep)
 
 weather_data <- get_growing_season_climate(weather[[WEATHER_YEAR]])
 dataframe_to_xml(drivers_element, weather_data)
+
+if (!is.null(DRIVERS_FILE_NAME)) {
+    write_xml(drivers_element, DRIVERS_FILE_NAME)
+}
+
 
 direct_modules_element <- xml_add_child(dynamical_system_element, "direct-modules")
 
