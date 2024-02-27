@@ -55,7 +55,22 @@ main <- function() {
         return(TRUE)
     }
 
-    usage_text <- "\n\t%prog [-d drivers_filename] crop year specification_filename\n\t%prog (-h|--help)"
+    is_valid_weather_year <- function(weather_year) {
+
+        is.wholenumber <-
+            function(x, tol = .Machine$double.eps^0.5)  abs(x - round(x)) < tol
+        
+        yr <- suppressWarnings(as.numeric(weather_year))
+
+        return (!is.na(yr) && is.wholenumber(yr) &&
+                yr >= 1995 && yr <= 2020)
+   }
+
+    is_valid_crop_name <- function(crop_name) {
+        return(crop_name %in% c("willow", "miscanthus_x_giganteus"))
+    }
+
+    usage_text <- "\n\t%prog [-d drivers_filename] crop year specification_filename\n\t%prog (-h|--help|-m|--man)"
     opt_parser <- OptionParser(usage = usage_text)
     opt_parser <- add_option(opt_parser, c("-m", "--man"), help="Print complete usage information", callback = print_usage_manual)
     opt_parser <- add_option(opt_parser, c("-d", "--drivers-file"), help="File to write drivers to", action = "store")
@@ -68,24 +83,38 @@ main <- function() {
     opt <- arguments$options
     pos_args <- arguments$args
 
-    if (length(pos_args) != 3) {
-        option_error("Three arguments are expected")
+    expected_number_of_positionals <- ifelse(is.null(opt$man),
+                                             ifelse(opt$`no-drivers`, 2, 3),
+                                             0)
+    if (length(pos_args) != expected_number_of_positionals) {
+        cat("\nUNEXPECTED NUMBER OF ARGUMENTS\n\n")
+        print_help(opt_parser)
         return()
     }
 
-    if (is.null(opt[["man"]])) {
-        suppress_drivers <- opt[["no-drivers"]]
+    if (is.null(opt$man)) {
+        suppress_drivers <- opt$`no-drivers`
 
         crop_name <- pos_args[[1]]
+
+        if (!is_valid_crop_name(crop_name)) {
+            cat("\nINVALID CROP NAME\nValid crop names are 'willow' and 'miscanthus'.\n\n")
+            return()
+        }
 
         if (suppress_drivers) {
             output_file_name <- pos_args[[2]]
         } else {
             weather_year <- pos_args[[2]]
+
+            if (!is_valid_weather_year(weather_year)) {
+                cat("\nINVALID WEATHER YEAR\nThe weather year must be between 1995 and 2020 (inclusive).\n\n")
+                return()
+            }
             output_file_name <- pos_args[[3]]
         }
 
-        drivers_file_name <- opt[["drivers-file"]]
+        drivers_file_name <- opt$`drivers-file`
 
         generate_files(crop_name, weather_year, output_file_name, drivers_file_name, suppress_drivers)
     }
