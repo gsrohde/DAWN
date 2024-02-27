@@ -43,8 +43,8 @@ General Information:
 main <- function() {
 
     option_error <- function(message) {
-#        cat(opt_parser@usage, "\n\n")
- #       cat(message, "\n")
+        cat(opt_parser@usage, "\n\n")
+        cat(message, "\n")
     }
 
     library(optparse)
@@ -59,6 +59,10 @@ main <- function() {
     opt_parser <- OptionParser(usage = usage_text)
     opt_parser <- add_option(opt_parser, c("-m", "--man"), help="Print complete usage information", callback = print_usage_manual)
     opt_parser <- add_option(opt_parser, c("-d", "--drivers-file"), help="File to write drivers to", action = "store")
+    opt_parser <- add_option(opt_parser, c("--no-drivers"),
+                             help="Suppress generation of drivers",
+                             action = "store_true", default =  FALSE)
+
     arguments = parse_args(opt_parser, positional_arguments = TRUE)
 
     opt <- arguments$options
@@ -70,12 +74,20 @@ main <- function() {
     }
 
     if (is.null(opt[["man"]])) {
+        suppress_drivers <- opt[["no-drivers"]]
+
         crop_name <- pos_args[[1]]
-        weather_year <- pos_args[[2]]
-        output_file_name <- pos_args[[3]]
+
+        if (suppress_drivers) {
+            output_file_name <- pos_args[[2]]
+        } else {
+            weather_year <- pos_args[[2]]
+            output_file_name <- pos_args[[3]]
+        }
+
         drivers_file_name <- opt[["drivers-file"]]
 
-        generate_files(crop_name, weather_year, output_file_name, drivers_file_name)
+        generate_files(crop_name, weather_year, output_file_name, drivers_file_name, suppress_drivers)
     }
 }
 
@@ -97,7 +109,7 @@ list_to_xml <- function(top, l) {
 dataframe_to_xml <- function(top, df) {
     n <- nrow(df)
     names <- names(df)
-    
+
     for (i in seq(1, n)) {
         row <- xml_add_child(top, "row")
         for (name in names) {
@@ -114,9 +126,10 @@ dataframe_to_xml <- function(top, df) {
 }
 
 
-generate_files <- function(crop_name, weather_year, output_file_name, drivers_file_name) {
+generate_files <- function(crop_name, weather_year, output_file_name, drivers_file_name, suppress_drivers) {
 
     library(BioCro)
+
     CROP <- eval(parse(text=crop_name))
 
     library(xml2)
@@ -151,25 +164,27 @@ generate_files <- function(crop_name, weather_year, output_file_name, drivers_fi
 
     named_list_to_xml(initial_state_element, CROP$initial_values)
 
-
-    if (is.null(drivers_file_name)) {
-        drivers_element <- xml_add_child(dynamical_system_element, "drivers")
-    } else {
-        drivers_element <- xml_new_root("drivers")
-
+    if (suppress_drivers || !is.null(drivers_file_name)) {
         driver_placeholder_element <- xml_add_child(dynamical_system_element, "driver-placeholder")
         xml_set_attr(driver_placeholder_element, "drivers-defined-externally", "true")
     }
 
-    xml_set_attr(drivers_element, "timestep", timestep)
+    if (!suppress_drivers) {
+        if (is.null(drivers_file_name)) {
+            drivers_element <- xml_add_child(dynamical_system_element, "drivers")
+        } else {
+            drivers_element <- xml_new_root("drivers")
+        }
 
-    weather_data <- get_growing_season_climate(weather[[weather_year]])
-    dataframe_to_xml(drivers_element, weather_data)
+        xml_set_attr(drivers_element, "timestep", timestep)
 
-    if (!is.null(drivers_file_name)) {
-        write_xml(drivers_element, drivers_file_name)
+        weather_data <- get_growing_season_climate(weather[[weather_year]])
+        dataframe_to_xml(drivers_element, weather_data)
+
+        if (!is.null(drivers_file_name)) {
+            write_xml(drivers_element, drivers_file_name)
+        }
     }
-
 
     direct_modules_element <- xml_add_child(dynamical_system_element, "direct-modules")
 
