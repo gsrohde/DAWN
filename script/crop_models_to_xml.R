@@ -2,30 +2,82 @@
 
 start_time <- Sys.time()
 
-library(optparse)
+manual_text <- r"(
+General Information:
 
-option_list <- list(
-    make_option(c("-d", "--drivers-file"), help="File to write drivers to", action = "store")
-)
-usage_text <- "\n\t%prog [-d drivers_filename] crop year specification_filename\n\t%prog (-h|--help)"
-opt_parser = OptionParser(usage = usage_text, option_list=option_list)
-arguments = parse_args(opt_parser, positional_arguments = 3)
-opt <- arguments$options
-args <- arguments$args
+    This script provides a way to generate input files for various
+    BioCro crop models from the data files in the BioCro R package.
+    The BioCro R package is available on GitHub at
+    https://github.com/biocro/biocro.
 
-CROP_NAME <- args[[1]]
-WEATHER_YEAR <- args[[2]]
-OUTPUT_FILE_NAME <- args[[3]]
-DRIVERS_FILE_NAME <- opt[["drivers-file"]]
+    When run without options, the script expects three arguments: the
+    name of the crop model (either "willow" or
+    "miscanthus_x_giganteous"), a specification of a year between 1995
+    and 2020 (inclusive), and the name for the output file, which will
+    be an XML file suitable for use as the simulation specification
+    required by the DAWN executable.  For example,
 
+        Rscript crop_models_to_xml.R willow 2005 biocro-system.willow.2005.xml
 
-library(BioCro)
-CROP <- eval(parse(text=CROP_NAME))
+    By default, the driver information will be included in the
+    simulation specification output file.  To write it to a separate
+    drivers file, use the "-d" option with the name of the file to
+    write the drivers to.  Here is a typical call:
 
-library(xml2)
+        Rscript crop_models_to_xml.R willow 2005 biocro-system.willow.xml -d 2005_weather.xml
 
+    Since often the same weather data--the same drivers--will be used
+    with multiple crop models, and since, generally, generating the
+    drivers element is the most time-consuming part of the script,
+    there is an option, --no-drivers, to suppress the generation of
+    driver data.  In this case, the year should be left out as well.
+    For example,
 
+        Rscript crop_models_to_xml.R --no-drivers miscanthus-x-giganteus biocro-system.miscanthus.xml
 
+    This will result in a "driver-placeholder" element being used in
+    place of a "drivers" element in the resulting simulation
+    specification file.
+  )"
+
+main <- function() {
+
+    option_error <- function(message) {
+#        cat(opt_parser@usage, "\n\n")
+ #       cat(message, "\n")
+    }
+
+    library(optparse)
+
+    print_usage_manual <- function(option, opt, value, parser) {
+        print_help(parser)
+        cat(manual_text)
+        return(TRUE)
+    }
+
+    usage_text <- "\n\t%prog [-d drivers_filename] crop year specification_filename\n\t%prog (-h|--help)"
+    opt_parser <- OptionParser(usage = usage_text)
+    opt_parser <- add_option(opt_parser, c("-m", "--man"), help="Print complete usage information", callback = print_usage_manual)
+    opt_parser <- add_option(opt_parser, c("-d", "--drivers-file"), help="File to write drivers to", action = "store")
+    arguments = parse_args(opt_parser, positional_arguments = TRUE)
+
+    opt <- arguments$options
+    pos_args <- arguments$args
+
+    if (length(pos_args) != 3) {
+        option_error("Three arguments are expected")
+        return()
+    }
+
+    if (is.null(opt[["man"]])) {
+        crop_name <- pos_args[[1]]
+        weather_year <- pos_args[[2]]
+        output_file_name <- pos_args[[3]]
+        drivers_file_name <- opt[["drivers-file"]]
+
+        generate_files(crop_name, weather_year, output_file_name, drivers_file_name)
+    }
+}
 
 named_list_to_xml <- function(top, l) {
     for (name in names(l)) {
@@ -60,71 +112,80 @@ dataframe_to_xml <- function(top, df) {
         }
     }
 }
-    
-library(xml2)
 
-document_element <- xml_new_root("simulation-specification")
 
-solver_element <- xml_add_child(document_element, "solver")
+generate_files <- function(crop_name, weather_year, output_file_name, drivers_file_name) {
 
-solver <- CROP$ode_solver
-xml_set_attr(solver_element, "name", solver$type)
+    library(BioCro)
+    CROP <- eval(parse(text=crop_name))
 
-# The other solver attributes don't apply to Euler solvers.
-if (!(solver$type %in% c('boost_euler', 'homemade_euler'))) {
-    xml_set_attr(solver_element, "output-step-size", solver$output_step_size)
-    xml_set_attr(solver_element, "adaptive-relative-error-tolerance", solver$adaptive_rel_error_tol)
-    xml_set_attr(solver_element, "adaptive-absolute-error-tolerance", solver$adaptive_abs_error_tol)
-    xml_set_attr(solver_element, "adaptive-maximum-steps", solver$adaptive_max_steps)
+    library(xml2)
+
+    document_element <- xml_new_root("simulation-specification")
+
+    solver_element <- xml_add_child(document_element, "solver")
+
+    solver <- CROP$ode_solver
+    xml_set_attr(solver_element, "name", solver$type)
+
+                                        # The other solver attributes don't apply to Euler solvers.
+    if (!(solver$type %in% c('boost_euler', 'homemade_euler'))) {
+        xml_set_attr(solver_element, "output-step-size", solver$output_step_size)
+        xml_set_attr(solver_element, "adaptive-relative-error-tolerance", solver$adaptive_rel_error_tol)
+        xml_set_attr(solver_element, "adaptive-absolute-error-tolerance", solver$adaptive_abs_error_tol)
+        xml_set_attr(solver_element, "adaptive-maximum-steps", solver$adaptive_max_steps)
+    }
+
+    dynamical_system_element <- xml_add_child(document_element, "dynamical-system")
+
+    parameters_element <- xml_add_child(dynamical_system_element, "parameters")
+
+    ## DAWN puts timestep as an attribute on the drivers rather than as a
+    ## parameter:
+    timestep <- CROP$parameters$timestep
+    CROP$parameters$timestep <- NULL
+
+    named_list_to_xml(parameters_element, CROP$parameters)
+
+    initial_state_element <- xml_add_child(dynamical_system_element, "initial-state")
+
+    named_list_to_xml(initial_state_element, CROP$initial_values)
+
+
+    if (is.null(drivers_file_name)) {
+        drivers_element <- xml_add_child(dynamical_system_element, "drivers")
+    } else {
+        drivers_element <- xml_new_root("drivers")
+
+        driver_placeholder_element <- xml_add_child(dynamical_system_element, "driver-placeholder")
+        xml_set_attr(driver_placeholder_element, "drivers-defined-externally", "true")
+    }
+
+    xml_set_attr(drivers_element, "timestep", timestep)
+
+    weather_data <- get_growing_season_climate(weather[[weather_year]])
+    dataframe_to_xml(drivers_element, weather_data)
+
+    if (!is.null(drivers_file_name)) {
+        write_xml(drivers_element, drivers_file_name)
+    }
+
+
+    direct_modules_element <- xml_add_child(dynamical_system_element, "direct-modules")
+
+    list_to_xml(direct_modules_element, CROP$direct_modules)
+
+    differential_modules_element <- xml_add_child(dynamical_system_element, "differential-modules")
+
+    list_to_xml(differential_modules_element, CROP$differential_modules)
+
+    write_xml(document_element, output_file_name)
+
+    end_time <- Sys.time()
+
+    time_taken <- round(end_time - start_time)
+
+    print(time_taken)
 }
 
-dynamical_system_element <- xml_add_child(document_element, "dynamical-system")
-
-parameters_element <- xml_add_child(dynamical_system_element, "parameters")
-
-## DAWN puts timestep as an attribute on the drivers rather than as a
-## parameter:
-timestep <- CROP$parameters$timestep
-CROP$parameters$timestep <- NULL
-
-named_list_to_xml(parameters_element, CROP$parameters)
-
-initial_state_element <- xml_add_child(dynamical_system_element, "initial-state")
-
-named_list_to_xml(initial_state_element, CROP$initial_values)
-
-
-if (is.null(DRIVERS_FILE_NAME)) {
-    drivers_element <- xml_add_child(dynamical_system_element, "drivers")
-} else {
-    drivers_element <- xml_new_root("drivers")
-
-    driver_placeholder_element <- xml_add_child(dynamical_system_element, "driver-placeholder")
-    xml_set_attr(driver_placeholder_element, "drivers-defined-externally", "true")
-}
-
-xml_set_attr(drivers_element, "timestep", timestep)
-
-weather_data <- get_growing_season_climate(weather[[WEATHER_YEAR]])
-dataframe_to_xml(drivers_element, weather_data)
-
-if (!is.null(DRIVERS_FILE_NAME)) {
-    write_xml(drivers_element, DRIVERS_FILE_NAME)
-}
-
-
-direct_modules_element <- xml_add_child(dynamical_system_element, "direct-modules")
-
-list_to_xml(direct_modules_element, CROP$direct_modules)
-
-differential_modules_element <- xml_add_child(dynamical_system_element, "differential-modules")
-
-list_to_xml(differential_modules_element, CROP$differential_modules)
-
-write_xml(document_element, OUTPUT_FILE_NAME)
-
-end_time <- Sys.time()
-
-time_taken <- round(end_time - start_time)
-
-print(time_taken)
+invisible(main())
