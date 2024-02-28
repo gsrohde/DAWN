@@ -1,5 +1,10 @@
 # Installation, Compilation, and Usage Instructions
 
+_This version of DAWN is built using CMake.  For the version that
+requires Make only, check out the version tagged "cmake-less_version".
+It is **strongly** recommended, however, that you upgrade to the
+CMake-managed versions._
+
 [Note: These instructions are biased towards the macOS operating
 system, because that's what I use.  Your mileage may vary on other
 platforms.]
