@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<simulation-specification xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                          xsi:noNamespaceSchemaLocation="../xml_schema/simulation-specification.xsd">
-  <solver
-      name="homemade_euler"
-      output-step-size="1"
-      adaptive-relative-error-tolerance="1e-5"
-      adaptive-absolute-error-tolerance="1e-5"
-      adaptive-maximum-steps="200"/>
+<simulation-specification>
+  <solver name="homemade_euler"/>
   <dynamical-system>
     <parameters>
       <variable name="absorptivity_par" value="0.8"/>

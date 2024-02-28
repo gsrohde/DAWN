@@ -1,6 +1,10 @@
-# Installation and Compilation Instructions
+# Installation, Compilation, and Usage Instructions
 
-## Get the source code
+[Note: These instructions are biased towards the macOS operating
+system, because that's what I use.  Your mileage may vary on other
+platforms.]
+
+## Get the DAWN source code
 
 Clone _this_ repository using
 
@@ -15,17 +19,20 @@ subdirectory.  If you cloned the DAWN repository without using the
 
 to ensure the `biocro-lib` subdirectory gets populated.
 
-## Build the BioCro library, the DAWN library and executable, and the tests using CMake.
+## Build the BioCro library, the DAWN library and executable, and the tests
+
+DAWN uses CMake to manage the build and testing processes.
 
 1. Install CMake if you do not already have a copy.  See
-https://cmake.org/download/.  Binary distributions are avaibable for
+https://cmake.org/download/.  Binary distributions are available for
 Windows, Linux, and macOS.  In addition, a macOS installation is
 available from [Homebrew](https://brew.sh/).
 
 2. If you haven't already installed it, install the Xerces-C++ XML
 parser.  Installation instructions are at
 https://xerces.apache.org/xerces-c/install-3.html, but it may also be
-installed on many platforms using a package manager.
+installed on many platforms using a package manager.  (Homebrew calls
+the package `xerces-c`.)
 
 3. Create a build directory.  The instructions that follow assume the
 build directory is called `DAWN_build` and has the same parent
@@ -307,13 +314,14 @@ Coming soon!
 ## Using the crop_models_to_xml.R script to generate input files
 
 The fastest way to create input files for various BioCro crop models
-is to use the crop_models_to_xml.R in conjunction with a working R
-installation and together with the BioCro R package.
+is to use the `crop_models_to_xml.R` script in conjunction with a
+working R installation and together with the BioCro R package.
 
 The BioCro R package comes with a pre-determined set of crop models
-for miscanthus (Miscanthus x giganteus) and willow (Salix spp.).  It
-also comes with several years worth of weather data that may be used
-as system drivers.
+for miscanthus (Miscanthus x giganteus) and willow (Salix spp.) (see
+https://biocro.github.io/BioCro-documentation/latest/pkgdown/reference/crop_model_definitions.html).
+It also comes with several years worth of weather data that may be
+used as system drivers (see https://biocro.github.io/BioCro-documentation/latest/pkgdown/reference/cmi_weather_data.html).
 
 To generate a simulation specification for one of these crops, run the
 script as follows:
@@ -321,13 +329,44 @@ script as follows:
         Rscript crop_models_to_xml.R <crop name> <weather data year> <output file name>
 
 where "crop name" is "willow" or "miscanthus_x_giganteus", the weather
-data year is a year between 1995 and 2020 (inclusive), and output file
-name is some suitable name of your choosing.  For example,
+data year is a year between 1995 and 2020 (inclusive), and "output
+file name" is some suitable name of your choosing.  For example,
 
         Rscript crop_models_to_xml.R willow 2002 biocro-system.willow.2002.xml
 
 should generate an input file for the willow crop model using weather
 data from 2002.
 
+### Separating out the drivers file
 
+It is convenient to be able to use a crop model with weather data from
+multiple years.  For this reason, DAWN provides the option to draw the
+drivers information from a separate file (see _Using external drivers
+files_ above).  Thus, the generation script also provides the option
+to put the generated weather information in a separate file by using
+the `-d` option.  For example, to make an input file for the willow
+crop model, but with the 2002 weather data in a separate file, we
+could alter the above run command to
 
+        Rscript crop_models_to_xml.R willow 2002 biocro-system.willow.xml -d 2002_weather.xml
+
+### Skipping drivers generation
+
+Lastly, we don't always want to generate the weather data file
+whenever we generate the input file for a crop model: the generation
+of the weather data is by far the most time-consuming step of the
+script.  To skip this step, use the `--no-drivers` option.
+
+For example, suppose we have just used the previous command to
+generate `biocro-system.willow.xml`, which contains the crop model
+information for willow, and `2002_weather.xml`, which contains the
+weather data for 2002.  Suppose we now want a file containing the crop
+model information for miscanthus, but we don't want to go through the
+time-consuming process of regenerating the 2002 weather data file.
+Then we can simply run
+
+        Rscript crop_models_to_xml.R miscanthus_x_giganteous biocro-system.miscanthus.xml --no-drivers
+
+Here, we have left out the year parameter and have added the
+`--no-drivers` option.  This command takes almost no time to complete
+its run.

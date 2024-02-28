@@ -12,7 +12,7 @@ General Information:
 
     When run without options, the script expects three arguments: the
     name of the crop model (either "willow" or
-    "miscanthus_x_giganteous"), a specification of a year between 1995
+    "miscanthus_x_giganteus"), a specification of a year between 1995
     and 2020 (inclusive), and the name for the output file, which will
     be an XML file suitable for use as the simulation specification
     required by the DAWN executable.  For example,
@@ -33,7 +33,7 @@ General Information:
     driver data.  In this case, the year should be left out as well.
     For example,
 
-        Rscript crop_models_to_xml.R --no-drivers miscanthus-x-giganteus biocro-system.miscanthus.xml
+        Rscript crop_models_to_xml.R --no-drivers miscanthus_x_giganteus biocro-system.miscanthus.xml
 
     This will result in a "driver-placeholder" element being used in
     place of a "drivers" element in the resulting simulation
@@ -98,7 +98,7 @@ main <- function() {
         crop_name <- pos_args[[1]]
 
         if (!is_valid_crop_name(crop_name)) {
-            cat("\nINVALID CROP NAME\nValid crop names are 'willow' and 'miscanthus'.\n\n")
+            cat("\nINVALID CROP NAME\nValid crop names are 'willow' and 'miscanthus_x_giganteus'.\n\n")
             return()
         }
 
