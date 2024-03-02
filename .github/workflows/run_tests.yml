@@ -44,7 +44,7 @@ jobs:
     - name: Build all targets
       run: |
         cmake -B build -S .
-        cmake --build build
+        cmake --build build -v
     - name: Run Tests
       run: |
         cd build
