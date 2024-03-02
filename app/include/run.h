@@ -1,4 +1,5 @@
 /* Standard Library */
+#include <memory>
 #include <string>
 #include <vector>
 
