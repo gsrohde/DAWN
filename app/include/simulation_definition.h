@@ -2,8 +2,9 @@
 #define SIMULATION_DEFINITION_H
 
 /* Standard Library */
-#include <string>
+#include <memory>
 #include <set>
+#include <string>
 
 /* Xerces Library */
 #include <xercesc/dom/DOM.hpp>
