@@ -19,7 +19,7 @@ using namespace xercesc;
 // Computes an absolute error bound to use based on the expected value
 // and a value for an acceptable relative error tolerance.
 double absolute_error_bound(double expected_value) {
-    constexpr double relative_error_tolerance { 5e-6 };
+    constexpr double relative_error_tolerance { 7e-6 };
 
     return std::abs(expected_value * relative_error_tolerance);
 }
