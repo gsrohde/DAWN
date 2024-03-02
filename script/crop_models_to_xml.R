@@ -2,7 +2,15 @@
 
 start_time <- Sys.time()
 
-manual_text <- r"(
+USAGE_TEXT <- r"(
+    %prog <crop> <year> <spec filename> [(-d|--drivers-file) <drivers filename>]
+    %prog <crop> <spec filename> --no-drivers
+    %prog (-h|--help|-m|--man)
+
+(Option parameters may appear before, between, or after positional parameters.)
+)"
+
+MANUAL_TEXT <- r"(
 General Information:
 
     This script provides a way to generate input files for various
@@ -53,7 +61,7 @@ main <- function() {
     ## predetermined, which is why we have three unused parameters.
     print_usage_manual <- function(option, opt, value, parser) {
         print_help(parser)
-        cat(manual_text)
+        cat(MANUAL_TEXT)
         return(TRUE)
     }
 
@@ -72,8 +80,7 @@ main <- function() {
         return(crop_name %in% c("willow", "miscanthus_x_giganteus"))
     }
 
-    usage_text <- "\n\t%prog [-d drivers_filename] crop year specification_filename\n\t%prog (-h|--help|-m|--man)"
-    opt_parser <- OptionParser(usage = usage_text)
+    opt_parser <- OptionParser(usage = USAGE_TEXT)
     opt_parser <- add_option(opt_parser, c("-m", "--man"), help="Print complete usage information", callback = print_usage_manual)
     opt_parser <- add_option(opt_parser, c("-d", "--drivers-file"), help="File to write drivers to", action = "store")
     opt_parser <- add_option(opt_parser, c("--no-drivers"),
