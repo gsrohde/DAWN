@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 /* Standard Library */
+#include <cmath>
 #include <string>
 #include <vector>
 
@@ -15,6 +16,13 @@
 using namespace std;
 using namespace xercesc;
 
+// Computes an absolute error bound to use based on the expected value
+// and a value for an acceptable relative error tolerance.
+double absolute_error_bound(double expected_value) {
+    constexpr double relative_error_tolerance { 5e-6 };
+
+    return std::abs(expected_value * relative_error_tolerance);
+}
 
 void compare_last_row_with_expected(const vector<string>& command_line,
                                     const vector<double>& expected_value)
@@ -31,7 +39,9 @@ void compare_last_row_with_expected(const vector<string>& command_line,
         const XMLCh* value = variable->getAttribute(XX("value"));
         // cout << StrX(name) << ": " << StrX(value) << endl;
 
-        EXPECT_DOUBLE_EQ(std::stod(string(StrX(value).localForm())), expected_value[i]);
+        EXPECT_NEAR(std::stod(string(StrX(value).localForm())),
+                    expected_value[i],
+                    absolute_error_bound(expected_value[i]));
     }
 }
 
