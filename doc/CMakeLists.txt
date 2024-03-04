@@ -11,4 +11,4 @@ endif()
 
 
 include(Doxygen)
-Doxygen(Document_DawnApp ../app)
+Doxygen(docs ../app)
