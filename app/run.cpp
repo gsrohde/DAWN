@@ -9,13 +9,20 @@
 #include "Result_xml_document.h"
 #include "run.h"
 
-std::unique_ptr<Result_xml_document> run(vector<string> command_line) {
-    std::vector<const char*> cstrings{};
+std::unique_ptr<Result_xml_document> run(vector<string> command_line_args) {
+    // cstrings will take the place of argV when calling the
+    // Option_parser constructor.  Since the constructor expects the
+    // command line options to start with the *second* element of the
+    // array (argV[0] containing the name of the command itself), we
+    // prepend command_line_args with a "dummy" element to represent
+    // this first element.
+    std::vector<const char*> cstrings{"dummy"};
 
-    // Convert command_line to a C-style array so that it may be
+    // Convert command_line_args to a C-style array so that it may be
     // passed to the Option_parser constructor.
-    for(const auto& string : command_line)
+    for (const auto& string : command_line_args) {
         cstrings.push_back(string.c_str());
+    }
 
     // optind is a global variable used by getopt and getopt_long that
     // must be reset between test invocations:

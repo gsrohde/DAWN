@@ -24,10 +24,10 @@ double absolute_error_bound(double expected_value) {
     return std::abs(expected_value * relative_error_tolerance);
 }
 
-void compare_last_row_with_expected(const vector<string>& command_line,
+void compare_last_row_with_expected(const vector<string>& command_line_args,
                                     const vector<double>& expected_value)
 {
-    auto result = run(command_line);
+    auto result = run(command_line_args);
 
     DOMNodeList* row_list = result->get_elements_by_tag_name("row");
     DOMElement* last_item = dynamic_cast< DOMElement* >(row_list->item(row_list->getLength() - 1));
@@ -47,7 +47,7 @@ void compare_last_row_with_expected(const vector<string>& command_line,
 
 
 TEST(RegressionTests, TestHarmonicOscillator) {
-    vector<string> command_line {"", "../app/sample_input/harmonic_oscillator_system.xml"};
+    vector<string> command_line_args {"../app/sample_input/harmonic_oscillator_system.xml"};
 
     // The EXPECT tests called in the compare_last_row_with_expected
     // function called below make use of the fact that
@@ -62,13 +62,13 @@ TEST(RegressionTests, TestHarmonicOscillator) {
         0.031853 // velocity
     };
 
-    compare_last_row_with_expected(command_line, expected_value);
+    compare_last_row_with_expected(command_line_args, expected_value);
 }
 
 
 TEST(RegressionTests, TestMiscanthus2002) {
-    vector<string> command_line {"", "-d", "../app/sample_input/2002_weather.xml",
-                                 "../app/sample_input/biocro-system.miscanthus.xml"};
+    vector<string> command_line_args {"-d", "../app/sample_input/2002_weather.xml",
+                                      "../app/sample_input/biocro-system.miscanthus.xml"};
 
     // The EXPECT tests called in the compare_last_row_with_expected
     // function called below make use of the fact that
@@ -140,13 +140,13 @@ TEST(RegressionTests, TestMiscanthus2002) {
         2002 // year
     };
 
-    compare_last_row_with_expected(command_line, expected_value);
+    compare_last_row_with_expected(command_line_args, expected_value);
 }
 
 
 TEST(RegressionTests, TestMiscanthus2005) {
-    vector<string> command_line {"", "-d", "../app/sample_input/2005_weather.xml",
-                                 "../app/sample_input/biocro-system.miscanthus.xml"};
+    vector<string> command_line_args {"-d", "../app/sample_input/2005_weather.xml",
+                                      "../app/sample_input/biocro-system.miscanthus.xml"};
 
     // The EXPECT tests called in the compare_last_row_with_expected
     // function called below make use of the fact that
@@ -218,13 +218,13 @@ TEST(RegressionTests, TestMiscanthus2005) {
         2005 // year
     };
 
-    compare_last_row_with_expected(command_line, expected_value);
+    compare_last_row_with_expected(command_line_args, expected_value);
 }
 
 
 TEST(RegressionTests, TestWillow2005) {
-    vector<string> command_line {"", "-d", "../app/sample_input/2005_weather.xml",
-                                 "../app/sample_input/biocro-system.willow.xml"};
+    vector<string> command_line_args {"-d", "../app/sample_input/2005_weather.xml",
+                                      "../app/sample_input/biocro-system.willow.xml"};
 
     // The EXPECT tests called in the compare_last_row_with_expected
     // function called below make use of the fact that
@@ -296,13 +296,13 @@ TEST(RegressionTests, TestWillow2005) {
         2005 // year
     };
 
-    compare_last_row_with_expected(command_line, expected_value);
+    compare_last_row_with_expected(command_line_args, expected_value);
 }
 
 
 TEST(RegressionTests, TestWillow2002) {
-    vector<string> command_line {"", "-d", "../app/sample_input/2002_weather.xml",
-                                 "../app/sample_input/biocro-system.willow.xml"};
+    vector<string> command_line_args {"-d", "../app/sample_input/2002_weather.xml",
+                                      "../app/sample_input/biocro-system.willow.xml"};
 
     // The EXPECT tests called in the compare_last_row_with_expected
     // function called below make use of the fact that
@@ -374,5 +374,5 @@ TEST(RegressionTests, TestWillow2002) {
         2002 // year
     };
 
-    compare_last_row_with_expected(command_line, expected_value);
+    compare_last_row_with_expected(command_line_args, expected_value);
 }
