@@ -9,5 +9,5 @@
 
 
 int run(int argC, char* argV[]);
-std::unique_ptr<Result_xml_document> run(std::vector<std::string> command_line);
+std::unique_ptr<Result_xml_document> run(std::vector<std::string> command_line_args);
 std::unique_ptr<Result_xml_document> run(Option_parser op);
