@@ -18,7 +18,10 @@ endif()
 # )
 # FetchContent_MakeAvailable(doxygen-awesome-css)
 
-function(Doxygen target input)
+function(Doxygen target)
+  set(input ${ARGN})
+  list(TRANSFORM input PREPEND "${PROJECT_SOURCE_DIR}/")
+
   set(NAME "${target}")
   set(DOXYGEN_HTML_OUTPUT     ${PROJECT_BINARY_DIR}/${NAME})
   set(DOXYGEN_GENERATE_HTML         YES)
@@ -34,7 +37,7 @@ function(Doxygen target input)
 
   if(DOXYGEN_FOUND)
     doxygen_add_docs(${NAME}
-        ${PROJECT_SOURCE_DIR}/${input}
+        ${input}
         COMMENT "Generate HTML documentation"
     )
   endif()
