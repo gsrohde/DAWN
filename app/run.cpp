@@ -9,6 +9,27 @@
 #include "Result_xml_document.h"
 #include "run.h"
 
+/**
+ * Run a BioCro simulation using the input file and the options
+ * specified in the command_line_args argument.
+ *
+ * This is the primary entry point for applications using the DAWN
+ * library instead of using the DAWN executable.
+ *
+ * @param[in] command_line_args
+ * @parblock
+ * A vector of strings corresponding to the command line options and
+ * arguments that would be passed to the DAWN executable.  Run the
+ * DAWN executable (`dawn`) with the `-h` option to see a list of
+ * options.
+ *
+ * At a minimum, the vector should contain a string specifying the
+ * path to an XML file specifying the simulation to be run.
+ * @endparblock
+ *
+ * @returns A pointer to a Result_xml_document object representing the
+ * result of running the simulation.
+ */
 std::unique_ptr<Result_xml_document> run(vector<string> command_line_args) {
     // cstrings will take the place of argV when calling the
     // Option_parser constructor.  Since the constructor expects the
@@ -32,6 +53,18 @@ std::unique_ptr<Result_xml_document> run(vector<string> command_line_args) {
     return run(op);
 }
 
+/**
+ * Run a BioCro simulation based on the options stored in an
+ * Option_parser object.
+ *
+ * This signature of the run function is probably most useful as the
+ * backend to more user-friendly versions of the function.
+ *
+ * @param[in] op An Option_parser object.
+ *
+ * @returns A pointer to a Result_xml_document object representing the
+ * result of running the simulation.
+ */
 std::unique_ptr<Result_xml_document> run(Option_parser op) {
     try {
         Simulation_definition sim_def(op);
@@ -70,6 +103,28 @@ std::unique_ptr<Result_xml_document> run(Option_parser op) {
     }
 }
 
+/**
+ * Run a BioCro simulation using the input file and the options
+ * specified in the argV argument.
+ *
+ * This is the workhorse for the `dawn` executable: it expects to be
+ * handed the arguments---argC and argV---passed to the `main`
+ * function.
+ *
+ * @param[in] argC An integer; this should be equal to the number of items in argV.
+ *
+ * @param[in] argV
+ * @parblock
+ * A C-style array consisting of C-style strings representing
+ * command-line arguments.  Run the DAWN executable (`dawn`) with the
+ * `-h` option to see a list of options.
+ *
+ * At a minimum, argV should contain a string specifying the path to
+ * an XML file specifying the simulation to be run.
+ * @endparblock
+ *
+ * @returns 0
+ */
 int run(int argC, char* argV[]) {
     Option_parser op(argC, argV);
     auto doc = run(op);
