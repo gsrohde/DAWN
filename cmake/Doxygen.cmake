@@ -20,6 +20,11 @@ if(USE_DOXYGEN_AWESOME_STYLESHEET)
   FetchContent_MakeAvailable(doxygen-awesome-css)
 endif()
 
+# Create a documentation target using the name passed as the first
+# argument.  Additional arguments are used to specify files and
+# directories to be used as Doxygen input.  These should be specifed
+# as path relative to the CMake list file from which this function is
+# called.
 function(Doxygen target)
   set(input ${ARGN})
   list(TRANSFORM input PREPEND "${PROJECT_SOURCE_DIR}/")
@@ -27,7 +32,7 @@ function(Doxygen target)
   set(NAME "${target}")
   set(DOXYGEN_HTML_OUTPUT     ${PROJECT_BINARY_DIR}/${NAME})
   set(DOXYGEN_GENERATE_HTML         YES)
-  if(ADD_TREEVIEW)
+  if(ADD_TREEVIEW OR NOT DEFINED ADD_TREEVIEW)
     set(DOXYGEN_GENERATE_TREEVIEW   YES)
   else()
     set(DOXYGEN_GENERATE_TREEVIEW    NO)
