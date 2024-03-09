@@ -18,6 +18,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
 option(INSTALL_BIOCRO_HEADERS "Install interface headers for the BioCro library" OFF)
 option(BUILD_SHARED_LIBS "Build libraries as shared libraries by default rather than as static libraries" ON)
 option(INSTALL_GTEST "Install Google Test" OFF)
+option(CUSTOMIZE_DOXYGEN "Customize the Doxygen documentation" OFF)
 
 # Set a default build type if none was specified
 set(default_build_type "Release")
