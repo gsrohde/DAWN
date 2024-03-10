@@ -33,5 +33,16 @@ cmake_dependent_option(
   OFF
 )
 
+# Add string options that are available only when CUSOMIZE_DOXYGEN is
+# turned on.  (cmake_dependent_option handles only boolean options.)
+if(CUSTOMIZE_DOXYGEN)
+  set(DOXYGEN_HTML_COLORSTYLE_HUE 120 CACHE STRING "0 to 360: 0 = RED, 120 = GREEN, 240 = BLUE")
+  set(DOXYGEN_HTML_COLORSTYLE_SAT 100 CACHE STRONG "0 = GRAY-SCALE, 255 = MOST VIVID; DEFAULT = 100")
+else()
+  # Unset these cache variables if customization is turned back off.
+  unset(DOXYGEN_HTML_COLORSTYLE_HUE CACHE) # Doxygen default is 220 (between cyan and blue)
+  unset(DOXYGEN_HTML_COLORSTYLE_SAT CACHE) # Doxygen default is 100
+endif()
+
 include(Doxygen)
 Doxygen(docs . ../app)
