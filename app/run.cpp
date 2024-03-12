@@ -1,3 +1,5 @@
+#include "run.h"
+
 /* BioCro Library */
 #include <framework/biocro_simulation.h>
 #include <framework/module_factory.h>
@@ -7,7 +9,6 @@
 #include "option_parser.h"
 #include "simulation_definition.h"
 #include "Result_xml_document.h"
-#include "run.h"
 
 /**
  * Run a BioCro simulation using the input file and the options

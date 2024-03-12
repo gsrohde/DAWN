@@ -1,6 +1,9 @@
+#include "option_parser.h"
+
+/* GNU library */
 #include <getopt.h>
 
-#include "option_parser.h"
+/* DAWN app */
 #include "compilation_options.h"
 
 using std::cerr;

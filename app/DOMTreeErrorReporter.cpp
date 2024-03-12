@@ -22,6 +22,7 @@
  * limitations under the License.
  */
 
+#include "DOMTreeErrorReporter.h"
 
 /* Standard Library */
 #include <string>
@@ -30,7 +31,6 @@
 #include <xercesc/sax/SAXParseException.hpp>
 
 /* DAWN app */
-#include "DOMTreeErrorReporter.h"
 #include "StrX.h"
 
 

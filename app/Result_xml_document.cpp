@@ -1,3 +1,5 @@
+#include "Result_xml_document.h"
+
 /* Standard Library */
 #include <algorithm>
 #include <sstream>
@@ -11,7 +13,6 @@
 #include <xercesc/framework/LocalFileFormatTarget.hpp>
 
 /* DAWN app */
-#include "Result_xml_document.h"
 #include "StrX.h"
 #include "xstr.h" // includes XX() macro
 

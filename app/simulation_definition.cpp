@@ -1,3 +1,5 @@
+#include "simulation_definition.h"
+
 /* Standard Library */
 #include <string>
 #include <iostream>
@@ -18,7 +20,6 @@
 #include <xercesc/util/OutOfMemoryException.hpp>
 
 /* DAWN app */
-#include "simulation_definition.h"
 #include "compilation_options.h"
 #include "StrX.h"
 #include "xstr.h" // includes XX() macro
