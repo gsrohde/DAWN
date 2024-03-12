@@ -8,6 +8,7 @@
 
 /* Xerces Library */
 #include <xercesc/dom/DOMDocument.hpp>
+#include <xercesc/dom/DOMNodeList.hpp>
 
 /* This is the only declaration we need from the BioCro library, and
    we make it directly rather than including state_map.h: */

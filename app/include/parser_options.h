@@ -1,9 +1,14 @@
 #ifndef PARSER_OPTIONS_H
 #define PARSER_OPTIONS_H
 
-#include <xercesc/parsers/XercesDOMParser.hpp>
+#include <xercesc/parsers/AbstractDOMParser.hpp> // XercesDOMParser;
+                                                 // We don't need the
+                                                 // full
+                                                 // XercesDOMParser
+                                                 // declaration in
+                                                 // this file.
 
-using xercesc::XercesDOMParser;
+using xercesc::AbstractDOMParser;
 
 
 class Parser_options {
@@ -14,17 +19,17 @@ class Parser_options {
 
     Parser_options(std::string validation_scheme) {
         if (validation_scheme == "never") {
-            this->validation_scheme = XercesDOMParser::Val_Never;
+            this->validation_scheme = AbstractDOMParser::Val_Never;
         }
         else if (validation_scheme == "auto") {
-            this->validation_scheme = XercesDOMParser::Val_Auto;
+            this->validation_scheme = AbstractDOMParser::Val_Auto;
         }
         else if (validation_scheme != "always") {
             throw std::runtime_error(validation_scheme + " is not a recognized validation scheme.");
         }
     }
 
-    inline XercesDOMParser::ValSchemes get_validation_scheme() {
+    inline AbstractDOMParser::ValSchemes get_validation_scheme() {
         return validation_scheme;
     }
     inline bool keep_going() {
@@ -35,7 +40,7 @@ class Parser_options {
     }
     
  private:
-    XercesDOMParser::ValSchemes validation_scheme { XercesDOMParser::Val_Always };
+    AbstractDOMParser::ValSchemes validation_scheme { AbstractDOMParser::Val_Always };
     bool keep_going_option {false};
     bool fast_fail_option {false};
 };

@@ -29,10 +29,11 @@
 #include <iostream>
 
 /* Xerces Library */
-#include <xercesc/util/XMLString.hpp>
+#include <xercesc/util/XMLString.hpp> // XMLString; includes XMLCh typedef
 
 using std::ostream;
 using xercesc::XMLString;
+// (XMLCh is a global typedef.)
 
 // ---------------------------------------------------------------------------
 //  This is a simple class that lets us do easy (though not terribly efficient)

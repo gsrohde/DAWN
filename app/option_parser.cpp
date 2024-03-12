@@ -56,13 +56,13 @@ Option_parser::Option_parser(int argC, char* argV[]) {
                  break;
              case 'v':
                  if (!strcmp(optarg, "never")) {
-                     parser_options.validation_scheme = XercesDOMParser::Val_Never;
+                     parser_options.validation_scheme = AbstractDOMParser::Val_Never;
                  }
                  else if (!strcmp(optarg, "auto")) {
-                     parser_options.validation_scheme = XercesDOMParser::Val_Auto;
+                     parser_options.validation_scheme = AbstractDOMParser::Val_Auto;
                  }
                  else if (!strcmp(optarg, "always")) {
-                     parser_options.validation_scheme = XercesDOMParser::Val_Always;
+                     parser_options.validation_scheme = AbstractDOMParser::Val_Always;
                  }
                  else {
                      cerr << "Unknown validation schema (-v) value: " << optarg << endl;

@@ -5,7 +5,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "parser_options.h"
+#include "parser_options.h" // for Parser_options
 
 using std::cerr;
 using std::cout;

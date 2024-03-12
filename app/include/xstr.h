@@ -27,9 +27,10 @@
 
 
 /* Xerces Library */
-#include <xercesc/util/XMLString.hpp>
+#include <xercesc/util/XMLString.hpp> // XMLString; includes XMLCh typedef
 
 using xercesc::XMLString;
+// (XMLCh is a global typedef.)
 
 class XStr
 {
