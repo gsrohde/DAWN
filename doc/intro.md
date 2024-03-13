@@ -32,3 +32,17 @@ the command-line help given by running `dawn --help`.
 
 Application programs may use the DAWN library to run simulations as part of their processing.
 
+In some cases, we may want to incorporate DAWN's ability to run
+simulations into some other application rather than simply running the
+`dawn` command-line app.  Here, we provide some guidelines as to how
+this can be done.
+
+## An example
+
+The file
+[regression_tests.cpp](https://github.com/gsrohde/use_dawn_lib/blob/master/regression_tests.cpp)
+in the [use_dawn_lib](https://github.com/gsrohde/use_dawn_lib)
+repository demonstrates the use of the DAWN library in another
+application.  (This application is just a rewriting of
+`tests/test_regression.cpp` in this repository as a free-standing
+application.)
