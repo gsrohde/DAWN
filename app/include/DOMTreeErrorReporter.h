@@ -27,7 +27,7 @@
 
 
 /* Standard Library */
-#include <sstream>
+#include <sstream> // for ostringstream
 
 /* Xerces Library */
 #include <xercesc/sax/ErrorHandler.hpp>
@@ -67,6 +67,7 @@ public:
     // -----------------------------------------------------------------------
     bool getSawErrors() const;
 
+private:
     // -----------------------------------------------------------------------
     //  Private data members
     //
