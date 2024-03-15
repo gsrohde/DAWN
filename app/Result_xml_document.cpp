@@ -1,16 +1,24 @@
 #include "Result_xml_document.h"
 
 /* Standard Library */
-#include <algorithm>
-#include <sstream>
+#include <algorithm> // for sort
+#include <iostream> // for cerr, endl
+#include <sstream> // for stringstream
 #include <string>
 
 /* Xerces Library */
-#include <xercesc/dom/DOM.hpp>
+#include <xercesc/dom/DOMElement.hpp>
+#include <xercesc/dom/DOMException.hpp>
+#include <xercesc/dom/DOMImplementation.hpp>
+#include <xercesc/dom/DOMImplementationLS.hpp>
+#include <xercesc/dom/DOMImplementationRegistry.hpp>
+#include <xercesc/dom/DOMLSOutput.hpp>
+#include <xercesc/dom/DOMLSSerializer.hpp>
+#include <xercesc/dom/DOMNodeList.hpp>
+#include <xercesc/framework/LocalFileFormatTarget.hpp>
+#include <xercesc/framework/StdOutFormatTarget.hpp>
 #include <xercesc/util/IOException.hpp>
 #include <xercesc/util/OutOfMemoryException.hpp>
-#include <xercesc/framework/StdOutFormatTarget.hpp>
-#include <xercesc/framework/LocalFileFormatTarget.hpp>
 
 /* DAWN app */
 #include "StrX.h"

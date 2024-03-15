@@ -7,7 +7,8 @@
 #include <string>
 
 /* Xerces Library */
-#include <xercesc/dom/DOM.hpp>
+#include <xercesc/dom/DOMElement.hpp>
+#include <xercesc/dom/DOMNode.hpp>
 #include <xercesc/parsers/XercesDOMParser.hpp>
 
 /* BioCro */

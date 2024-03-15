@@ -26,7 +26,7 @@
  */
 
 /* Standard Library */
-#include <iostream>
+#include <ostream>
 
 /* Xerces Library */
 #include <xercesc/util/XMLString.hpp> // XMLString; includes XMLCh typedef
