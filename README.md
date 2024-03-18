@@ -329,6 +329,15 @@ Here is more extensive information about the various options:
         the HTML Doxygen documentation output.  Values may range from
         0 (gray-scales only) to 255 (the most vivid colors).
 
+    * Document_XercesC_Headers (_default:_ OFF)
+
+        Include the XercesC header files among the files for Doxygen
+        to document.  Since these files don't include Doxygen-style
+        comments, this option is probably mainly useful as a way to
+        show all Xerces header files in the dependency graph of file
+        includes and as a convenient way to browse the source code in
+        these header files.
+
 ## Using a separate XML validator
 
 The diagnostic information provided by the app during validation of

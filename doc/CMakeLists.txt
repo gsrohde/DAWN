@@ -32,6 +32,13 @@ cmake_dependent_option(
   "CUSTOMIZE_DOXYGEN"
   OFF
 )
+cmake_dependent_option(
+  Document_XercesC_Headers
+  "Include XercesC header files in Doxygen input"
+  OFF
+  "CUSTOMIZE_DOXYGEN"
+  OFF
+)
 
 # Add string options that are available only when CUSOMIZE_DOXYGEN is
 # turned on.  (cmake_dependent_option handles only boolean options.)

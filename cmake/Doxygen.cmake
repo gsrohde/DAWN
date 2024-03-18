@@ -53,6 +53,13 @@ function(Doxygen target)
     set(DOXYGEN_EXTRACT_PRIVATE      NO)
   endif()
 
+  if(Document_XercesC_Headers)
+    find_package(XercesC 3.2)
+    if(XercesC_FOUND)
+      list(APPEND input ${XercesC_INCLUDE_DIRS}/xercesc)
+    endif()
+  endif()
+
   if(DOXYGEN_FOUND)
     doxygen_add_docs(${NAME}
         ${input}
