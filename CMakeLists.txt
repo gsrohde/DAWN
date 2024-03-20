@@ -48,7 +48,7 @@ if(INSTALL_BIOCRO_HEADERS)
   )
 endif()
 
-install(TARGETS dawn_lib
+install(TARGETS dawn
           ARCHIVE
           PUBLIC_HEADER
             DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/dawn
@@ -58,4 +58,4 @@ install(TARGETS dawn_lib
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_DATADIR}/dawn/
         DESTINATION ${CMAKE_INSTALL_DATADIR}/dawn)
 
-install(TARGETS dawn)
+install(TARGETS runsim)

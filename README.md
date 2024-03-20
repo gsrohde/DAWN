@@ -83,10 +83,10 @@ build directory with -B:
 
 ## Running the application.
 
-The executable is called `dawn`.  In what follows, we assume that you
-haven't necessarily installed this to your system.  Instead, we will
-run the copy created in the `<build directory>/app` directory by the
-build step.
+The executable is called `runsim`.  In what follows, we assume that
+you haven't necessarily installed this to your system.  Instead, we
+will run the copy created in the `<build directory>/app` directory by
+the build step.
 
 Start by CD-ing to the `app` directory with
 
@@ -98,27 +98,27 @@ Start by CD-ing to the `app` directory with
 
 To see usage information, run
 
-        ./dawn -h
+        ./runsim -h
 
-(Note: If you installed dawn to a location in you path, you can just
-run this with `dawn -h`.)
+(Note: If you installed runsim to a location in your path, you can
+just run this with `runsim -h`.)
 
 ### Trying out the samples.
 
 Several sample XML input files are provided in the directory
 `DAWN_build/app/sample_input`.  For example,
 
-        ./dawn sample_input/harmonic_oscillator_system.xml
+        ./runsim sample_input/harmonic_oscillator_system.xml
 
 will run a simulation of a harmonic oscillator system and write the
 results to standard output.  To write to a file instead, use the
 `--out` (or `-o`) option:
 
-        ./dawn --out=harmonic_oscillator_result.xml sample_input/harmonic_oscillator_system.xml
+        ./runsim --out=harmonic_oscillator_result.xml sample_input/harmonic_oscillator_system.xml
 
 To try this on a crop model, try using the input file `sample_input/biocro-system.miscanthus.2002.xml`:
 
-        ./dawn --out=miscanthus_simulation_result.xml sample_input/biocro-system.miscanthus.2002.xml
+        ./runsim --out=miscanthus_simulation_result.xml sample_input/biocro-system.miscanthus.2002.xml
 
 ### Using external drivers files
 
@@ -136,7 +136,7 @@ The driver data removed has been placed in a file called
 `sample_input/2002_weather.xml`.  Using these two files, we can get
 the same result as in the last example above by calling
 
-        ./dawn --out=miscanthus_simulation_result.xml --drivers=sample_input/2002_weather.xml \
+        ./runsim --out=miscanthus_simulation_result.xml --drivers=sample_input/2002_weather.xml \
                sample_input/biocro-system.miscanthus.xml
 
 With the ability to specify drivers independently of the main
@@ -144,7 +144,7 @@ specification file, it is now easy to switch out one weather data set
 for another.  For example, if we want to use weather data from 2005,
 we merely have to specify a different drivers file:
 
-        ./dawn --out=miscanthus_simulation_result.xml --drivers=sample_input/2005_weather.xml \
+        ./runsim --out=miscanthus_simulation_result.xml --drivers=sample_input/2005_weather.xml \
                sample_input/biocro-system.miscanthus.xml
 
 (Note that if the simulation specification file *does* specify a set
@@ -155,7 +155,7 @@ ignored.  For example, using
 `sample_input/biocro-system.miscanthus.xml` in the previous command so
 that we have
 
-        ./dawn --out=miscanthus_simulation_result.xml --drivers=sample_input/2005_weather.xml \
+        ./runsim --out=miscanthus_simulation_result.xml --drivers=sample_input/2005_weather.xml \
                sample_input/biocro-system.miscanthus.2002.xml
 
 will still use the 2005 weather data, not the 2002 data contained in
@@ -230,7 +230,7 @@ Here is more extensive information about the various options:
 
     These two sub-obtions are mainly useful if we want one library to
     be shared and the other to be static.  For example, if we want to
-    build both `libBioCro.a` and `libdawn_lib.dylib`, we could use the
+    build both `libBioCro.a` and `libdawn.dylib`, we could use the
     configuration command
 
             cmake -S <DAWN source directory> -B <build directory> -DBUILD_SHARED_LIBS=OFF -DDAWNLIB_STATIC=OFF

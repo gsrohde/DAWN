@@ -39,9 +39,9 @@ class Option_parser {
     void usage()
     {
         cout << "\nUsage:\n"
-            "    main [options] <XML file> [options]\n"
-            "    main -h\n"
-            "    main -show_default_schema_uri\n\n"
+            "    runsim [options] <XML file> [options]\n"
+            "    runsim -h\n"
+            "    runsim -show_default_schema_uri\n\n"
             "This program reads the simulation specification from <XML file>, runs\n"
             "the simulation, and writes the result to standard output, or to the file\n"
             "specified by the --out option.\n\n"

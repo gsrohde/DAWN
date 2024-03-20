@@ -22,7 +22,7 @@ endif()
 include(CMakeDependentOption)
 cmake_dependent_option(
   DAWNLIB_STATIC
-  "Build dawn_lib as a static library"
+  "Build dawn as a static library"
   ON
   "NOT BUILD_SHARED_LIBS"
   OFF
@@ -36,22 +36,22 @@ else ()
 endif ()
 
 # use build type in library definition
-add_library(dawn_lib ${DAWNLIB_BUILD_TYPE})
+add_library(dawn ${DAWNLIB_BUILD_TYPE})
 
-target_sources(dawn_lib PRIVATE DOMTreeErrorReporter.cpp)
-target_sources(dawn_lib PRIVATE Result_xml_document.cpp)
-target_sources(dawn_lib PRIVATE option_parser.cpp)
-target_sources(dawn_lib PRIVATE run.cpp)
-target_sources(dawn_lib PRIVATE simulation_definition.cpp)
+target_sources(dawn PRIVATE DOMTreeErrorReporter.cpp)
+target_sources(dawn PRIVATE Result_xml_document.cpp)
+target_sources(dawn PRIVATE option_parser.cpp)
+target_sources(dawn PRIVATE run.cpp)
+target_sources(dawn PRIVATE simulation_definition.cpp)
 
-target_link_libraries(dawn_lib PUBLIC XercesC::XercesC) # PUBLIC so dawn app and tests can use Xerces as well
-target_link_libraries(dawn_lib PUBLIC BioCro) # PUBLIC so tests (specifically, simulation_definitions_tests)
+target_link_libraries(dawn PUBLIC XercesC::XercesC) # PUBLIC so dawn app and tests can use Xerces as well
+target_link_libraries(dawn PUBLIC BioCro) # PUBLIC so tests (specifically, simulation_definitions_tests)
                                               # can use BioCro headers as well
-target_include_directories(dawn_lib PUBLIC include) # PUBLIC so tests can use headers in include subdirectory as well
+target_include_directories(dawn PUBLIC include) # PUBLIC so tests can use headers in include subdirectory as well
 
 option(USE_REMOTE_SCHEMA_URI "Whether or not to fetch the schema from a public repository rather than using a local file" OFF)
 option(USE_LOCAL_SCHEMA_FILE "Whether to look for the schema file locally" ON)
-target_compile_definitions(dawn_lib PRIVATE
+target_compile_definitions(dawn PRIVATE
     $<$<BOOL:${USE_LOCAL_SCHEMA_FILE}>:USE_LOCAL_SCHEMA_FILE>
     $<$<BOOL:${USE_REMOTE_SCHEMA_URI}>:USE_REMOTE_SCHEMA_URI>
     INSTALL_SCHEMA_FILEPATH=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/dawn/simulation-specification.xsd
@@ -60,7 +60,7 @@ target_compile_definitions(dawn_lib PRIVATE
 
 # Copy the schema files to the build tree
 add_custom_command(
-        TARGET dawn_lib POST_BUILD
+        TARGET dawn POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
                 ${CMAKE_SOURCE_DIR}/app/xml_schema
                 ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_DATADIR}/dawn
@@ -91,17 +91,17 @@ list(APPEND CMAKE_INSTALL_RPATH
     ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}
 )
 
-add_executable(dawn main.cpp)
-target_link_libraries(dawn PRIVATE dawn_lib)
+add_executable(runsim main.cpp)
+target_link_libraries(runsim PRIVATE dawn)
 
 add_custom_command(
-        TARGET dawn_lib POST_BUILD
+        TARGET dawn POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
                 ${CMAKE_SOURCE_DIR}/app/sample_input/
                 ${CMAKE_CURRENT_BINARY_DIR}/sample_input
         BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/sample_input)
 
-set_property(TARGET dawn_lib
+set_property(TARGET dawn
              PROPERTY PUBLIC_HEADER
              app/include/DOMTreeErrorReporter.h
              app/include/option_parser.h

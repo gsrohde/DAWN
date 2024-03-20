@@ -26,7 +26,7 @@ add_executable(test_all
                test_regression.cpp
                test_simulation_definition.cpp)
 
-target_link_libraries(test_all PRIVATE dawn_lib
+target_link_libraries(test_all PRIVATE dawn
                                        GTest::gtest_main
                                        GTest::gmock)
 
