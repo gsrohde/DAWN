@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.20.0)
-project(DAWN)
+
+project(DAWN VERSION 0.1
+        LANGUAGES CXX)
+
+enable_testing()
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 message(VERBOSE "Processing top level CMakeLists.txt")
@@ -31,7 +36,6 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
-enable_testing()
 include(GNUInstallDirs)
 
 add_subdirectory(biocro-lib)
